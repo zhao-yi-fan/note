@@ -229,3 +229,458 @@ CF-RAY: 41ee32c192db66b8-TSN
 >   例如把服务时间通过响应头返回给客户端, 客户端通过获取响应头信息得到这个时间(响应头返回的速度是优先于响应主体的)
 > 2. 设置响应主体
 >   主要的返回信息都在响应主体中
+## 前端性能优化技巧
+> 1. 减少HTTP请求次数和请求大小
+> 2. 代码优化
+>       有利于SEO
+>       有利于扩展维护
+>       有利于减少性能消耗
+>       [JS代码优化的108条建议][雅虎CSS优化的36条建议]
+> 3. DNS及HTTP通讯方式的优化
+
+### 主要性能优化技巧
+
+> 
+> 1. 在JS中尽量减少闭包的使用(原因: 闭包会产生不释放的栈内存)
+> A: 循环给元素做事件绑定的时候, 尽可能的把后期需要的信息(例如索引)存储到元素的自定义属性上, 而不是创建闭包存储
+> B: 可以在最外层形成一个闭包, 把一些后续需要的公共信息进行存储, 而不是每一个方法都创建闭包(例如单例模式)
+> C: 尽可能的手动释放不被占用的内存
+> ...
+> 2. 尽量合并css和js文件(把需要引入的css合并为一个, js也合并为一个), 原理是在减少HTTP请求次数, 尽可能的把合并后的代码进行压缩, 减少HTTP请求资源的大小
+> A: webpack这种自动化构建工具, 可以帮我们实现代码的合并和压缩(工程化开发)
+> B: 在移动开发(或者追求高性能的PC端开发, 例如百度首页), 如果CSS或者JS不是需要很多, 我们可以选择把css和js编程内嵌式(也就是代码直接写在HTML中)
+> 
+> 3. 尽量使用字体图标或者SVG图标, 来代替传统的PNG等格式的图片(因为字体图标等是矢量图(基于代码编写出来的), 放大不会变形, 而且渲染速度快, 相对比位图要小一些)
+> 4. 减少对DOM的操作(主要是减少DOM的重绘和回流(重排))
+> A: 关于重排的分离读写
+> B: 使用文档碎片或者字符串拼接做数据绑定(DOM的动态创建)
+> 5. 在JS 中避免"嵌套循环" (这种会额外增加很多循环次数) 和 "死循环" (一旦遇到死循环浏览器就卡壳了)
+> 6. 采用图片的"懒加载"(延迟加载)
+> 目的是为了减少页面"第一次加载"过程中HTTP的请求次数, 让页面打开速度变快
+> 步骤: 开始加载页面的时候, 所有的真实图片都不去发送HTTP请求加载, 而是给一张占位的背景图, 当页面加载完并且图片在可视区域内我们再去做图片加载
+> 7. 利用浏览器和服务器端的缓存技术(304缓存), 把一些不经常更新的静态资源文件做缓存处理(例如: JS,CSS,静态图片等都可以做缓存)
+> 原理是为了减少HTTP请求大小, 让获取速度更快
+> 8. 尽可能使用事件委托(事件代理)来处理事件绑定的操作, 减少DOM的频繁操作, 其中包括给每一个DOM元素做事件绑定
+> 9. 尽量减少CSS表达式的使用(expression)
+```css
+#myDiv {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    left: expression(document.body.offsetWidth - 110 + "px");
+    top: expression(document.body.offsetHeight - 110 + "px");
+    background: red;
+}
+```
+> 10. CSS选择器解析规则是从右向左解析
+
+```css
+.container .link a {
+    // 先找到所有的a, 再筛选是在.link样式类中的, 再次筛选是在.container样式类中的
+    // 先找到的是所有的a, 操作起来是消耗性能的, 我们在使用css选择器的视乎尽可能减少对标签选择器的使用
+}
+```
+> 11. CSS雪碧图技术(css sprite / css图片精灵)
+> 把所有相对较小资源图片汇总到一张大图上, 后期我们只需要把大图加载下来, 用背景定位的方式展示对应的小图即可
+
+```css
+.bg{
+    background:url('xxx.png');
+}
+.box1{
+    background-position:xx xx;
+}
+.box2{
+    background-position:xx xx;
+}
+
+<div class='bg box1'></div>
+```
+
+> 12. 减少对于cookie的使用(最主要的是减少本地cookie存储内容的大小), 因为客户端操作cookie的时候, 这些信息总是在客户端和服务端传来传去
+> 13. 页面中的数据获取采用异步编程和延迟分批加载
+> 使用异步获取数据, 是为了降低HTTP通道的堵塞, 不会因为数据没有请求回来耽误下面信息的渲染, 提高页面的打开速度(我们可以这样处理: 需要动态绑定数据的区域先隐藏, 等待数据返回并且绑定完成后再让其显示)
+> 延迟分批加载类似于图片懒加载, 是为了减少第一次页面加载时候的HTTP请求次数
+> 14. 页面中出现音视频标签, 我们不让页面加载的时候就去加载这些资源(要不然页面加载速度会变慢)
+> 方案: 只需要设置preload='none'即可, 等待页面加载完成, 音视频播放的时候我们再去加载音视频资源
+> 15. 在客户端和服务端进行信息交互的时候, 对于多项数据我们尽可能基于JSON格式来进行传送(JSON格式的数据处理方便, 资源偏小)
+> 相对于XML格式的传输才会有这个优势
+> 16. 尽可能实现JS的封装(低耦合高内聚), 减少页面中的冗余代码(减少HTTP请求资源的大小)
+> 17. CSS中设置定位后, 最好使用z-index改变盒子的层级, 让所有的盒子不在相同的平面上, 这样后续处理的时候, 性能有那么一点点的提高
+> 18. 在基于AJAX的GET请求进行数据交互的时候, 根据需求可以让其产生缓存(这个缓存不是304缓存), 这样下一次从相同地址获取的数据是上一次缓存的数据(但是很少用, 项目中一般刻意清除这个缓存的时候偏多)
+> 19. 尽量减少对于filter滤镜的使用(这个属性消耗性能较大一些)
+> 20. 在CSS导入的时候尽量减少使用@import导入式, 因为@import是同步操作, 只有把这个对应的CSS导入, 才会向下加载, 而link是异步操作
+> 21. 配置ETag(有点类似于304缓存)
+> 22. 使用window.requestAnimationFrame(JS中的帧动画)代替传统的定时器动画
+> 23. 减少递归的使用, 避免死递归, 避免由于递归导致的栈内存嵌套(建议使用尾递归)
+> 24. 避免使用iframe(不仅不好管控样式, 而且相当于在a页面中加载了其他页面, 消耗较大)
+> 25. 利用h5中提供的loaclstorage本地存储或者是manifest离线缓存, 做一些信息的本地存储, 下一次加载页面的时候直接从本地获取, 减少HTTP请求次数
+> 26. 基于script调取JS的时候, 可以使用defer或者async来异步加载
+
+- 重量级优化: 做CDN加速(烧钱机器)
+
+<img src="media/CDN.png">
+
+### 额外技巧
+> 1. 我们一般都把css放到body上, 把js放到body下(原因: 让其先加载css再加载, 先加载css是为了保证页面渲染的过程中, 元素时带着样式渲染的, 而js一般都是用来操作DOM元素的, 需要等到元素加载完再操作)
+> 2. 能用css搞定的绝对不用js, 能用原生js搞定的绝对不用插件, 绝对不使用flash(除了音视频的低版本浏览器播放)
+> css处理动画等功能的性能优于js, 而且css中的transform变形还开启了硬件加速
+> 3. js中尽量减少对eval的使用, 因为js合并压缩的时候, 可能出现由于符号不完善, 导致的代码进行优先级错乱问题, eval处理起来消耗的性能也是偏大一点的
+> 4. 使用keep-alive实现客户端和服务端的长连接
+> 5. 尽量使用设计模式来管理我们的代码(单例, 构造, Promise, 发布订阅), 方便后期的升级和维护
+> 6. 开启服务器端的gzip压缩(这个压缩可以有效减少请求资源文件的大小), 其实客户端的图片等资源也是可以进行压缩的(但是对于24位的位图, 压缩后可能会变模糊)
+> 7. 页面中不要出现无效的链接(利于SEO优化), 还有其他技巧: 提高关键字曝光率, img需要加alt, 设置meta标签, 标签语义化...
+> 8. 避免使用with语句(非常耗性能)
+## 全局刷新和局部刷新
+
+### 全局刷新
+
+> 页面是服务器端渲染的(前后端不分离项目)
+> 不使用AJAX: 首先向服务器端发送一个请求(通过浏览器地址问号传参发送给服务器), 服务器获取请求后, 验证是否存在, 不管存在不存在, 都要给用户一个提示(原始展示的页面内容需要发生改动), 服务器端把带提示的内容重新进行拼接, 然后返回给客户端, 客户端重新渲染最新的内容(只能页面整体刷新).
+
+<img src="media/全局刷新.png">
+
+- 服务器端(全局刷新)渲染的好处
+
+> 1. 有利于SEO优化(服务器渲染好的内容到客户端呈现, 在页面源代码中可以看到绑定的内容, 有利于引擎的收录), 但是客户端做字符串拼接, 呈现出来的内容在页面源代码中是没有的, 不利于SEO.
+> 2. 只要服务器并发(抗压能力)给力, 页面加载速度会比客户端渲染更快
+> **很多大网站(例如: 京东, 淘宝)首屏内容都是基于服务器端渲染的, 客户端获取XML数据后直接呈现, 增加页面第一次打开速度, 而剩下屏中的内容都是基于AJAX获取数据, 在客户端进行数据拼接渲染的...**
+
+### 局部刷新
+
+> AJAX的诞生就是为了实现局部刷新
+
+<img src="media/局部刷新.png">
+
+- 总结
+
+> 1. 基于AJAX向服务器发送请求获取数据(不管是JSON还是服务器渲染好的XML文档)都是前后端分离的项目
+> A: 不利于SEO优化(源代码中看不到动态增加的数据)
+> B: 都可以实现"局部刷新"
+> 例如: 京东, 首屏数据是基于AJAX从服务器端获取的XML字符串(服务器端渲染), 其它屏数据是从服务器获取JSON, 客户端拼接字符串渗入到指定的区域中(客户端渲染)
+> 2. 不基于AJAX, 直接通过浏览器向服务器发送请求, 服务器把需要呈现的内容返回, 这种模式是非前后端分离的项目
+> A: 有利于SEO优化
+> B: 只能实现"全局刷新"
+> 请求页面额后缀名一般不是.html, 而是.php/.jsp/.aspx/.asp..., 也有.html, 这个是基于node做后台实现服务器渲染的(注意原始地址可能被重新修改"URL重写")
+> 3. 还有一些项目, 首屏一般是不分离的, 浏览器向服务器发送请求, 服务器端直接把首屏内容返回, 客户端直接显示, 但是其它屏信息都是基于AJAX获取的, 这种叫做半分离, 例如淘宝就是这样处理的.
+
+## AJAX
+
+
+- 1. async javascript and xml(异步的js和xml)
+
+> 在ajax中的异步不是我们理解的同步异步编程, 而是泛指"局部刷新", 但是我们在以后的ajax请求中尽可能使用异步获取数据(因为异步数据获取不会阻塞下面代码的执行)
+> xml是一种文件格式(我们可以把HTML理解为XML的一种): 可扩展的标记语言, 它的作用是用自己扩展的一些语义标签来存储一些数据和内容, 这样存储的好处是清晰的展示出数据的结构.
+> 很久以前, AJAX刚刚兴起的时候, 客户端从服务器端获取数据, 服务器为了清晰的表达数据结构, 都是返回XML格式的内容, 当下, 我们获取的数据一般都是JSON格式的内容, JSON相对于XML来说, 也能清晰表达数据结构, 而且访问里面数据的时候操作起来比XML更简便(但是现在某些项目中, 服务器返回给客户端的数据不单纯是数据, 而是数据和需要展示的结构拼接好的结果(类似于我们自己做的字符串拼接), 换句话说, 是服务器端把数据和结构拼接好返回给我们, 此时返回的数据格式一般都是XML格式的字符串)
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <student>
+        <name>张三</name>
+        <age>25</age>
+        <score>
+            <english>98</english>
+            <chinese>100</chinese>
+            <math>100</math>
+        </score>
+    </student>
+    <student>
+        <name>李四</name>
+        <age>24</age>
+        <score>
+            <english>8</english>
+            <chinese>90</chinese>
+            <math>80</math>
+        </score>
+    </student>
+</root>
+```
+
+```json
+[
+    {
+        "name": "张三",
+        "age": 25,
+        "score": {
+        "english": 98,
+        "chinese": 100,
+        "math": 100
+        }
+    },
+    {
+        "name": "李四",
+        "age": 24,
+        "score": {
+        "english": 9,
+        "chinese": 90,
+        "math": 80
+        }
+    }
+]
+```
+
+- 2. AJAX操作
+
+> 1. 创建AJAX实例: IE6中是不兼容的, 使用的是new ActiveXObject来实现额
+>    `let xhr = new XMLHttpRequest();`
+
+
+> 2. 打开请求: 发送请求之前的一些配置项
+> a. HTTP METHOD 请求方式
+> GET/DELETE/HEAD/OPTIONS/TRACE/CONNECT
+> POST/PUT
+> b. URL项服务器端发送请求的API(Application Programming Interface) 接口地址
+> c. ASYNC: 设置AJAX请求的同步异步, 默认是异步(写true也是异步), false是同步, 项目中都是用异步编程, 防止阻塞后续代码执行
+> d. USER-NAME/USER-PASS: 用户名和密码, 一般不用
+> `xhr.open([HTTP METHOD], [URL], [ASYNC], [USER-NAME], [USER-PASS]);`
+
+> 3. 事件监听: 一般监听的都是 READY-STATE-CHANGE
+> 事件(AJAX状态改变事件), 基于这个事件可以获取服务器返回的响应头相应主体内容
+> 
+```javascript
+xhr.onreadystatechange = ()=> {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+        xhr.responseText;
+    }
+}
+```
+> 4. 发送AJAX请求: 从这步开始, 当前AJAX任务开始, 如果AJAX是同步的, 后续代码不会执行, 要等到AJAX状态成功后再执行, 反之异步不会
+> `xhr.send([请求主体内容]);`
+
+
+- 3. 关于HTTP请求方式的一点学习
+
+> 所有的请求都可以给服务器端传递内容, 也都可以从服务器端获取内容
+> GET: 从服务器端获取数据(给的少拿得多)
+> POST: 向服务器端推送数据(给的多拿得少)
+> DELETE: 删除服务器端的某些内容(一般是删除一些文件)
+> PUT: 向服务器上存放一些内容(一般也是存放文件)
+> HEAD: 只想获取服务器返回的响应头信息, 不要响应主体中的内容
+> OPTIONS: 一般使用它向服务器发送一个探测性请求, 如果服务器端返回信息了, 说明当前客户端和服务器端建立了连接, 我们可以继续执行其他请求了(TRACE是干这件事的, 但是axios这个AJAX类库在基于cross domain进行跨域请求的时候, 就是先发送OPTIONS请求进行探测尝试, 如果能连通服务器, 才会继续发送其它的请求)
+
+### GET和POST的区别
+
+
+- 4. GET vs POST
+
+> [传递给服务器信息的方式不一样]
+> GET是基于URL地址"问号传参"的方式把信息传递给服务器, POST是基于"请求主体"把信息传递给服务器
+
+```javascript
+// GET "问号传参"
+let xhr = new XMLHttpRequest();
+xhr.open('GET', 'https://www.easy-mock.com/mock/5b0412beda8a195fb0978627/temp/list?id=1000&lx=2000');
+xhr.onreadystatechange = () => {
+    if (xhr.readyState ===4 && xhr.status === 200){
+        console.log(JSON.parse(xhr.responseText));
+
+    }
+}
+
+// POST "请求主体"
+let xhr = new XMLHttpRequest();
+xhr.open('GET', 'https://www.easy-mock.com/mock/5b0412beda8a195fb0978627/temp/list');
+xhr.onreadystatechange = () => {
+    if (xhr.readyState ===4 && xhr.status === 200){
+        console.log(JSON.parse(xhr.responseText));
+    }
+}
+xhr.send(JSON.stringify({id: 1000, lx: 2000}));//=> 请求主体中传递给服务的是JSON格式的字符串, 但是真实项目中常用的是URL-ENCODE格式的字符串"id=1000&lx=2000"
+```
+
+```javascript
+// GET
+xhr.open('GET', '/temp/list?xxx=xxx&xxx=xxx')
+// POST
+xhr.send('xxx=xxx&xxx=xxx')
+```
+> GET一般应用于拿(给服务器的会少一些), 而POST给服务器的很多, 如果POST是基于问号传参方式来处理会出现一些问题: URL会拼接很长, 浏览器对于URL的长度有最大限度(谷歌8KB 火狐7KB IE2KB...), 超过的部分浏览器就会把它截掉了.
+> 所以GET请求可以基于URL传参, 而POST都是使用请求主体传递(请求主体理论上是没有限制的, 真实项目中我们会自己做大小限制, 防止上传过大信息导致请求迟迟完不成)
+
+
+> [GET不安全, POST相对安全]
+> 因为GET是基于"问号传参"把信息传递给服务器的, 容易被骇客进行URL劫持, POST是基于请求主体传递的, 相对来说不好被劫持; 所以登录, 注册等设计安全性的交互操作, 我们都应该用POST请求.
+
+> [GET会产生不可控制的缓存, POST不会]
+> 不可控: 不是想要就要, 想不要就不要的, 这是浏览器自主记忆的缓存, 我们无法基于JS控制, 真实项目中我们都会把这个缓存干掉.
+> GET请求产生缓存是因为: 连续多次向相同的地址(并且传递的参数信息也是相同的)发送请求, 浏览器会把之前获取的数据从缓存中拿到返回, 导致无法获取服务器最新的数据(POST不会)
+
+> 解决方案:
+> 保证每次请求的地址不完全一致: 在每一个请求的末尾追加一个随机数即可(使用_作为属性名就是不想和其它的属性名冲突)
+
+```javascript
+xhr.open('GET', `temp/list?lx=1000&_=${Math.random()}`);
+```
+
+### AJAX状态和HTTP网络状态码
+- 5. AJAX状态(READY-STATE)
+
+> 0: UNSENT 刚开始创建XHR, 还没有发送
+> 1: OPENED 已经执行了OPEN这个操作
+> 2: HEADERS_RECEIVED 已经发送AJAX请求(AJAX任务开始), 响应头信息已经被客户端接收了(响应头中包含了: 服务器的时间, 返回的HTTP状态码...)
+> 3: LOADING 响应主体内容正在返回
+> 4: DONE 响应主体内容已经被客户端接收
+
+- 6. HTTP网络状态码(STATUS)
+
+> 根据状态码能够清楚的反应出当前交互的结果及原因
+> 200: OK 成功(只能证明服务器成功返回信息了, 但是信息不一定是你业务需要的)
+> 301: Moved Permanently 永久转移(永久重定向)
+>   域名更改, 访问原始域名重定向到新的域名
+>   例如: 京东域名www.360buy.com 状态是301永久指向www.jd.com
+> 302: Move temporarily 临时转移(临时重定向是 307)
+>   例如: 访问京东用HTTP协议访问, 但会临时重定向HTTPS协议访问.
+>   网站现在是基于HTTPS协议运作的, 如果访问的是HTTP协议, 会基于307重定向到HTTPS协议上
+>   302一般用作服务器负载均衡: 当一台服务器达到最大并发数的时候, 会把后续访问的用户临时转移到其它的服务器机组上处理
+>   偶尔真实项目中会把所有的图片放到单独的服务器上"图片处理服务器", 这样减少主服务器的压力, 当用户向主服务器访问图片的时候, 主服务器都把它转移到图片服务器上处理
+> 304 Not Modified 设置缓存
+>   对于不经常更新的资源文件, 例如: css/js/html/img等, 服务器会结合客户端设置304缓存, 第一次加载过这些资源就缓存到客户端了, 下次再获取的时候, 是从缓存中获取; 如果资源更新了, 服务器端会通过最后修改时间来强制让客户端从服务器重新拉取: 基于CTRL+F5强制刷新页面, 304做的缓存就没有用了.
+
+> 400 Bad Request 请求参数错误
+> 401 Unauthorized 无权限访问
+> 404 Not Found 找不到资源(地址不存在)
+> 413 Request Entity Too Large 和服务器交互的内容资源超过服务器最大限制
+
+> 500 Internal Server Error 未知的服务器错误
+> 503 Service Unavailable 服务器超负荷
+
+### AJAX中常用的属性和方法
+
+![1547379393762](media/1547379393762.png)
+
+![1547438209542](media/1547438209542.png)
+
+- 7.关于XHR的属性和方法
+
+> `xhr.response` 响应主体内容
+> `xhr.responseText` 响应主体的内容是字符串(JSON或者XML格式字符串都可以)
+> `xhr.responseXML` 响应主体的内容是XML文档
+>
+> `xhr.readyState`  存有 XMLHttpRequest 的状态。从 0 到 4 发生变化。0: 请求未初始化 1: 服务器连接已建立 2: 请求已接收 3: 请求处理中 4: 请求已完成，且响应已就绪
+>
+> `xhr.status` 返回的HTTP状态码
+> `xhr.statusText` 状态码的描述
+>
+> `xhr.timeout` 设置请求超时的时间
+> `xhr.withCredentials` 是否允许跨域(FALSE是不允许)
+>
+> `xhr.abort()` 强制中断AJAX请求
+> `xhr.getAllResponseHeaders()` 获取所有响应头信息
+> `xhr.getResponseHeader([key])` 获取KEY对应的响应头信息, 例如: xhr.getResponseHeader('date')就是在获取响应头中的服务器时间
+>
+> `xhr.open()` 打开URL请求
+> `xhr.overrideMimeType()` 重写MIME类型
+> `xhr.send()` 发送AJAX请求
+> `xhr.setRequestHeader()` 设置请求头
+
+
+
+
+> responseText: 字符串
+>
+> responseXML: XML文档
+
+```javascript
+let xhr = new XMLHttpRequest();
+xhr.open('GET', 'temp.xml');
+xhr.send();
+```
+
+![1547434201943](media/1547434201943.png)
+
+> xhr.timeout: 设置请求的时间
+>
+> xhr.ontimeout: 设置请求超时后提示, 请求超时会执行ontimeout函数
+
+```javascript
+let xhr = new XMLHttpRequest();
+xhr.open('GET', 'https://www.easy-mock.com/mock/5b0412beda8a195fb0978627/temp/list');
+// 设置请求的时间
+xhr.timeout = 200;
+// 设置请求超时后提示
+xhr.ontimeout = () => {
+    console.log('请求超时, 请稍后重试');
+}
+xhr.onreadystatechange = () => {
+    if (xhr.readyState ===4 && xhr.status === 200){
+        console.log(JSON.parse(xhr.responseText));
+    }
+}
+xhr.send(null);
+```
+
+![1547436955038](media/1547436955038.png)
+
+> xhr.onabort: 强制中断AJAX请求
+>
+> 在请求没结束之前, 中断就可以. 
+>
+> 在请求已经结束了之后, 中断不会执行onabort函数.
+
+```javascript
+let xhr = new XMLHttpRequest();
+xhr.open('GET', 'https://www.easy-mock.com/mock/5b0412beda8a195fb0978627/temp/list');
+xhr.timeout = 200;// 设置请求的时间
+// 设置请求超时后提示
+xhr.ontimeout = () => {
+    console.log('请求超时, 请稍后重试');
+    xhr.onabort();
+}
+xhr.onabort = () => {
+    console.log('当前请求已经被强制中断')
+
+}
+xhr.onreadystatechange = () => {
+    if (xhr.readyState ===4 && xhr.status === 200){
+        console.log(JSON.parse(xhr.responseText));
+    }
+}
+xhr.send(null);
+// 也可以用下面的方式来测试
+// setTimeout(() => {
+//     xhr.onabort();
+// }, 1000);
+```
+
+![1547437822852](media/1547437822852.png)
+
+> xhr.setRequestHeader: 设置的请求头信息不能出现中文而且必须在OPENED之后才可以设置成功.
+
+```javascript
+let xhr = new XMLHttpRequest();
+xhr.open('GET', 'https://www.easy-mock.com/mock/5b0412beda8a195fb0978627/temp/list');
+// 设置的请求头信息不能出现中文而且必须在OPENED之后才可以设置成功.
+xhr.setRequestHeader('zhufeng', '@@@');
+xhr.onreadystatechange = () => {
+    if (xhr.readyState ===4 && xhr.status === 200){
+        console.log(JSON.parse(xhr.responseText));
+    }
+}
+xhr.send(null);
+```
+
+![1547439756616](media/1547439756616.png)
+
+> new Date()获取当前客户端事件
+> new Date(事件字符串) 把指定的事件字符串格式化为标准的北京时间(不在是字符串了, 而是DATE类的实例, 也是标准的事件格式数据)
+
+```javascript
+let xhr = new XMLHttpRequest();
+xhr.open('GET', 'temp.json');
+xhr.onreadystatechange = () => {
+    // 证明服务器已经返回内容了(HTTP请求成功)
+    if(!/^(2|3)\d{2}$/.test(xhr.status)) return;
+    if(xhr.readyState === 2) {
+        // 响应头信息已经回来了
+        let time = xhr.getResponseHeader('date');// 获取的结果是格林尼治时间, 而且是字符串
+        console.log(time, new Date(time));
+    }
+    if (xhr.readyState === 4) {
+        console.log(xhr.responseText);
+    }
+}
+xhr.send(null);
+```
+
+![1547443616459](media/1547443616459.png)
