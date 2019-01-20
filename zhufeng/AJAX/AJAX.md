@@ -684,3 +684,890 @@ xhr.send(null);
 ```
 
 ![1547443616459](media/1547443616459.png)
+
+### AJAX中的同步异步
+
+> new XMLHttpRequest()状态是0, 
+>
+> xhr.open()状态变为1.
+>
+> 响应头返回变为2, 
+>
+> 响应主体正在返回变为3, 
+>
+> 响应主体返回变为4
+
+- 异步: send和onreadystatechange(监听状态改变事件)位置前后都不影响
+
+```javascript
+let xhr = new XMLHttpRequest();
+xhr.open('GET', 'temp.json', true);// 异步
+xhr.onreadystatechange = () => {// 监听的是AJAX"改变事件": 设置监听之前有一个状态, 当后续的状态和设置之前的状态不相同, 才会触发这个事件
+    if (xhr.readyState === 2) { 
+        console.log(1); 
+    }
+    if (xhr.readyState === 4) { 
+        console.log(2); 
+    }
+};
+xhr.send();// 发送AJAX请求: 不论是同步还是异步, 执行了send()才证明AJAX任务开始
+console.log(3);
+//=> 3 1 2
+```
+
+```javascript
+let xhr = new XMLHttpRequest();
+xhr.open('GET', 'temp.json', true);
+xhr.send();// AJAX任务开始(异步)
+// 此时状态是1
+xhr.onreadystatechange = () => {
+    if (xhr.readyState === 2) { 
+        console.log(1); 
+    }
+    if (xhr.readyState === 4) { 
+        console.log(2); 
+    }
+};
+console.log(3);
+//=> 3 1 2
+```
+
+- 同步
+
+> 同步时,onreadystatechange在前, send在后, 监听事件可以监听到2, 3状态, 但是不执行. 当主任务队列执行结束, 此时状态是4, 监听事件可以监听到4状态并执行
+>
+> onreadystatechange在前后, send在前. 当send执行完后, 此时的状态已经是4了, 监听状态不会监听到状态的改变了.
+
+```javascript
+let xhr = new XMLHttpRequest();
+xhr.open('GET', 'temp.json', false);
+xhr.onreadystatechange = () => {//=> 监听前的状态是1
+    if (xhr.readyState === 2) { 
+        console.log(1); 
+    }
+    if (xhr.readyState === 4) { 
+        console.log(2); 
+    }
+};
+xhr.send();//=> 任务开始(同步: 只要当前AJAX请求这件事没有完成, 什么都不能做)
+console.log(3);
+//=> 2 3  当AJAX任务开始, 由于是同步编程, 主任务队列在状态没有变成4(任务结束)之前一直被这件事占用着, 其它事情都做不了(当服务器把响应头返回的时候, 状态为2, 触发了事件eadystatechange, 但是由于主任务队列没有完成, 被占用着, 绑定的方法也无法执行... 所以只有状态为4的时候, 也就是主任务队列执行结束后才执行reaystatechange这个方法)
+```
+
+<img src="media/AJAX中的同步异步.png">
+
+```javascript
+let xhr = new XMLHttpRequest();
+xhr.open('GET', 'temp.json', false);
+xhr.send();//=> 开始请求(状态不为4, 其它事都做不了)
+//=> 事件绑定前状态已经是4了
+xhr.onreadystatechange = () => {
+    if (xhr.readyState === 2) { 
+        console.log(1); 
+    }
+    if (xhr.readyState === 4) { 
+        console.log(2); 
+    }
+};
+console.log(3);
+//=> 3
+```
+
+## 倒计时
+
+- Date()知识
+
+> new Date() 获取当前客户端本机时间(是标准的时间格式数据 => 对象)
+> 	Thu Jan 17 2019 11:11:53 GMT+0800 (中国标准时间)
+> new Date("时间字符串"); 把指定的时间字符串转换为标准事件数据, 时间字符串支持很多格式
+> 	例如:
+> 	"xxxx-xx-xx xx:xx:xx" 中杠换成斜杠也可以
+> 	"xxxx/xx/xx"小时分钟秒默认00:00:00
+>     		new Date(2019/1/17)//=> Thu Jan 01 1970 08:00:00 GMT+0800 (中国标准时间)
+
+### 基于客户端时间做倒计时
+
+```html
+<head>
+    <style>
+        .timeBox {
+            margin: 20px auto;
+            width: 300px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            border: 1px dashed lightblue;
+            font-size: 20px;
+        }
+
+        .timeBox span {
+            color: lightcoral;
+            font-weight: bolder;
+        }
+    </style>
+</head>
+<body>
+    <div class="timeBox">
+        距离抢购还剩<span>-- : -- : --</span>
+    </div>
+
+    <script>
+        let timeBox = document.querySelector('.timeBox'),
+            timeSpan = timeBox.querySelector('span'),
+            autoTimer = null;
+        let computedTime = function computedTime() {
+            // 获取当前时间和目标时间之间的差值(两个时间相差的毫秒差)
+            let nowTime = new Date(),
+                tarTime = new Date('2019/01/18 11:33:40'),
+                diffTime = tarTime - nowTime;
+
+            // 在毫秒差中计算出对应的"时分秒"
+            if (diffTime >= 0) {
+                let hours = Math.floor(diffTime / (1000 * 60 * 60));
+                diffTime = diffTime - hours * 3600000;
+                let minutes = Math.floor(diffTime / (1000 * 60));
+                diffTime = diffTime - minutes * 60000;
+                let seconds = Math.floor(diffTime / 1000);
+                timeSpan.innerHTML = `${hours} : ${minutes} : ${seconds}`;
+                return;
+            }
+
+            // 已经到达抢购的时间了
+            timeSpan.innerHTML = '-- : -- : --';
+            clearInterval(autoTimer);
+        };
+        computedTime();
+        let autoTimer = setInterval(computedTime, 1000);
+    </script>
+</body>
+```
+
+![1547696250366](media/1547696250366.png)
+
+### 基于服务器端时间做倒计时
+
+> ​	从服务器端获取时间会存在一个问题: 由于服务器端返回数据需要时间, 所以客户端那到返回的"服务器时间"的时候, 已经过去一会了, 导致获取的事件和真实的事件时有一定误差的, 这个误差越小越好, 那么如何减小误差:
+>
+> 1. 在AJAX为2的时候就从响应头中获取信息, 而不是等到更靠后的状态4
+> 2. 请求方式设置为HEAD: 只获取响应头信息即可, 响应主体内容不需要
+> 3. 特殊: 即使我们向服务器发送一个不存在的请求地址, 返回的是404状态码, 但是响应头信息中都会存在服务器的时间(不建议使用, 不友好
+>
+> new Date().getTime(); 
+>
+> 时间对象.getTime(),返回的是指定的日期和时间距 1970 年 1 月 1 日午夜（GMT 时间）之间的毫秒数。
+
+- 第一种
+
+```javascript
+let timeBox = document.querySelector('.timeBox'),
+    timeSpan = timeBox.querySelector('span'),
+    autoTimer = null,
+    _serverTime = null;
+// 从服务器获取时间(获取响应头中的时间信息即可)
+let queryTime = function queryTime() {
+    return new Promise(resolve => {
+        // 第二次执行queryTime:
+        // 用之前记录的全局变量值, 但是需要把这个值手动累加1秒钟
+        if (_serverTime) {
+            _serverTime = new Date(_serverTime.getTime() + 1000);
+            resolve(_serverTime);
+            return;
+        }
+        // 第一次向服务器发送请求: 把获取的结果存储到全局变量中
+        let xhr = new XMLHttpRequest(),
+            serverTime = null;
+        xhr.open('HEAD', 'json/data.json');// 默认是true(异步)
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 2) {
+                serverTime = new Date(xhr.getResponseHeader('date'));
+                _serverTime = serverTime;
+                resolve(serverTime);
+            }
+        };
+        xhr.send(null);
+    });
+};
+
+let computedTime = function computedTime() {
+    // 这样处理也有一个问题, 一个客户端每间隔1秒都会向服务器发送一个新的请求, 这样下去访问用户多, 服务器就爆了(超过负载均衡)
+    // 解决方案: 创建一个全局变量, 记录第一次从后台获取的服务器时间, 每一秒刷新的时候, 都是在第一次的基础上一直累加一秒, 而不是重新从服务器获取(减轻服务器的压力)
+    let promise = queryTime();
+    promise.then(serverTime => {
+        let nowTime = serverTime,
+            tarTime = new Date('2019/01/19 11:33:40'),
+            diffTime = tarTime - nowTime;
+
+        if (diffTime >= 0) {
+            let hours = Math.floor(diffTime / (1000 * 60 * 60));
+            diffTime = diffTime - hours * 3600000;
+            let minutes = Math.floor(diffTime / (1000 * 60));
+            diffTime = diffTime - minutes * 60000;
+            let seconds = Math.floor(diffTime / 1000);
+            timeSpan.innerHTML = `${hours} : ${minutes} : ${seconds}`;
+            return;
+        }
+
+        timeSpan.innerHTML = '-- : -- : --';
+        clearInterval(autoTimer);
+    })
+
+};
+computedTime();
+autoTimer = setInterval(computedTime, 1000);
+```
+
+- 第二种
+
+```javascript
+let timeBox = document.querySelector('.timeBox'),
+    timeSpan = timeBox.querySelector('span'),
+    autoTimer = null,
+    _serverTime = null;
+
+//=>从服务器获取时间（获取响应头中的时间信息即可）
+let queryTime = function queryTime() {
+    //=>第二次执行QUERY-TIME：
+    //用之前记录的全局变量值，但是需要把这个值手动累加1秒钟
+    if (_serverTime) {
+        _serverTime = new Date(_serverTime.getTime() + 1000);
+        return _serverTime;
+    }
+    //=>第一次向服务器发送请求:把获取的结果存储到全局变量中
+    return new Promise(resolve => {
+        let xhr = new XMLHttpRequest(),
+            serverTime = null;
+        xhr.open('HEAD', 'json/data.json');
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 2) {
+                serverTime = new Date(xhr.getResponseHeader('date'));
+                _serverTime = serverTime;
+                resolve(serverTime);
+            }
+        };
+        xhr.send(null);
+    });
+}; 
+let computedTime = function computedTime() {
+    let promise = queryTime();
+    promise instanceof Promise ? promise.then(fn) : fn(promise);
+
+    function fn(serverTime) {
+        let nowTime = serverTime,
+            tarTime = new Date('2018/05/24 18:00:00'),
+            diffTime = tarTime - nowTime;
+
+        //=>在毫秒差中计算出对应的“时分秒”
+        if (diffTime >= 0) {
+            let hours = Math.floor(diffTime / (1000 * 60 * 60));
+            diffTime = diffTime - hours * 3600000;
+            let minutes = Math.floor(diffTime / (1000 * 60));
+            diffTime = diffTime - minutes * 60000;
+            let seconds = Math.floor(diffTime / 1000);
+
+            hours < 10 ? hours = '0' + hours : null;
+            minutes < 10 ? minutes = '0' + minutes : null;
+            seconds < 10 ? seconds = '0' + seconds : null;
+
+            timeSpan.innerHTML = `${hours} : ${minutes} : ${seconds}`;
+            return;
+        }
+
+        //=>已经到达抢购的时间了
+        timeSpan.innerHTML = '-- : -- : --';
+        clearInterval(autoTimer);
+    }
+};
+
+computedTime();
+autoTimer = setInterval(computedTime, 1000);
+```
+
+## 封装AJAX库(参考JQ方式)
+
+### JQ源码中的AJAX
+
+- 调用方法
+
+> \$.ajax([URL], [OPTIONs]) 或者 ​\$.ajax([OPTIONS]) 在OPTIONS中有一个URL字段代表请求的URL地址
+>
+> \$.get / \$.post / ​\$.getJSON / ​\$.getScript 这些方法都是基于\$.ajax构建出来的快捷方法, 项目中最常使用的还是\$.ajax
+
+- 参数
+
+> URL:请求的API接口地址
+>
+> METHOD: 请求的方式
+>
+> DATA: 传递给服务器的信息可以放到DATA中
+>
+> ​    如果是GET请求时基于问号传参过去的
+> ​    如果是POST请求时基于请求主体传递过去的
+> ​    DATA的值可以是对象也可以是字符串(一般常用对象)
+> ​        如果是对象类型, JQ会把对象转换为 xxx=xxx&xxx=xxx 的模式(x-www-form-urlencoded)
+> ​        如果是字符串, 我们写的是什么就传递什么
+>
+> DATA-TYPE: 预设置获取结果的数据格式 TEXT/JSON/JSONP/HTML/SCRIPT/XML...(服务器返回给客户端的响应主体中的内容一般都是字符串[JSON格式居多]), 而设置DATA-TYPE='JSON', JQ会内部把获取的字符串转为JSON格式的对象 => "它不会影响服务器返回的结果, 只是把返回的结果进行了二次处理"
+>
+> ASYNC: 设置同步或者异步(TRUE: 异步 FALSE: 同步)
+>
+> CACHE: 设置GET请求下是否建立缓存(TRUE: 建立缓存(默认) FALSE: 不建立缓存), 当我们设置FALSE, 并且当前请求时GET请求, JQ会在请求的URL地址末尾追加随机数(时间辍)
+>
+> SUCCESS: 回调函数, 当AJAX请求成功执行, JQ执行回调函数的时候会把从响应主体中获取的结果(可能二次处理了)当做参数传递给回调函数
+>
+> ERROR: 请求失败后执行的回调函数
+
+> 以POST请求传递 对象
+
+```javascript
+$.ajax({
+    url: 'https://www.easy-mock.com/mock/5b0412beda8a195fb0978627/temp/list',
+    method: 'POST',
+    data: {
+        name: '赵一凡',
+        age: 23
+    },
+    dataType: 'json',
+    async: true,
+    cache: true,
+    success: () => {
+
+    },
+    error: () => {
+
+    }
+})
+```
+
+![1547819679295](media/1547819679295.png)
+
+> 以GET请求传递 对象
+
+```javascript
+$.ajax({
+    url: 'https://www.easy-mock.com/mock/5b0412beda8a195fb0978627/temp/list',
+    method: 'GET',
+    data: {
+        name: '赵一凡',
+        age: 23
+    },
+    dataType: 'json',
+    async: true,
+    cache: true,
+    success: () => {
+
+    },
+    error: () => {
+
+    }
+})
+```
+
+![1547819614467](media/1547819614467.png)
+
+> 以POST请求传递 字符串'哈哈'
+
+```javascript
+$.ajax({
+    url: 'https://www.easy-mock.com/mock/5b0412beda8a195fb0978627/temp/list',
+    method: 'POST',
+    data: '哈哈',
+    dataType: 'json',
+    async: true,
+    cache: true,
+    success: () => {
+
+    },
+    error: () => {
+
+    }
+})
+```
+
+![1547819385222](media/1547819385222.png)
+
+> 以GET请求传递 字符串'哈哈'
+
+```javascript
+$.ajax({
+    url: 'https://www.easy-mock.com/mock/5b0412beda8a195fb0978627/temp/list',
+    method: 'GET',
+    data: '哈哈',
+    dataType: 'json',
+    async: true,
+    cache: true,
+    success: () => {
+
+    },
+    error: () => {
+
+    }
+})
+```
+
+![1547819453358](media/1547819453358.png)
+
+> cache: JQ源码时间辍
+
+```javascript
+if ( s.cache === false ) {
+    s.url = rts.test( cacheURL ) ?
+        cacheURL.replace( rts, "$1_=" + nonce++ ) :
+    cacheURL + ( rquery.test( cacheURL ) ? "&" : "?" ) + "_=" + nonce++;
+}
+//nonce
+var nonce = jQuery.now();
+//now
+now: function() {
+    return +( new Date() );
+},
+```
+
+> cache为false并且请求方式为'GET', 这时不建立缓存
+
+```javascript
+$.ajax({
+    url: 'https://www.easy-mock.com/mock/5b0412beda8a195fb0978627/temp/list',
+    method: 'GET',
+    data: {
+        name: '赵一凡',
+        age: 23
+    },
+    dataType: 'json',
+    async: true,
+    cache: false,
+    success: () => {
+        
+    },
+    error: () => {
+
+    }
+})
+```
+
+
+
+![1547821839143](media/1547821839143.png)
+
+### 封装AJAX库
+
+> 封装AJAX库
+
+```javascript
+; (function () {
+    function AJAX(options) {
+        return new init(options);
+    }
+
+    let init = function init(options = {}) {
+        // INIT PARAM
+        let {
+            url,
+            method = 'GET',
+            data = null,
+            dataType = 'JSON',
+            async = true,
+            cache = true,
+            success,
+            error
+        } = options;
+
+
+        // MOUNT: 把配置项挂载到实例上
+        ['url', 'method', 'data', 'dataType', 'async', 'cache', 'success', 'error'].forEach(item => {
+            this[item] = eval(item);
+        });
+
+        // SEND: 发送AJAX请求
+        this.sendAjax();
+
+    };
+    AJAX.prototype = {
+        constructor: AJAX,
+        init,
+        // 发送AJAX请求
+        sendAjax() {
+            this.handleData();
+            this.handleCache();
+            // SEND
+            let { method, url, async, error, success, data } = this,
+                xhr = new XMLHttpRequest;
+            xhr.open(method, url, async);
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4) {
+                    // ERROR
+                    if (!/^(2|3)\d{2}$/.test(xhr.status)) {
+                        error && error(xhr.statusText, xhr);
+                        return;
+                    }
+                    // SUCCESS
+                    let result = this.handleDataType(xhr);
+                    success && success(result, xhr);
+                }
+            };
+            xhr.send(data);
+        },
+
+        // 处理DATA-TYPE
+        handleDataType(xhr) {
+            let dataType = this.dataType.toUpperCase(),
+                result = xhr.responseText;
+            switch(dataType) {
+                case 'TEXT':
+                    break;
+                case 'JSON':
+                    result = JSON.parse(result);
+                    break;
+                case 'XML':
+                    result = xhr.responseXML;
+                    break;
+            }
+            return result;
+        },
+        // 处理CACHE
+        handleCache() {
+            let { url, method, cache } = this;
+            if (/^GET$/i.test(method) && cache === false) {
+                // URL末尾追加时间辍
+                // 字符串加时间格式, 时间格式会自动变为毫秒
+                url += `${this.check()}_=${+(new Date())}`;
+                this.url = url;
+            }
+        },
+        // 处理DATA
+        handleData() {
+            let { data, method } = this;
+            if (!data) return;
+            // 如果是object对象, 我们把它转换为x-www-form-urlencoded这种模式, 方便后期传递给服务器
+            if (typeof data === 'object') {
+                let str = ``;
+                for (let key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        str += `${key}=${data[key]}&`;
+                    }
+                }
+                data = str.substring(0, str.length - 1);
+            }
+
+            // 根据请求方式不一样, 传递给服务器的方式也不同
+            if (/^(GET|DELETE|HEAD|TRACE|OPTIONS)$/i.test(method)) {
+                this.url += `${this.check()}${data}`;
+                this.data = null;
+                return;
+            }
+            // POST系列
+            this.data = data;
+        },
+        check() {
+            return this.url.indexOf('?') > -1 ? '&' : '?';
+        }
+
+    };
+    init.prototype = AJAX.prototype;
+    window.ajax = AJAX;
+
+})(window);
+```
+
+> html文件
+
+```html
+<script>
+    ajax({
+    url: 'https://www.easy-mock.com/mock/5b0412beda8a195fb0978627/temp/list',
+    method: 'GET',
+    data: {
+        name: '赵一凡',
+        age: 28
+    },
+    cache: true,
+    success: (result, xhr) => {
+        console.log(result);
+    },
+    error: (result, xhr) => {
+        console.log(result);
+
+    }
+});
+</script>
+```
+
+- 其他细节问题
+
+> 数组Array原型方法forEach
+
+```javascript
+array.forEach(callback(currentValue, index, array){
+    //do something
+}, this)
+
+array.forEach(callback[, thisArg])
+```
+
+![1547885901697](media/1547885901697.png)
+
+> string原型方法indexOf
+
+```javascript
+str.indexOf(searchValue[, fromIndex])
+```
+
+![1547896388549](media/1547896388549.png)
+
+> 正则RegExp原型方法test();
+
+```javascript
+regexObj.test(str)
+```
+
+![1547896627724](media/1547896627724.png)
+
+> 字符串string原型方法toUpperCase();
+
+```javascript
+console.log( "alphabet".toUpperCase() ); //=> "ALPHABET"
+```
+
+![1547908870478](media/1547908870478.png)
+
+> ES6中函数可以这样写
+
+```javascript
+// ES6函数简写
+success(){
+    
+}
+// 等同于
+let success = function () {
+    
+}
+```
+
+> ES6中的类(构造函数)可以写`class`, 写了class后这个函数就不能当做普通函数执行了.只能用来new 实例.
+
+```javascript
+class AJAX {
+    
+}
+// 等同于
+function AJAX() {
+    
+}
+```
+
+## 基于PROMISE解决回调地狱问题
+
+### PROMISE
+
+> Promise是ES6中新增加的内置类: 目的是为了管理异步操作的
+>
+> 1. new Promise()创建类的一个实例, 每一个实例都可以管理一个异步操作
+>    必须传递一个回调函数进去(回调函数中管理你的异步操作), 不传递会报错
+>    回调函数中会有两个参数
+>             resolve: 异步操作成功做的事情(代指成功后的事件队列 => 成功后要做的所有的事情都存放到成功这个事件队列中)
+>             reject: 异步操作失败做的事情(代指失败后的事件队列)
+>    new Promise的时候立即把回调函数执行了(Promise是同步的)
+> 2. 基于Promise.prototype.then方法(还有catch/finally两个方法)向成功队列和失败队列中依次加入需要处理的事情
+> 3. 如果是多个THEN调用, 不是像我们想象的依次把增加的方法执行
+>    异步操作成功或者失败, 先把第一个THEN中的方法执行, 每当执行一个THEN会返回一个新的Promise实例, 这个实例管控的是第一个THEN中方法执行的是成功还是失败
+
+```javascript
+let promise1 = new Promise((resolve, reject) => {
+    $.ajax({
+        url: 'json/data.json',
+        success(result) {
+            resolve(result);
+        },
+        error(msg) {
+            reject(msg);
+        }
+    });
+});
+promise1.then(
+    result => {
+        console.log('THEN1 OK', result);
+    },
+    msg => {
+        console.log('THEN1 NO', msg);
+    }
+).then(
+    result => {
+        console.log('THEN2 OK', result);
+    },
+    msg => {
+        console.log('THEN2 NO', msg);
+    }
+);
+```
+
+> 建议不要使用THEN中的第二个参数(这样看起来很乱), 而是建议我们使用Promise.prototype.catch来管理失败的情况
+
+```javascript
+let promise1 = new Promise((resolve, reject) => {
+    $.ajax({
+        url: 'json/data2.json',
+        success(result) {
+            resolve(result);
+        },
+        error(msg) {
+            reject('no');
+        }
+    });
+});
+promise1.then(result => {
+    console.log('THEN1 OK', result);
+    100();
+    return 100;
+}).catch(msg => {
+    // 第一个CATCH
+    // 1. 异步请求失败会执行它
+    // 2. 第一个THEN方法失败也会执行它
+    console.log('CATCH1', msg);
+}).then(result => {
+    console.log('THEN2 OK', result);
+}).catch(msg => {
+    console.log('CATCH2', msg);
+});
+```
+
+> **总结**
+>
+> then, catch, finally算一组, 不管执行哪个方法, 都会返回新的promise实例.
+> then是管控上一个promise实例的成功还是失败.
+> catch也是管控上一个promise实例的成功还是失败, 还管控自己then兄弟的成功还是失败.
+> finally不管谁成功还是失败, 反正自己都得执行.
+
+```javascript
+let A = function A() {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve();
+        }, 1000);
+    });
+};
+let B = function B() {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve();
+        }, 1000);
+    });
+};
+
+let promise = A();
+promise.then(() => {
+    console.log(1);
+    return B();// 如果方法中返回的是一个具体值, 而是执行中没有错误异常, 会立即执行下一个THEN中的方法(不写return 也是返回了具体值: undefined), 但是如果返回的是一个PROMISE实例(并且管控了一个异步操作), 只能等PROMISE完成, 把成功后的结果当做具体的值返回, 才能进入下一个函数执行
+}).then(() => { 
+    console.log(2)
+});
+```
+
+### JS中的异常捕获
+
+> JS中的异常捕获(目的: 把抛出异常的错误捕获到, 不让其阻断浏览器的继续执行)
+>
+> try报错才会执行catch中的代码
+>
+> finally不管TRY中的代码成功还是失败都会执行
+
+```javascript
+try {
+    // 正常执行的JS代码(可能会报错);
+    1();// 报错, 失败
+} catch (e) {
+    // TRY中的代码报错了会执行CATCH
+} finally {
+    // 不管TRY中的代码成功还是失败都会执行
+}
+```
+
+### 解决回调地狱问题
+
+- 普通jquery解决回调地狱
+
+```javascript
+$.ajax({
+    url: 'https://www.easy-mock.com/mock/5b0412beda8a195fb0978627/temp/list',
+    success: result => {
+        $.ajax({
+            url: 'https://www.easy-mock.com/mock/5b0412beda8a195fb0978627/temp/info',
+            success: result => {
+                $.ajax({
+                    url: 'https://www.easy-mock.com/mock/5b0412beda8a195fb0978627/temp/add',
+                    method: 'POST',
+                    success: result => {
+
+                    }
+                })
+            }
+        })
+    }
+})
+```
+
+- 基于发布订阅解决回调地狱问题
+
+```javascript
+let $plan = $.Callbacks(),
+    $planB = $.Callbacks();
+$.ajax({
+    url: 'https://www.easy-mock.com/mock/5b0412beda8a195fb0978627/temp/list',
+    success: result => {
+        $plan.fire(result);
+    }
+});
+
+$plan.add(result => {
+    $.ajax({
+        url: 'https://www.easy-mock.com/mock/5b0412beda8a195fb0978627/temp/info',
+        success: result => {
+            $planB.fire(result);
+        }
+    });
+});
+
+$planB.add(result => {
+
+});
+```
+
+- 基于PROMISE解决回调地狱问题
+
+```javascript
+let queryA = function queryA() {
+    return new Promise(resolve => {
+        $.ajax({
+            url: 'https://www.easy-mock.com/mock/5b0412beda8a195fb0978627/temp/list',
+            success: resolve
+        });
+    });
+};
+let queryB = function queryB() {
+    return new Promise(resolve => {
+        $.ajax({
+            url: 'https://www.easy-mock.com/mock/5b0412beda8a195fb0978627/temp/info',
+            success: resolve
+        });
+    });
+};
+let queryC = function queryC() {
+    return new Promise(resolve => {
+        $.ajax({
+            url: 'https://www.easy-mock.com/mock/5b0412beda8a195fb0978627/temp/add',
+            method: 'POST',
+            success: resolve
+        });
+    });
+};
+
+let promise = queryA();
+promise.then(result => {
+    console.log('A', result);
+    return queryB();// 上一个THEN中函数手动返回一个新的PROMISE实例(管控了一个异步操作), 下一个THEN会等上一个THEN中的异步成功后再执行
+}).then(result => {
+    console.log('B', result);
+    return queryC();
+}).then(result => {
+    console.log('C', result);
+});
+```
+

@@ -634,17 +634,18 @@ console.log(a, b);
 - 对象解构赋值默认情况下要求: 左侧变量名和对象中的属性名一致才可以
 
 ```javascript
- let obj = {name: 'xxx', age: 25, sex: 0};
- let { name, age } = obj;//=> xxx 25
- console.log(name, age);
+let obj = {name: 'xxx', age: 25, sex: 0};
+let { name, age } = obj;
+console.log(name, age);//=> xxx 25
 
- let { sex } = obj;
- console.log(sex);//=> 0
+let { sex } = obj;
+console.log(sex);//=> 0
 ```
 
 > 给解构的属性名起别名作为我们使用的变量(起别名之后, 原始名字就不可用了)
 
 ```javascript
+let obj = {name: 'xxx', age: 25, sex: 0};
 let {age: ageAA} = obj;
 console.log(age);//=>Uncaught ReferenceError: age is not defined
 console.log(ageAA);//=> 25
@@ -653,6 +654,7 @@ console.log(ageAA);//=> 25
 > 获取一个不存在的属性会undefined
 
 ```javascript
+let obj = {name: 'xxx', age: 25, sex: 0};
 let {friend: friendAA} = obj;
 console.log(friend);//=> Uncaught ReferenceError: friend is not defined
 console.log(friendAA);//=> undefined
@@ -661,13 +663,24 @@ console.log(friendAA);//=> undefined
 > 给不存在的属性设置默认值
 
 ```javascript
+let obj = {name: 'xxx', age: 25, sex: 0};
 let {friend = 0} = obj;
 console.log(friend);//=> 0
 ```
 
+> 给一个`有值的属性`修改值是不可以的, 有值的话就获取, 并不会修改原有的值.
+>
+> 没有这个属性的话, 就会初始化这个属性.
+
+```javascript
+let obj = {name: 'xxx', age: 25, sex: 0};
+let {age = 0} = obj;
+console.log(age);//=> 25
+```
+
 - 实际运用
 
-> 把传递的对象解构了(不传递值, 默认赋值为空对象: 现在传递对象或者不传递, 形参接收到的都是对象), 解构的时候, 可以把传递进来对象中, 如果某个属性不存在, 我们赋值默认值
+> 把传递的对象解构了(不传递值, 默认赋值为空对象: 现在传递对象或者不传递对象, 形参接收到的都是对象), 解构的时候, 可以把传递进来对象中, 如果某个属性不存在, 我们赋值默认值
 
 ```javascript
 // *函数形参赋值默认值
