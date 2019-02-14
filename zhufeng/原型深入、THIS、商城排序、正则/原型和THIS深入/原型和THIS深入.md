@@ -933,7 +933,6 @@ let fn = function (...ary) {
     ary.shift();
     return (eval(ary.join('+')) / ary.length).toFixed(2);
 }
-
 ```
 
 ## ES6-箭头函数
