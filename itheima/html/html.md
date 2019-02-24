@@ -1,32 +1,30 @@
-## 1.编辑工具
+## 编辑工具
 
-dreamweaver  
+> dreamweaver  
 
-sublime
+> sublime
 
-HBuilder
+> HBuilder
 
-Visual Studio Code
+> Visual Studio Code
 
-WebStorm
+> WebStorm
 
-## 2.网页是如何形成的?
+## 网页是如何形成的
 
+> 编写代码--->浏览器渲染--->变成网页
 
+## 浏览器内核
 
-编写代码--->浏览器渲染--->变成网页
+> 浏览器内核分为两个部分: 渲染引擎(layout engineer或Rendering Engine)和js引擎
 
-## 3.浏览器内核
+> 渲染引擎: (主要渲染html 和css).获得网页的内容(html xml 图像等),再读取css整理,计算网页的显示方式,然后输出到显示器,内核不同渲染出来的效果不同.
 
-浏览器内核分为两个部分: 渲染引擎(layout engineer或Rendering Engine)和js引擎
-
-渲染引擎: (主要渲染html 和css).获得网页的内容(html xml 图像等),再读取css整理,计算网页的显示方式,然后输出到显示器,内核不同渲染出来的效果不同.
-
-js引擎:解析javascript语言,执行javascript语言来实现网页动态效果.
+> js引擎:解析javascript语言,执行javascript语言来实现网页动态效果.
 
 #### 内核分类:
 
-(1).trident内核(IE):
+- trident内核(IE):
 
 IE内核
 
@@ -36,23 +34,23 @@ IE内核
 
 window10发布后,加了新浏览器Edge,Edge有新内核EdgeHTML.
 
-(2)Gecko(firefox)
+- Gecko(firefox)
 
 Moailla FireFox使用.  该浏览器内核代码公开,可开发程度高,全时间程序员都可以为其编写代码.近年来没落,更新频繁,打开速度慢.猪一样的队友flash,神一样的对手chrome.
 
-(3)webkit(Safari)
+- webkit(Safari)
 
 Safari是苹果公司开发的浏览器,内核是webkit.
 
 代表浏览器:傲游浏览器3  Apple Safari(win/mac/iphone/ipad)  Symbian手机浏览器  Android默认浏览器
 
-(4)Chromium/Blink(chrome)
+- Chromium/Blink(chrome)
 
 在Chromium项目中研发Blink渲染引擎(浏览器核心),内置于chrome浏览器中,Blink是Webkit分支.
 
 大部分国产浏览器最新版采用Blink内核,二次开发的.
 
-(5)Presto(Opera)
+- Presto(Opera)
 
 Presto(已经废弃)是opera浏览器已被废弃的内核,最新的opera浏览器用的是Blink的内核.
 
@@ -68,7 +66,7 @@ ios是Safari浏览器
 
 WP7平台自带浏览器内核是IE的Trident内核.
 
-## 4.Web标准
+## Web标准
 
 浏览器内核不同,工作原理,解析不同.开发者常常需要开发多版本.
 
@@ -88,7 +86,7 @@ WP7平台自带浏览器内核是IE的Trident内核.
 
 6.提高页面浏览速度
 
-#### web标准构成:
+#### web标准构成
 
 web标准不是一个标准,是由W3C和其他标准化组织制定的一系列标准的集合.
 
@@ -100,11 +98,11 @@ web标准不是一个标准,是由W3C和其他标准化组织制定的一系列�
 
 行为标准:行为是指网页模型的定义及交互的编写.js
 
-## 5.文档类型:
+## 文档类型
 
 <!DOCTYPE>标签位于文档的最前面,用于向浏览器说明当前文档使用哪种html或xhtml标准规范,必须在开头处使用.
 
-## 6.字符集:
+## 字符集
 
 utf-8是目前最常用的字符集编码方式,常用的字符集编码方式还有gbk和gb2312.
 
@@ -118,7 +116,7 @@ utf-8则包含全世界所有国家需要用到的字符
 
 注意:以后统统使用utf-8字符集,就可以避免出现字符集不同意二引起乱码的情况了.
 
-## 7.html常用标签
+## html常用标签
 
 #### 标题标签:
 
@@ -396,11 +394,7 @@ base写在<head></head>之间
 位于<table></table>标签中，一般包含网页中除头部和底部之外的其他内容。
 ```
 
-
-
-
-
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/html%E7%AC%94%E8%AE%B0/media/thead.png" />
+<img src="media/thead.png" />
 
 例子:
 
