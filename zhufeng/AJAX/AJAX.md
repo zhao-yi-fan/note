@@ -700,6 +700,8 @@ xhr.send(null);
 
 - 异步: send和onreadystatechange(监听状态改变事件)位置前后都不影响
 
+异步操作: 执行send后, 有一个线程是去请求数据, 主栈会空闲下来
+
 ```javascript
 let xhr = new XMLHttpRequest();
 xhr.open('GET', 'temp.json', true);// 异步
@@ -712,7 +714,9 @@ xhr.onreadystatechange = () => {// 监听的是AJAX"改变事件": 设置监听�
     }
 };
 xhr.send();// 发送AJAX请求: 不论是同步还是异步, 执行了send()才证明AJAX任务开始
+// 执行send后, 有一个线程是去请求数据, 主栈会空闲下来
 console.log(3);
+// 等主任务队列都执行完之后, 状态每改变一次, 等待区的onreadystatechange就会到主栈中执行一次
 //=> 3 1 2
 ```
 
@@ -720,7 +724,8 @@ console.log(3);
 let xhr = new XMLHttpRequest();
 xhr.open('GET', 'temp.json', true);
 xhr.send();// AJAX任务开始(异步)
-// 此时状态是1
+// 执行send后, 有一个线程是去请求数据, 主栈会空闲下来
+// 此时事件绑定前状态是1
 xhr.onreadystatechange = () => {
     if (xhr.readyState === 2) { 
         console.log(1); 
@@ -735,9 +740,9 @@ console.log(3);
 
 - 同步
 
-> 同步时,onreadystatechange在前, send在后, 监听事件可以监听到2, 3状态, 但是不执行. 当主任务队列执行结束, 此时状态是4, 监听事件可以监听到4状态并执行
+> 同步时, 当执行xhr.send, 就表示AJAX请求发出, 任务开始. 只要当前AJAX请求这件事没有完成, 什么都不能做, AJAX任务结束后才出栈.
 >
-> onreadystatechange在前后, send在前. 当send执行完后, 此时的状态已经是4了, 监听状态不会监听到状态的改变了.
+> onreadystatechange在前, send在后, 监听事件可以监听到2, 3状态, 但是不执行. 当主任务队列执行结束, 此时状态是4, 监听事件可以监听到4状态并执行
 
 ```javascript
 let xhr = new XMLHttpRequest();
@@ -752,17 +757,29 @@ xhr.onreadystatechange = () => {//=> 监听前的状态是1
 };
 xhr.send();//=> 任务开始(同步: 只要当前AJAX请求这件事没有完成, 什么都不能做)
 console.log(3);
-//=> 2 3  当AJAX任务开始, 由于是同步编程, 主任务队列在状态没有变成4(任务结束)之前一直被这件事占用着, 其它事情都做不了(当服务器把响应头返回的时候, 状态为2, 触发了事件eadystatechange, 但是由于主任务队列没有完成, 被占用着, 绑定的方法也无法执行... 所以只有状态为4的时候, 也就是主任务队列执行结束后才执行reaystatechange这个方法)
+//=> 2 3  当AJAX任务开始, 由于是同步编程, 主任务队列在状态没有变成4(任务结束)之前一直被这件事占用着, 其它事情都做不了(当服务器把响应头返回的时候, 状态为2, 触发了事件readystatechange, 但是由于主任务队列没有完成, 被占用着, 绑定的方法也无法执行... 所以只有状态为4的时候, 此时也只能监听到变为4的状态了, 也就是主任务队列执行结束后才执行reaystatechange这个方法)
 ```
 
 <img src="media/AJAX中的同步异步.png">
+
+> onreadystatechange在后, send在前. 当send执行完后, 此时的状态已经是4了, 监听状态不会监听到状态的改变了.
+>
+> 第一行let xhr = new XMLHttpRequest()代码进栈, 执行完出栈
+>
+> 第二行xhr.open进栈, 执行完出栈.
+>
+> 第三行xhr.send进栈, 但是不会出栈, 会等待AJAX任务执行结束才会出栈, 出栈时的状态已经为4了
+>
+> 第四行是状态监听代码, 会进入等待栈, 等待状态改变的时候才会执行, 但是状态不再改变, 所以不会执行了
+
+所以, AJAX同步请求的时候, 监听状态要在send之前, 否则什么都监听不到
 
 ```javascript
 let xhr = new XMLHttpRequest();
 xhr.open('GET', 'temp.json', false);
 xhr.send();//=> 开始请求(状态不为4, 其它事都做不了)
 //=> 事件绑定前状态已经是4了
-xhr.onreadystatechange = () => {
+xhr.onreadystatechange = () => {//=> 状态改变才会触发, 放到等待区的时候状态已经为4了, 不会再改变了, 所以不会执行这个方法(什么都不会输出)
     if (xhr.readyState === 2) { 
         console.log(1); 
     }

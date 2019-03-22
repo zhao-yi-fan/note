@@ -172,7 +172,8 @@ var f = new Fn();
 <img src="media/函数的三种角色运行机制图.png">
 
 > Object类中的代码字符串看不到, 一般会写"native code"(原生代码)
-> Object下的属性有definedProperty,用来监听一个对象中属性变化的   
+> Object下的属性有`definedProperty`,用来监听一个对象中属性变化的   
+>
 > 所有的数字都是Number类的实例, 所有的字符串都是String类的实例, true/false是Boolean类的实例, null是Null类的实例, undefined是Undefined类的实例, 对象是Object类的实例, 只要是一个函数, 永远就是内置Function这个类的实例
 > 虽然Object.prototype在控制台看不到有\__proto__属性, 但是确实存在的
 ```javascript

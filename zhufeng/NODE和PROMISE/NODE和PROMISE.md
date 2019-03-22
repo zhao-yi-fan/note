@@ -1,3 +1,33 @@
+# GIT
+
+## 集中式对比分布式
+
+
+
+## 常用的LINUX命令
+
+
+
+## 基础工作流程
+
+
+
+## 一些细节问题
+
+
+
+## 关于GIT的回滚
+
+
+
+## 团队协作开发的基础流程
+
+
+
+## 分支处理和团队协作
+
+
+
 # NODE
 
 ## NODE基础概念
@@ -1001,6 +1031,8 @@ let server = http.creatServer();//=>创建WEB服务
 server.listen();//=>监听端口
 ```
 
+> 注意: 基于NODE创建后台程序, 我们一般都创建一个server模块, 在模块中实现创建WEB服务, 和对于请求的处理(并且我们一般都会把server模块放到当前项目的根目录下)
+>
 > 初始化之后需要改package.json文件
 >
 > "main"主入口修改
@@ -1200,6 +1232,190 @@ res.end(JSON.stringify({ name: '哈哈' }));
 
 ![1550115636465](media/1550115636465.png)
 
+## 创建静态资源服务器
+
+> 服务器上可能有一堆项目代码, 这堆项目代码中既可能有服务器端的程序代码, 也有可能有客户端的项目代码, 而客户端程序代码我们一般都放到static这个文件夹中
+>
+> static
+>     都是服务器端需要返回给客户端, 由客户端浏览器渲染和解析的(前端项目:包括页面,css,js,图片等)
+> server.js
+>     都是需要在服务器端基于NODE执行的(后端项目: 一般只有JS)
+>
+>     我们创建的WEB服务需要处理两类请求:
+>         1. 静态资源文件的请求处理: 想要文件
+>         2. API接口的请求处理: 想要数据
+>         区别: 第一类请求的地址中有后缀名, 第二类没有后缀
+
+
+
+![1551240918538](media/1551240918538.png)
+
+> server.js文件
+
+```javascript
+let http = require('http'),
+    url = require('url'),
+    path = require('path'),
+    fs = require('fs');
+let { readFile } = require('./utils/fsPromise'),
+    mime = require('mime');
+//=> 创建WEB服务
+let port = 8686;
+let handle = function handle(req, res) {
+    //=> 客户端请求资源文件(PATH-NAME), 服务器端都是到STATIC文件夹中进行读取, 也是根据客户端请求的路径名称读取的, 服务器端基于FS读取文件中内容的时候, 直接加上"./static"即可
+    let { method, headers: requestHeaders } = req,
+        { pathname, query } = url.parse(req.url, true),
+        pathREG = /\.([a-z0-9]+)$/i;
+
+    //=> 静态资源文件处理
+    if (pathREG.test(pathname)) {
+        readFile(`./static${pathname}`).then(result => {
+            //=>读取成功: 根据请求资源文件的类型, 设置响应内容的MIME
+            let suffix = pathREG.exec(pathname)[1];
+            res.writeHead(200, {
+                'content-type': `${mime.getType(suffix)};charset=utf-8;`
+            });
+            res.end(result);
+        }).catch(error => {
+            //=>读取失败:最可能由于文件不存在而读取失败(也就是客户端请求的地址是错误的, 我们应该响应的内容是404)
+            res.writeHead(404, { 'content-type': 'text/plain;charset=utf-8;' });
+            res.end('NOT FOUND!');
+        });
+        return;
+    }
+
+};
+http.createServer(handle).listen(port, () => {
+    console.log(`server is success, listen on ${port}!`)
+});
+
+```
+
+> fsPromise.js文件
+
+```javascript
+let fs = require('fs'),
+    path = require('path');
+//=> 存储的是当前模块执行所在的绝对路径(!==__dirname)
+let dirname = path.resolve();
+
+//=> MKDIR && RMDIR && READ-DIR && READ-FILE && COPY-FILE
+['mkdir', 'rmdir', 'readdir', 'readFile', 'copyFile', 'unlink'].forEach(item => {
+    exports[item] = function (pathname, copypath = '') {
+        pathname = path.resolve(dirname, pathname);
+        copypath = path.resolve(dirname, copypath);
+        return new Promise((resolve, reject) => {
+            let arg = [(err, result) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(result || '');
+            }];
+            if (item === 'readFile') {
+                //=> 非图片或者音视频等富媒体资源设置UTF-8
+                if (!/(JPG|JPEG|PNG|GIF|SVG|ICO|BMP|EOT|TTF|WOFF|MP#|MP4|OGG|WAV|M4A|WMV|AVI)$/i.test(pathname)) {
+                    arg.unshift('utf8');
+                }
+            }
+            item === 'copyFile' ? arg.unshift(copypath) : null;
+            fs[item](pathname, ...arg);
+        });
+    };
+});
+
+
+//=> WRITE && APPEND
+['writeFile', 'appendFile'].forEach(item => {
+    exports[item] = function (pathname, content) {
+        pathname = path.resolve(dirname, pathname);
+        if (typeof content !== 'string') {
+            //=> 写入的内容我们规定必须是字符串才可以
+            content = JSON.stringify(content);
+        }
+        return new Promise((resolve, reject) => {
+            fs[item](pathname, content, 'utf8', (err, result) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(result || '');
+            });
+        });
+    };
+})
+```
+
+
+
+
+
+## API接口的请求处理(获取指定用户信息)
+
+
+
+## API接口的请求处理(POST请求处理)
+
+
+
+## 专题汇总-JS中的同步异步(宏任务和微任务)
+
+
+
+## process的一点知识
+
+
+
+# PROMISE A+
+
+## 复习PROMISE的使用
+
+
+
+## 封装基础版的PROMISE库
+
+
+
+## 异常报错按照REJECTED状态处理
+
+
+
+## 实现THEN方法的链式调用
+
+
+
+## 实现CATCH方法
+
+
+
+## 实现PROMISE.CALL方法
+
+
+
+# 存储方案
+
+## 本地存储和服务器存储
+
+
+
+## localStorage和cookie
+
+
+
+# Express
+
+## 初始express
+
+
+
+## express里面的中间件
+
+
+
+## 基于express写API处理
+
+
+
 # 其他
 
 ## 编辑器插件和配置备份神器--setting sync
@@ -1228,6 +1444,6 @@ res.end(JSON.stringify({ name: '哈哈' }));
 
 ```
 GitHub Token: 8b043912fe107452ceafce920c4298dfedaf4093
-GitHub Gist: 05ecbb27183159e5145d88b211ae1a56
+GitHub Gist: 1fa641053091a9778ba857e4bfb8709d
 ```
 
