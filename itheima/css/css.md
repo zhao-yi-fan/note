@@ -11,23 +11,26 @@ CSS通常称为CSS样式表或层叠样式表（级联样式表），主要用�
 
 CSS以HTML为基础，提供了丰富的功能，如字体、颜色、背景的控制及整体排版等，而且还可以针对不同的浏览器设置不同的样式。
 
-## 引入CSS样式表（书写位置）
+## CSS引入方式（四种）
 
-### 内部样式表
+### 内部样式表(嵌入式)
 
-内嵌式是将CSS代码集中写在HTML文档的head头部标签中，并且用style标签定义，其基本语法格式如下：
+将CSS样式表放到head中用`<style>`标签包裹起来
+
+基本语法格式如下：
 
 ```html
 <head>
-<style type="text/CSS">
-    选择器 {属性1:属性值1; 属性2:属性值2; 属性3:属性值3;}
-</style>
+    ...
+    <style type="text/css">
+        ...此处写CSS样式
+    </style>
 </head>
 ```
 
 语法中，style标签一般位于head标签中title标签之后，也可以把他放在HTML文档的任何地方。
 
-type="text/CSS"  在html5中可以省略， 写上也比较符合规范， 所以这个地方可以写也可以省略。
+type="text/css"  在html5中可以省略， 写上也比较符合规范， 所以这个地方可以写也可以省略。
 
 ### 行内式（内联样式）
 
@@ -43,7 +46,9 @@ type="text/CSS"  在html5中可以省略， 写上也比较符合规范， 所�
 
 ### 外部样式表（外链式）
 
-链入式是将所有的样式放在一个或多个以.CSS为扩展名的外部样式表文件中，通过link标签将外部样式表文件链接到HTML文档中，其基本语法格式如下：
+链接式引入：将一个独立的.css文件引入到HTML文件中，使用`<link>`标记写在`<head>`标记中。 链接式会以网页文件主体装载前装载CSS文件。
+
+其基本语法格式如下：
 
 ```html
 <head>
@@ -51,15 +56,30 @@ type="text/CSS"  在html5中可以省略， 写上也比较符合规范， 所�
 </head>
 ```
 
-注意：  link 是个单标签!!!
+注意：  link 是个单标签!
 
 该语法中，link标签需要放在head头部标签中，并且必须指定link标签的三个属性，具体如下：
 
 ```
 href：定义所链接外部样式表文件的URL，可以是相对路径，也可以是绝对路径。
-type：定义所链接文档的类型，在这里需要指定为“text/CSS”，表示链接的外部文件为CSS样式表。
+type：定义所链接文档的类型，在这里需要指定为“text/css”，表示链接的外部文件为CSS样式表。
 rel：定义当前文档与被链接文档之间的关系，在这里需要指定为“stylesheet”，表示被链接的文档是一个样式表文件。
 ```
+
+### 导入方式
+
+导入式：   将一个独立的.css文件引入HTML文件中，导入式使用@import 引入外部CSS文件，`<style>`标记也是写在`<head>`标记中。 导入式会在整个网页装载完后再装载CSS文件。
+
+```html
+<head>
+    ...
+    <style type="text/css">
+        @import "My.css"; 此处注意.css文件的路径
+    </style>
+</head>
+```
+
+
 
 ### 三种样式表总结（位置）
 
@@ -73,9 +93,8 @@ rel：定义当前文档与被链接文档之间的关系，在这里需要指�
 
 使用HTML时，需要遵从一定的规范。CSS亦如此，要想熟练地使用CSS对网页进行修饰，首先需要了解CSS样式规则，具体格式如下：                                          
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/gz.png" />
+<img src="media/gz.png" />
 
-```
 在上面的样式规则中:
 
 1.选择器用于指定CSS样式作用的HTML对象，花括号内是对该对象设置的具体样式。
@@ -84,13 +103,14 @@ rel：定义当前文档与被链接文档之间的关系，在这里需要指�
 4.属性和属性值之间用英文“:”连接。
 5.多个“键值对”之间用英文“;”进行区分。
 可以用段落 和 表格的对齐的演示。
-```
 
 ## CSS基础选择器
 
 ### 标签选择器（元素选择器）
 
-标签选择器是指用HTML标签名称作为选择器，按标签名称分类，为页面中某一类标签指定统一的CSS样式。其基本语法格式如下：
+标签选择器是指用HTML标签名称作为选择器，按标签名称分类，为页面中某一类标签指定统一的CSS样式。
+
+其基本语法格式如下：
 
 ```
 标签名{属性1:属性值1; 属性2:属性值2; 属性3:属性值3; }  或者
@@ -99,38 +119,25 @@ rel：定义当前文档与被链接文档之间的关系，在这里需要指�
 
 标签选择器最大的优点是能快速为页面中同类型的标签统一样式，同时这也是他的缺点，不能设计差异化样式。
 
-标签选择器 可以把某一类标签全部选择出来  div  span  
-
 ### 类选择器
 
-类选择器使用“.”（英文点号）进行标识，后面紧跟类名，其基本语法格式如下：
+类选择器使用“.”（英文点号）进行标识，后面紧跟类名
+
+其基本语法格式如下：
 
 ```
 .类名{属性1:属性值1; 属性2:属性值2; 属性3:属性值3; }
 ```
 
-```
- 标签调用的时候用 class=“类名”  即可。
-```
+类选择器最大的优势是可以为元素对象定义单独或相同的样式。 可以选择一个或者多个标签。
 
-类选择器最大的优势是可以为元素对象定义单独或相同的样式。 可以选择一个或者多个标签 
-
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/good.png" />小技巧：
-
-```
-1.长名称或词组可以使用中横线来为选择器命名。
-2.不建议使用“_”下划线来命名CSS选择器。
-```
-
-​    输入的时候少按一个shift键;
-　浏览器兼容问题 (比如使用_tips的选择器命名，在IE6是无效的)
-　能良好区分JavaScript变量命名(JS变量命名是用“_”)
-
-```
-3.不要纯数字、中文等命名， 尽量使用英文字母来表示。
-```
-
-
+> 小技巧：
+>
+> 1.长名称或词组可以使用中横线来为选择器命名。
+> 2.不建议使用“\_”下划线来命名CSS选择器。
+> 浏览器兼容问题 (比如使用_tips的选择器命名，在IE6是无效的)
+> 能良好区分JavaScript变量命名(js变量命名是用“\_”)
+> 3.不要纯数字、中文等命名， 尽量使用英文字母来表示。
 
 命名规范：  见附件（Web前端开发规范手册.doc）
 
@@ -140,14 +147,12 @@ rel：定义当前文档与被链接文档之间的关系，在这里需要指�
 
 我们可以给标签指定多个类名，从而达到更多的选择目的。
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/lei.png" />
+<img src="media/lei.png" />
 
-注意：
-
-```
-1. 样式显示效果跟HTML元素中的类名先后顺序没有关系,受CSS样式书写的上下顺序有关。
-2. 各个类名中间用空格隔开。
-```
+> 注意：
+>
+> 1. 样式显示效果跟HTML元素中的类名先后顺序没有关系,受CSS样式书写的上下顺序有关。
+> 2. 各个类名中间用空格隔开。
 
 多类名选择器在后期布局比较复杂的情况下，还是较多使用的。
 
@@ -158,13 +163,11 @@ rel：定义当前文档与被链接文档之间的关系，在这里需要指�
 <div class="font14">貂蝉</div>
 ```
 
-
-
-类名选择器 ：< div    class=“nav”>      这个 div 的名字 就是 nav      nav 就是  div     这个 div 也是 nav
-
 ### id选择器
 
-id选择器使用“#”进行标识，后面紧跟id名，其基本语法格式如下：
+id选择器使用“#”进行标识，后面紧跟id名
+
+其基本语法格式如下：
 
 ```
 #id名{属性1:属性值1; 属性2:属性值2; 属性3:属性值3; }
@@ -182,7 +185,7 @@ W3C标准规定，在同一个页面内，不允许有相同名字的id对象出
 
 id选择器     好比人的身份证号码，  全中国是唯一的， 不得重复。 只能使用一次。
 
-***id选择器和类选择器最大的不同在于 使用次数上。***
+**id选择器和类选择器最大的不同在于 使用次数上。**
 
 ### 通配符选择器
 
@@ -191,8 +194,6 @@ id选择器     好比人的身份证号码，  全中国是唯一的， 不得�
 ```
 * { 属性1:属性值1; 属性2:属性值2; 属性3:属性值3; }
 ```
-
-
 
 例如下面的代码，使用通配符选择器定义CSS样式，清除所有HTML标记的默认边距。
 
@@ -203,32 +204,32 @@ id选择器     好比人的身份证号码，  全中国是唯一的， 不得�
 }
 ```
 
-## CSS字体样式属性
+## CSS字体属性(Font)
 
-### font-size:字号大小
+### font-size:字号参数
 
 font-size属性用于设置字号，该属性的值可以使用相对长度单位，也可以使用绝对长度单位。其中，相对长度单位比较常用，推荐使用像素单位px，绝对长度单位使用较少。具体如下：
 
 <img src="media/dd.png" />
 
-### font-family:字体
+### font-family:字体名称
 
 font-family属性用于设置字体。网页中常用的字体有宋体、微软雅黑、黑体等，例如将网页中所有段落文本的字体设置为微软雅黑，可以使用如下CSS样式代码：
 
+```css
 p{ font-family:"微软雅黑";}
+```
 
 可以同时指定多个字体，中间以逗号隔开，表示如果浏览器不支持第一个字体，则会尝试下一个，直到找到合适的字体。
 
-> <img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/good.png" />常用技巧：
-
-```
-1. 现在网页中普遍使用14px+。
-2. 尽量使用偶数的数字字号。ie6等老式浏览器支持奇数会有bug。
-3. 各种字体之间必须使用英文状态下的逗号隔开。
-4. 中文字体需要加英文状态下的引号，英文字体一般不需要加引号。当需要设置英文字体时，英文字体名必须位于中文字体名之前。
-5. 如果字体名中包含空格、#、$等符号，则该字体必须加英文状态下的单引号或双引号，例如font-family: "Times New Roman";。
-6. 尽量使用系统默认字体，保证在任何用户的浏览器中都能正确显示。
-```
+> 注意：
+>
+> 1. 现在网页中普遍使用14px+。
+> 2. 尽量使用偶数的数字字号。ie6等老式浏览器支持奇数会有bug。
+> 3. 各种字体之间必须使用英文状态下的逗号隔开。
+> 4. 中文字体需要加英文状态下的引号，英文字体一般不需要加引号。当需要设置英文字体时，英文字体名必须位于中文字体名之前。
+> 5. 当字体名称包含两个以上分开的单词是，用“”把该字体名称括起来。例如font-family: "Times New Roman";。
+> 6. 尽量使用系统默认字体，保证在任何用户的浏览器中都能正确显示。
 
 ### CSS Unicode字体
 
@@ -239,7 +240,7 @@ p{ font-family:"微软雅黑";}
 方案二： 在 CSS 直接使用 Unicode 编码来写字体名称可以避免这些错误。使用 Unicode 写中文字体名称，浏览器是可以正确的解析的。
 font-family: "\5FAE\8F6F\96C5\9ED1"，表示设置字体为“微软雅黑”。
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/shs.png" />
+<img src="media/shs.png" />
 
 可以通过escape()  来测试属于什么字体。
 
@@ -262,23 +263,31 @@ font-family: "\5FAE\8F6F\96C5\9ED1"，表示设置字体为“微软雅黑”。
 
 字体加粗除了用 b  和 strong 标签之外，可以使用CSS 来实现，但是CSS 是没有语义的。
 
-```html
-font-weight属性用于定义字体的粗细，其可用属性值：normal、bold、bolder、lighter、100~900（100的整数倍）。
-```
+font-weight属性用于定义字体的粗细，
 
+其可用属性值：
 
+normal 默认值
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/good.png" />小技巧： 
+bold 粗体
 
-```css
-数字 400 等价于 normal，而 700 等价于 bold。  但是我们更喜欢用数字来表示。  
-```
+bolder 特粗体
 
-### font-style:字体风格
+lighter 细体
+
+100~900（100的整数倍）
+
+> 注意:
+>
+> 数字 400 等价于 normal，而 700 等价于 bold。  但是我们更喜欢用数字来表示。 
+
+### font-style:倾斜字的名称
 
 字体倾斜除了用 i  和 em 标签之外，可以使用CSS 来实现，但是CSS 是没有语义的。
 
-font-style属性用于定义字体风格，如设置斜体、倾斜或正常字体，其可用属性值如下：
+font-style属性用于定义字体风格，如设置斜体、倾斜或正常字体。
+
+可用属性值如下：
 
 normal：默认值，浏览器会显示标准的字体样式。
 
@@ -286,35 +295,31 @@ italic：浏览器会显示斜体的字体样式。
 
 oblique：浏览器会显示倾斜的字体样式。
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/good.png" />小技巧： 
-
-```
-平时我们很少给文字加斜体，反而喜欢给斜体标签（em，i）改为普通模式。
-```
+> 注意：
+>
+> 平时我们很少给文字加斜体，反而喜欢给斜体标签（em，i）改为普通模式。
 
 ### font:综合设置字体样式 (重点)
 
-font属性用于对字体样式进行综合设置，其基本语法格式如下：
+在一个声明中设置所有字体属性
+
+其基本语法格式如下：
 
 ```css
 选择器{font: font-style  font-weight  font-size/line-height  font-family;}
 ```
 
-
-
-```
 使用font属性时，必须按上面语法格式中的顺序书写，不能更换顺序，各个属性以空格隔开。
 
 注意：其中不需要设置的属性可以省略（取默认值），但必须保留font-size和font-family属性，否则font属性将不起作用。
-```
 
-## CSS外观属性
+## CSS文本属性(Text)
 
 ### color:文本颜色
 
 color属性用于定义文本的颜色，其取值方式有如下3种：
 
-1.预定义的颜色值，如red，green，blue等。
+1.颜色值为颜色名称的颜色，如red，green，blue等。
 
 2.十六进制，如#FF0000，#FF6600，#29D794等。实际工作中，十六进制是最常用的定义颜色的方式。
 
@@ -322,17 +327,21 @@ color属性用于定义文本的颜色，其取值方式有如下3种：
 
 需要注意的是，如果使用RGB代码的百分比颜色值，取值为0时也不能省略百分号，必须写为0%。如果三组数,每组都的两个数字都是一样的,可以省略写成一个.eg:#FF0000,写成#F00
 
-### line-height:行间距
+### line-height:行高
 
-line-height属性用于设置行间距，就是行与行之间的距离，即字符的垂直间距，一般称为行高。line-height常用的属性值单位有三种，分别为像素px，相对值em和百分比%，实际工作中使用最多的是像素px
+line-height是行高，也可以定义行间距
 
-一般情况下，行距比字号大7.8像素左右就可以了。
+line-height 与 font-size 的计算值之差（在 CSS 中成为“行间距”）分为两半，分别加到一个文本行内容的顶部和底部。可以包含这些内容的最小框就是行框。
+
+line-height常用的属性值单位有三种，分别为像素px，相对值em和百分比%，实际工作中使用最多的是像素px
 
 ### text-align:水平对齐方式
 
-```
-text-align属性用于设置文本内容的水平对齐，相当于html中的align对齐属性。其可用属性值如下：
-```
+用于设置文本内容的水平对齐，相当于html中的align对齐属性。
+
+如果 direction 属性是 ltr，则默认值是 left；如果 direction 是 rtl，则为 right。
+
+其可用属性值如下：
 
 left：左对齐（默认值）
 
@@ -342,7 +351,7 @@ center：居中对齐
 
 是让盒子里面的内容水平居中， 而不是让盒子居中对齐
 
-### text-indent:首行缩进
+### text-indent:缩进距离
 
 text-indent属性用于设置首行文本的缩进，其属性值可为不同单位的数值、em字符宽度的倍数、或相对于浏览器窗口宽度的百分比%，允许使用负值, 建议使用em作为设置单位。
 
@@ -384,7 +393,7 @@ text-decoration   通常我们用于给链接修改装饰效果
 
 并集选择器（CSS选择器分组）是各个选择器通过<strong style="color:#f00">逗号</strong>连接而成的，任何形式的选择器（包括标签选择器、class类选择器id选择器等），都可以作为并集选择器的一部分。如果某些选择器定义的样式完全相同，或部分相同，就可以利用并集选择器为它们定义相同的CSS样式。
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/bing.png" />
+<img src="media/bing.png" />
 
 记忆技巧：
 
@@ -398,7 +407,7 @@ text-decoration   通常我们用于给链接修改装饰效果
 
 后代选择器又称为包含选择器，用来选择元素或元素组的后代，其写法就是把外层标签写在前面，内层标签写在后面，中间用空格分隔。当标签发生嵌套时，内层标签就成为外层标签的后代。
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/hou.png" />
+<img src="media/hou.png" />
 
 子孙后代都可以这么选择。 或者说，它能选择任何包含在内 的标签。 
 
@@ -406,7 +415,7 @@ text-decoration   通常我们用于给链接修改装饰效果
 
 子元素选择器只能选择作为某元素子元素的元素。其写法就是把父级标签写在前面，子级标签写在后面，中间跟一个 &gt; 进行连接，注意，符号左右两侧各保留一个空格。
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/zi1.png" />
+<img src="media/zi1.png" />
 
 白话：  这里的子 指的是 亲儿子  不包含孙子 重孙子之类。
 
@@ -478,10 +487,7 @@ HTML标签一般分为块标签和行内标签两种类型，它们也称块元�
 
 每个块元素通常都会独自占据一整行或多整行，可以对其设置宽度、高度、对齐等属性，常用于网页布局和网页结构的搭建。 霸道
 
-```
-常见的块元素有<h1>~<h6>、<p>、<div>、<ul>、<ol>、<li>等，其中<div>标签是最典型的块元素。
-
-```
+常见的块元素有`<h1>~<h6>、<p>、<div>、<ul>、<ol>、<li>`等，其中<div>标签是最典型的块元素。
 
   块级元素的特点：
 
@@ -497,10 +503,7 @@ HTML标签一般分为块标签和行内标签两种类型，它们也称块元�
 
 行内元素（内联元素）不占有独立的区域，仅仅靠自身的字体大小和图像尺寸来支撑结构，一般不可以设置宽度、高度、对齐等属性，常用于控制页面中文本的样式。
 
-```
 常见的行内元素有<a>、<strong>、<b>、<em>、<i>、<del>、<s>、<ins>、<u>、<span>等，其中<span>标签最典型的行内元素。
-
-```
 
 行内元素的特点：
 
@@ -520,35 +523,28 @@ HTML标签一般分为块标签和行内标签两种类型，它们也称块元�
 
 ### 块级元素和行内元素区别
 
-```
 块级元素的特点：
 （1）总是从新行开始
 （2）高度，行高、外边距以及内边距都可以控制。
 （3）宽度默认是容器的100%
 （4）可以容纳内联元素和其他块元素。
 
-```
-
-```
 行内元素的特点：
 （1）和相邻行内元素在一行上。
 （2）高、宽无效，但水平方向的padding和margin可以设置，垂直方向的无效。
 （3）默认宽度就是它本身内容的宽度。
 （4）行内元素只能容纳文本或则其他行内元素。
 
-```
-
 ### 行内块元素（inline-block）
 
-```
-在行内元素中有几个特殊的标签——<img />、<input />、<td>，可以对它们设置宽高和对齐属性，有些资料可能会称它们为行内块元素。
+在行内元素中有几个特殊的标签——`<img />`、`<input />`、`<td>`，可以对它们设置宽高和对齐属性，有些资料可能会称它们为行内块元素。
 
 行内块元素的特点：
 （1）和相邻行内元素（行内块）在一行上,但是之间会有空白缝隙。
 （2）默认宽度就是它本身内容的宽度。
 （3）高度，行高、外边距以及内边距都可以控制。
 
-```
+
 
 ### 标签显示模式转换 display
 
@@ -578,7 +574,7 @@ font-size: 12px;
 
 示例：
 
-```
+```css
 /* good */
 .post,
 .page,
@@ -591,14 +587,13 @@ font-size: 12px;
 .post, .page, .comment {
     line-height: 1.5;
 }
-
 ```
 
 【建议】 选择器的嵌套层级应不大于 3 级，位置靠后的限定条件应尽可能精确。
 
 示例：
 
-```
+```css
 /* good */
 #username input {}
 .comment .avatar {}
@@ -606,7 +601,6 @@ font-size: 12px;
 /* bad */
 .page .header .login #username input {}
 .comment div * {}
-
 ```
 
 ### 属性规范
@@ -615,7 +609,7 @@ font-size: 12px;
 
 示例：
 
-```
+```css
 /* good */
 .selector {
     margin: 0;
@@ -631,7 +625,7 @@ font-size: 12px;
 
 示例：
 
-```
+```css
 /* good */
 .selector {
     margin: 0;
@@ -648,7 +642,7 @@ font-size: 12px;
 
 <img src="media/line1.png"  />
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/line2.png"  />
+<img src="media/line2.png"  />
 
 行高我们利用最多的一个地方是： 可以让一行文本在盒子中垂直居中对齐。
 
@@ -658,7 +652,7 @@ font-size: 12px;
 
 
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/1.png"  />
+<img src="media/1.png"  />
 
 上距离和下距离总是相等的，因此文字看上去是垂直居中的。
 
@@ -730,10 +724,7 @@ font-size: 12px;
 
 注意：
 
-```
 恰当地使用继承可以简化代码，降低CSS样式的复杂性。子元素可以继承父元素的样式（text-，font-，line-这些元素开头的都可以继承，以及color属性）
-
-```
 
 ### CSS优先级
 
@@ -741,7 +732,6 @@ font-size: 12px;
 
 在考虑权重时，初学者还需要注意一些特殊的情况，具体如下：
 
-```
 继承样式的权重为0。即在嵌套结构中，不管父元素样式的权重多大，被子元素继承时，他的权重都为0，也就是说子元素定义的样式会覆盖继承来的样式。
 
 行内样式优先。应用style属性的元素，其行内样式的权重非常高，可以理解为远大于100。总之，他拥有比上面提高的选择器都大的优先级。
@@ -750,7 +740,7 @@ font-size: 12px;
 
 CSS定义了一个!important命令，该命令被赋予最大的优先级。也就是说不管权重如何以及样式位置的远近，!important都具有最大优先级。
 
-```
+
 
 #### CSS特殊性（Specificity）
 
@@ -791,37 +781,42 @@ a:hover      -----—>      0,0,1,1
 总结优先级：
 
 1. 使用了 !important声明的规则。
+
 2. 内嵌在 HTML 元素的 style属性里面的声明。
+
 3. 使用了 ID 选择器的规则。
+
 4. 使用了类选择器、属性选择器、伪元素和伪类选择器的规则。
+
 5. 使用了元素选择器的规则。
+
 6. 只包含一个通用选择器的规则。
+
 7. 同一类选择器则遵循就近原则。
 
-```
 总结：权重是优先级的算法，层叠是优先级的表现
 
-```
+
 
 ## CSS 背景(background)
 
 CSS 可以添加背景颜色和背景图片，以及来进行图片设置。
 
-| background-color                                            | 背景颜色         |
-| ----------------------------------------------------------- | ---------------- |
-| background-image                                            | 背景图片地址     |
-| background-repeat                                           | 是否平铺         |
-| background-position                                         | 背景位置         |
-| background-attachment                                       | 背景固定还是滚动 |
-| 背景的合写（复合属性）                                      |                  |
-| background:背景颜色 背景图片地址 背景平铺 背景滚动 背景位置 |                  |
+| 属性                                                        | 描述                                         |
+| ----------------------------------------------------------- | -------------------------------------------- |
+| background-image                                            | 背景图片地址                                 |
+| background-repeat                                           | 是否平铺                                     |
+| background-position                                         | 背景位置                                     |
+| background-attachment                                       | 背景固定还是滚动                             |
+| background-color                                            | 背景颜色                                     |
+| background:背景颜色 背景图片地址 背景平铺 背景滚动 背景位置 | 简写属性，作用是将背景属性设置在一个声明中。 |
 
-### 背景图片(image)
+### background-image
 
 语法： 
 
 ```css
-background-image : none | url (url) 
+background-image : none | url('URL')
 ```
 
 参数： 
@@ -831,9 +826,9 @@ url : 　使用绝对或相对地址指定背景图像
 
 background-image 属性允许指定一个图片展示在背景中（只有CSS3才可以多背景）可以和 background-color 连用。 如果图片不重复地话，图片覆盖不到地地方都会被背景色填充。 如果有背景图片平铺，则会覆盖背景颜色。
 
-小技巧：  我们提倡 背景图片后面的地址，url不要加引号。
+小技巧：  我们提倡背景图片后面的地址，url不要加引号。
 
-### 背景平铺（repeat）
+### background-repeat
 
 语法： 
 
@@ -865,7 +860,7 @@ repeat-y : 　背景图像在纵向平铺
 
 <img src="media/q.png" width="600"/>
 
-### 背景位置(position)
+### background-position
 
 语法： 
 
@@ -892,7 +887,7 @@ position : 　top | center | bottom | left | center | right
 
 实际工作用的最多的，就是背景图片居中对齐了。
 
-### 背景附着
+### background-attachment
 
 语法： 
 
@@ -909,7 +904,7 @@ fixed : 　背景图像固定
 
 设置或检索背景图像是随对象内容滚动还是固定的。
 
-### 背景简写
+### background
 
 background属性的值的书写顺序官方并没有强制标准的。为了可读性，建议大家如下写：
 
@@ -933,7 +928,7 @@ background: rgba(0,0,0,0.3);
 
 ## 盒子模型（CSS重点）
 
-其实，CSS就三个大模块：  盒子模型 、 浮动 、 定位，其余的都是细节。要求这三部分，无论如何也要学的非常精通。  
+CSS三大模块：  盒子模型 、 浮动 、 定位，其余的都是细节。
 
 所谓盒子模型就是把HTML页面中的元素看作是一个矩形的盒子，也就是一个盛装内容的容器。每个矩形都由元素的内容、内边距（padding）、边框（border）和外边距（margin）组成。
 
@@ -998,14 +993,13 @@ double：边框为双实线
 | 颜色综合设置 | border-color:上边 [右边 下边 左边];                          | 颜色值、#十六进制、rgb(r,g,b)、rgb(r%,g%,b%)                 |
 | 边框综合设置 | border:四边宽度 四边样式 四边颜色;                           |                                                              |
 
-```
-	border-top: 1px solid red; /*上边框*/
-	border-bottom: 2px solid green; /*下边框*/
-	border-left: 1px solid blue;
-	border-right: 5px solid pink;
-	
-	border: 1px solid red;
+```css
+border-top: 1px solid red; /*上边框*/
+border-bottom: 2px solid green; /*下边框*/
+border-left: 1px solid blue;
+border-right: 5px solid pink;
 
+border: 1px solid red;
 ```
 
 #### 表格的细线边框
@@ -1053,9 +1047,9 @@ margin:上外边距 右外边距  下外边距  左外边
 
 取值顺序跟内边距相同。
 
-#### 外边距实现盒子居中
+#### 外边距实现盒子水平居中
 
-可以让一个盒子实现水平居中，需要满足一下两个条件：
+可以让一个盒子实现水平居中，需要满足以下两个条件：
 
 1. 必须是块级元素。     
 2. 盒子必须指定了宽度（width）
@@ -1068,7 +1062,7 @@ margin:上外边距 右外边距  下外边距  左外边
 .header{ width:960px; margin:0 auto;}
 ```
 
-#### 文字盒子居中图片和背景区别
+#### 文字盒子居中
 
 1. 文字水平居中是  text-align: center
 2. 盒子水平居中  左右margin 改为 auto 
@@ -1078,26 +1072,28 @@ text-align: center; /*  文字居中水平 */
 margin: 10px auto;  /* 盒子水平居中  左右margin 改为 auto 就阔以了 */
 ```
 
+#### 图片和背景区别
+
 1. 插入图片 我们用的最多 比如产品展示类
 2. 背景图片我们一般用于小图标背景 或者 超大背景图片
 
 ```css
-section img {  
-		width: 200px;/* 插入图片更改大小 width 和 height */
-		height: 210px;
-		margin-top: 30px;  /* 插入图片更改位置 可以用margin 或padding  盒模型 */
-		margin-left: 50px; /* 插入当图片也是一个盒子 */
-	}
+section img {
+    width: 200px;/* 插入图片更改大小 width 和 height */
+    height: 210px;
+    margin-top: 30px;  /* 插入图片更改位置 可以用margin 或padding  盒模型 */
+    margin-left: 50px; /* 插入当图片也是一个盒子 */
+}
 
 aside {
-		width: 400px;
-		height: 400px;
-		border: 1px solid purple;
-		background: #fff url(images/sun.jpg) no-repeat;
-	
-		background-size: 200px 210px; /*  背景图片更改大小只能用 background-size */
-		background-position: 30px 50px; /* 背景图片更该位置 我用 background-position */
-	}
+    width: 400px;
+    height: 400px;
+    border: 1px solid purple;
+    background: #fff url(images/sun.jpg) no-repeat;
+
+    background-size: 200px 210px; /*  背景图片更改大小只能用 background-size */
+    background-position: 30px 50px; /* 背景图片更该位置 我用 background-position */
+}
 ```
 
 #### 清除元素的默认内外边距
@@ -1123,7 +1119,7 @@ aside {
 
 当上下相邻的两个块元素相遇时，如果上面的元素有下外边距margin-bottom，下面的元素有上外边距margin-top，则他们之间的垂直间距不是margin-bottom与margin-top之和，而是两者中的较大者。这种现象被称为相邻块元素垂直外边距的合并（也称外边距塌陷）。
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/www.png" />
+<img src="media/www.png" />
 
 解决方案：  避免就好了。
 
@@ -1131,7 +1127,7 @@ aside {
 
 对于两个嵌套关系的块元素，如果父元素没有上内边距及边框，则父元素的上外边距会与子元素的上外边距发生合并，合并后的外边距为两者中的较大者，即使父元素的上外边距为0，也会发生合并。
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/n.png" />
+<img src="media/n.png" />
 
 解决方案：
 
@@ -1147,13 +1143,12 @@ width和height的属性值可以为不同单位的数值或相对于父元素的
 大多数浏览器，如Firefox、IE6及以上版本都采用了W3C规范，符合CSS规范的盒子模型的总宽度和总高度的计算原则是：
 
 ```
-  /*外盒尺寸计算（元素空间尺寸）*/
-  Element空间高度 = content height + padding + border + margin
-  Element 空间宽度 = content width + padding + border + margin
-  /*内盒尺寸计算（元素实际大小）*/
-  Element Height = content height + padding + border （Height为内容高度）
-  Element Width = content width + padding + border （Width为内容宽度）
-
+/*外盒尺寸计算（元素空间尺寸）*/
+Element空间高度 = content height + padding + border + margin
+Element 空间宽度 = content width + padding + border + margin
+/*内盒尺寸计算（元素实际大小）*/
+Element Height = content height + padding + border （Height为内容高度）
+Element Width = content width + padding + border （Width为内容宽度）
 ```
 
 注意：
@@ -1174,10 +1169,7 @@ width和height的属性值可以为不同单位的数值或相对于父元素的
 
 按照 优先使用  宽度 （width）  其次 使用内边距（padding）    再次  外边距（margin）。   
 
-```
-  width >  padding  >   margin   
-
-```
+`width  >  padding  >  margin   `
 
 原因：
 
@@ -1203,20 +1195,20 @@ border-radius: 50%;   让一个正方形  变成圆圈
 box-shadow:水平阴影 垂直阴影 模糊距离（虚实）  阴影尺寸（影子大小）  阴影颜色  内/外阴影；
 ```
 
-![1498467567011](C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/1498467567011.png)
+![1498467567011](media/1498467567011.png)
 
 1. 前两个属性是必须写的。其余的可以省略。
 2. 外阴影 (outset) 但是不能写    默认      想要内阴影  inset 
 
 ```css
 div {
-			width: 200px;
-			height: 200px;
-			border: 10px solid red;
-			/* box-shadow: 5px 5px 3px 4px rgba(0, 0, 0, .4);  */
-			/* box-shadow:水平位置 垂直位置 模糊距离 阴影尺寸（影子大小） 阴影颜色  内/外阴影； */
-			box-shadow: 0 15px 30px  rgba(0, 0, 0, .4);
-			
+    width: 200px;
+    height: 200px;
+    border: 10px solid red;
+    /* box-shadow: 5px 5px 3px 4px rgba(0, 0, 0, .4);  */
+    /* box-shadow:水平位置 垂直位置 模糊距离 阴影尺寸（影子大小） 阴影颜色  内/外阴影； */
+    box-shadow: 0 15px 30px  rgba(0, 0, 0, .4);
+
 }
 ```
 
@@ -1236,22 +1228,19 @@ html语言当中另外一个相当重要的概念----------标准流！或者普
 
 浮动最早是用来控制图片，以便达到其他元素（特别是文字）实现“环绕”图片的效果。
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/l.png" style="width: 600px; border: 2px solid #000;"/>
+<img src="media/l.png"/>
 
 后来，我们发现浮动有个很有意思的事情：就是让任何盒子可以一行排列,因此我们就慢慢的偏离主题，用浮动的特性来布局了。（CSS3已经我们真正意义上的网页布局，具体CSS3我们会详细解释）
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/d.png" />
+<img src="media/d.png" />
 
-### 什么是浮动？
+### 什么是浮动
 
 元素的浮动是指设置了浮动属性的元素会脱离标准标准流的控制，移动到其父元素中指定位置的过程。
 
 在CSS中，通过float属性来定义浮动，其基本语法格式如下：
 
-```
-选择器{float:属性值;}
-
-```
+`选择器{float:属性值;}`
 
 | 属性值 | 描述                 |
 | ------ | -------------------- |
@@ -1263,28 +1252,19 @@ html语言当中另外一个相当重要的概念----------标准流！或者普
 
 浮动脱离标准流，====脱标==== 不占位置，会影响标准流。浮动只有左右浮动。
 
-```
 1. 浮动首先创建包含块的概念（包裹）。就是说， 浮动的元素总是找理它最近的父级元素对齐。但是不会超出内边距的范围。 
 
-```
-
-   <img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/one.jpg" width="500" /> 
+   <img src="media/one.jpg" width="500" /> 
 
 
 
-
-
-```
 2.一个父盒子里面的子盒子，如果其中一个子级有浮动的，则其他子级都需要浮动。这样才能一行对齐显示。
 
-```
+3.元素添加浮动后，元素会具有行内块元素的特性。元素的大小完全取决于定义的大小或者默认的内容多少浮动根据元素书写的位置来显示相应的浮动。
 
-```
-3. 元素添加浮动后，元素会具有行内块元素的特性。元素的大小完全取决于定义的大小或者默认的内容多少浮动根据元素书写的位置来显示相应的浮动。
 
-```
 
-总结：  浮动 --->    
+总结：
 
 浮动的目的就是为了让多个块级元素同一行上显示。  最核心的关键点就是   怎么排列的， 是否占有位置
 
@@ -1314,19 +1294,19 @@ float      浮 漏 特
 
 一列固定宽度且居中
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/yl.jpg" width="400" />
+<img src="media/yl.jpg"/>
 
 最普通的，最为常用的结构
 
 ### 两列左窄右宽型
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/ll.jpg" width="400" />
+<img src="media/ll.jpg"/>
 
 比如小米    <a href="http://www.mi.com" target="_blank"> 小米官网 </a>
 
 ### 通栏平均分布型
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/tl.jpg" width="600" />
+<img src="media/tl.jpg" width="600" />
 
 比如锤子    <a href="http://www.smartisan.com/" target="_blank"> 锤子官网 </a>
 
@@ -1344,9 +1324,9 @@ float      浮 漏 特
 
 清除浮动主要为了解决父级元素因为子级浮动引起内部高度为0 的问题。
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/n.jpg" />
+<img src="media/n.jpg" />
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/no.jpg" />
+<img src="media/no.jpg" />
 
 ### 清除浮动的方法
 
@@ -1354,10 +1334,7 @@ float      浮 漏 特
 
 在CSS中，clear属性用于清除浮动，其基本语法格式如下：
 
-```
-选择器{clear:属性值;}   clear 清除 
-
-```
+`选择器{clear:both;}`
 
 | 属性值 | 描述                                       |
 | ------ | ------------------------------------------ |
@@ -1367,9 +1344,11 @@ float      浮 漏 特
 
 #### 额外标签法
 
-```html
-是W3C推荐的做法是通过在浮动元素末尾添加一个空的标签例如 <div style=”clear:both”></div>，或者其他标签br等亦可。
-```
+额外标签法是W3C推荐的做法是通过在浮动元素末尾添加一个空的标签
+
+例如 
+
+`<div style="clear:both"></div>`，或者其他标签br等亦可。
 
 优点： 通俗易懂，书写方便
 
@@ -1379,9 +1358,7 @@ float      浮 漏 特
 
 可以通过触发BFC的方式，可以实现清除浮动效果。
 
-```css
-可以给父级添加： overflow为 hidden|auto|scroll  都可以实现。
-```
+可以给父级添加： `overflow为 hidden|auto|scroll`  都可以实现。
 
 优点：  代码简洁
 
@@ -1389,14 +1366,14 @@ float      浮 漏 特
 
 #### 使用after伪元素清除浮动
 
-**:after 方式为空元素的升级版，好处是不用单独加标签了** 
+**:after 方式为额外标签法的升级版，好处是不用单独加标签了** 
 
 使用方法：
 
 ```css
- .clearfix:after {  content: ""; display: block; height: 0; clear: both; visibility: hidden;  }   
+.clearfix:after {  content: ""; display: block; height: 0; clear: both; visibility: hidden;  }   
 
- .clearfix {*zoom: 1;}   /* IE6、7 专有 */
+.clearfix {*zoom: 1;}   /* IE6、7 专有 */
 ```
 
 优点： 符合闭合浮动思想  结构语义化正确
@@ -1405,9 +1382,7 @@ float      浮 漏 特
 
 代表网站： 百度、淘宝网、网易等
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/163.png" style="border: 1px dashed #3c3c3c;"/>
-
-
+<img src="media/163.png"/>
 
 注意： content:""   尽量不带点
 
@@ -1417,14 +1392,14 @@ float      浮 漏 特
 
 ```css
 .clearfix:before,.clearfix:after { 
-  content:"";
-  display:table;  /* 这句话可以出发BFC BFC可以清除浮动,BFC我们后面讲 */
+    content:"";
+    display:table;  /* 这句话可以出发BFC BFC可以清除浮动,BFC我们后面讲 */
 }
 .clearfix:after {
- clear:both;
+    clear:both;
 }
 .clearfix {
-  *zoom:1;
+    *zoom:1;
 }
 ```
 
@@ -1446,15 +1421,15 @@ background-position   背景定位
 
 第一幅图， 小黄色块可以再图片上移动：
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/1.gif" style="border: 1px dashed #3c3c3c;"/>
+<img src="media/1.gif"/>
 
 第二幅图， 左右箭头压住图片：
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/2.gif" style="border: 1px dashed #3c3c3c;"/>
+<img src="media/2.gif"/>
 
-第三幅图,  hot 再盒子外面多出一块，更加突出：
+第三幅图,  hot 在盒子外面多出一块，更加突出：
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/it.png" style="border: 1px dashed #3c3c3c;"/>
+<img src="media/it.png"/>
 
 以上三个小地方，如果用标准流或者浮动，实现会比较复杂或者难以实现，此时用定位来做
 
@@ -1471,13 +1446,13 @@ background-position   背景定位
 | left       | 左侧偏移量，定义元素相对于其父元素左边线的距离 |
 | right      | 右侧偏移量，定义元素相对于其父元素右边线的距离 |
 
-也就说，以后定位要和这边偏移搭配使用了， 比如 top: 100px;  left: 30px; 等等
+也就说，以后定位要和边偏移搭配使用了， 比如 top: 100px;  left: 30px; 等等
 
 2、定位模式(定位的分类)
 
 在CSS中，position属性用于定义元素的定位模式，其基本语法格式如下：
 
-选择器{position:属性值;}
+`选择器{position:属性值;}`
 
 position属性的常用值
 
@@ -1506,7 +1481,7 @@ PS： 静态定位其实没啥可说的。
 
 对元素设置相对定位后，可以通过边偏移属性改变元素的位置，但是它在文档流中的位置仍然保留。如下图所示，即是一个相对定位的效果展示：
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/r.png"  />
+<img src="media/r.png"  />
 
 注意：   
 
@@ -1519,23 +1494,25 @@ PS： 静态定位其实没啥可说的。
 
 ### 绝对定位absolute (拼爹型)
 
-　[注意] 如果文档可滚动，绝对定位元素会随着它滚动，因为元素最终会相对于正常流的某一部分定位。
-
 当position属性的取值为absolute时，可以将元素的定位模式设置为绝对定位。
 
-注意：    绝对定位最重要的一点是，它可以通过边偏移移动位置，但是它完全脱标，完全不占位置。
+注意：
+
+如果文档可滚动，绝对定位元素会随着它滚动，因为元素最终会相对于正常流的某一部分定位。
+
+绝对定位最重要的一点是，它可以通过边偏移移动位置，但是它完全脱标，完全不占位置。
 
 #### 父级没有定位
 
 若所有父元素都没有定位，以浏览器当前屏幕为准对齐(document文档)。
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/ab.png" />
+<img src="media/ab.png" />
 
 #### 父级有定位
 
 绝对定位是将元素依据最近的已经定位（绝对、固定或相对定位）的父元素（祖先）进行定位。 
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/ab1.png" />
+<img src="media/ab1.png" />
 
 
 
@@ -1551,7 +1528,7 @@ PS： 静态定位其实没啥可说的。
 
 但是，在我们网页布局的时候， 最常说的 子绝父相是怎么来的呢？ 请看如下图：
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/zi.png"  style="border: 1px dashed #3c3c3c;"/>
+<img src="media/zi.png"/>
 
 
 
@@ -1570,10 +1547,38 @@ PS： 静态定位其实没啥可说的。
 定位的盒子也可以水平或者垂直居中，有一个算法。
 
 1. 首先left 50%   父盒子的一半大小
-
 2. 然后走自己外边距负的一半值就可以了 margin-left。
 
-   ​
+```html
+<head>
+    <style>
+        .father {
+            width: 200px;
+            height: 200px;
+            background-color: rgb(0, 255, 102);
+            position: relative;
+        }
+
+        .son {
+            width: 50px;
+            height: 50px;
+            background-color: pink;
+            position: absolute;
+            left: 50%;
+            margin-left: -25px;
+            top: 50%;
+            margin-top: -25px;
+        }
+    </style>
+</head>
+<body>
+    <div class="father">
+        <div class="son"> </div>
+    </div>
+</body>
+```
+
+![1553663027698](media/1553663027698.png)
 
 ### 固定定位fixed(认死理型)
 
@@ -1592,11 +1597,11 @@ ie6等低版本浏览器不支持固定定位。
 
 当对多个元素同时设置定位时，定位元素之间有可能会发生重叠。
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/zzz.png" />
+<img src="media/zzz.png" />
 
 在CSS中，要想调整重叠定位元素的堆叠顺序，可以对定位元素应用z-index层叠等级属性，其取值可为正整数、负整数和0。
 
-比如：  z-index: 2;       font-weight: 700  
+比如：  z-index: 2;
 
 注意：
 
@@ -1620,7 +1625,7 @@ ie6等低版本浏览器不支持固定定位。
 
 行内块 的宽度和高度 跟内容有关系.
 
-** 因此 比如 行内元素 如果添加了 绝对定位或者 固定定位后 浮动后，可以不用转换模式，直接给高度和宽度就可以了。**
+**因此 比如 行内元素 如果添加了 绝对定位或者 固定定位后 浮动后，可以不用转换模式，直接给高度和宽度就可以了**
 
 ## CSS高级技巧
 
@@ -1646,7 +1651,7 @@ visible : 　对象可视
 
 hidden : 　对象隐藏
 
-特点： 隐藏之后，继续保留原有位置。（停职留薪）
+特点： 隐藏之后，继续保留原有位置。
 
 #### overflow 溢出
 
@@ -1662,7 +1667,7 @@ scroll : 　不管超出内容否，总是显示滚动条
 
 ### CSS用户界面样式
 
- 所谓的界面样式， 就是更改一些用户操作样式， 比如 更改用户的鼠标样式， 表单轮廓等。但是比如滚动条的样式改动受到了很多浏览器的抵制，因此我们就放弃了。 防止表单域拖拽
+所谓的界面样式，就是更改一些用户操作样式， 比如 更改用户的鼠标样式， 表单轮廓等。但是比如滚动条的样式改动受到了很多浏览器的抵制，因此我们就放弃了。 防止表单域拖拽
 
 #### 鼠标样式cursor
 
@@ -1676,10 +1681,10 @@ cursor :  default  小白 | pointer  小手  | move  移动  |  text  文本
 
 ```html
 <ul>
-  <li style="cursor:default">我是小白</li>
-  <li style="cursor:pointer">我是小手</li>
-  <li style="cursor:move">我是移动</li>
-  <li style="cursor:text">我是文本</li>
+    <li style="cursor:default">我是小白</li>
+    <li style="cursor:pointer">我是小手</li>
+    <li style="cursor:move">我是移动</li>
+    <li style="cursor:text">我是文本</li>
 </ul>
 ```
 
@@ -1690,20 +1695,20 @@ cursor :  default  小白 | pointer  小手  | move  移动  |  text  文本
  是绘制于元素周围的一条线，位于边框边缘的外围，可起到突出元素的作用。
 
 ```css
- outline : outline-color ||outline-style || outline-width 
+outline : outline-color ||outline-style || outline-width 
 ```
 
- 但是我们都不关心可以设置多少，我们平时都是去掉的。
+但是我们都不关心可以设置多少，我们平时都是去掉的。
 
 最直接的写法是 ：  outline: 0;   或者  outline: none;
 
 ```html
- <input  type="text"  style="outline: 0;"/>
+<input  type="text"  style="outline: 0;"/>
 ```
 
 #### 防止拖拽文本域resize
 
-resize：none    这个单词可以防止 火狐 谷歌等浏览器随意的拖动 文本域。
+`resize：none`    这个单词可以防止 火狐 谷歌等浏览器随意的拖动 文本域。
 
 右下角可以拖拽： 
 
@@ -1723,7 +1728,7 @@ resize：none    这个单词可以防止 火狐 谷歌等浏览器随意的拖�
 
 vertical-align 垂直对齐， 这个看上去很美好的一个属性， 实际有着不可捉摸的脾气。
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/xian.jpg" />
+<img src="media/xian.jpg" />
 
 ```css
 vertical-align : baseline |top |middle |bottom 
@@ -1733,9 +1738,7 @@ vertical-align : baseline |top |middle |bottom
 
 vertical-align 不影响块级元素中的内容对齐，它只针对于 行内元素或者行内块元素，特别是行内块元素， **通常用来控制图片/表单与文字的对齐**。
 
-![1498467742995](C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/1498467742995.png)
-
-
+![1498467742995](media/1498467742995.png)
 
 #### 图片、表单和文字对齐
 
@@ -1747,8 +1750,10 @@ vertical-align 不影响块级元素中的内容对齐，它只针对于 行内�
 
 解决的方法就是：  
 
-1. 给img vertical-align:middle | top等等。  让图片不要和基线对齐。<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/1633.png"  width="500"  style="border: 1px dashed #ccc;" />
-2. 给img 添加 display：block; 转换为块级元素就不会存在问题了。<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/sina1.png" width="500" style="border: 1px dashed #ccc;"/>
+1. 给img vertical-align:middle | top等等。  让图片不要和基线对齐。
+2. <img src="media/1633.png"/>
+3. 给img 添加 display：block; 转换为块级元素就不会存在问题了。
+4. <img src="media/sina1.png"/>
 
 ## 溢出的文字隐藏
 
@@ -1773,11 +1778,11 @@ ellipsis : 　当对象内文本溢出时显示省略标记（...）
 
 注意一定要首先强制一行内显示，再次和overflow属性  搭配使用
 
-## CSS精灵技术（sprite） 小妖精  雪碧
+## CSS精灵技术（sprite）  雪碧图
 
 ### 精灵技术产生的背景
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/sss.png" />
+<img src="media/sss.png" />
 
 图所示为网页的请求原理图，当用户访问一个网站时，需要向服务器发送请求，网页上的每张图像都要经过一次请求才能展现给用户。
 
@@ -1787,7 +1792,7 @@ ellipsis : 　当对象内文本溢出时显示省略标记（...）
 
 简单地说，CSS精灵是一种处理网页背景图像的方式。它将一个页面涉及到的所有零星背景图像都集中到一张大图中去，然后将大图应用于网页，这样，当用户访问该页面时，只需向服务发送一次请求，网页中的背景图像即可全部展示出来。通常情况下，这个由很多小的背景图像合成的大图被称为精灵图（雪碧图），如下图所示为京东网站中的一个精灵图。
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/jds.png"  style="border: 1px dashed #ccc;" />
+<img src="media/jds.png"/>
 
 #### 精灵技术的使用
 
@@ -1799,27 +1804,24 @@ CSS 精灵其实是将网页中的一些背景图像整合到一张大图中（�
 
 大部分情况下，精灵图都是网页美工做。
 
-```
 我们精灵图上放的都是小的装饰性质的背景图片。 插入图片不能往上放。
-我们精灵图的宽度取决于最宽的那个背景。 
+我们精灵图的宽度取决于最宽的那个背景。
 我们可以横向摆放也可以纵向摆放，但是每个图片之间，间隔至少隔开偶数像素合适。
 在我们精灵图的最低端，留一片空隙，方便我们以后添加其他精灵图。
 
-```
-
-结束语：   小公司，背景图片很少的情况，没有必要使用精灵技术，维护成本太高。 如果是背景图片比较多，可以建议使用精灵技术。
+结束语：小公司，背景图片很少的情况，没有必要使用精灵技术，维护成本太高。 如果是背景图片比较多，可以建议使用精灵技术。
 
 ## 滑动门
 
 先来体会下现实中的滑动门,或者你可以叫做推拉门：
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/h.gif" />
+<img src="media/h.gif" />
 
 ### 滑动门出现的背景
 
 制作网页时，为了美观，常常需要为网页元素设置特殊形状的背景，比如微信导航栏，有凸起和凹下去的感觉，最大的问题是里面的字数不一样多
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/wxx.jpg" />
+<img src="media/wxx.jpg" />
 
 为了使各种特殊形状的背景能够自适应元素中文本内容的多少，出现了CSS滑动门技术。它从新的角度构建页面，使各种特殊形状的背景能够自由拉伸滑动，以适应元素内部的文本内容，可用性更强。 最常见于各种导航栏的滑动门。
 
@@ -1831,9 +1833,9 @@ CSS 精灵其实是将网页中的一些背景图像整合到一张大图中（�
 
 ```html
 <li>
-  <a href="#">
-    <span>导航栏内容</span>
-  </a>
+    <a href="#">
+        <span>导航栏内容</span>
+    </a>
 </li>
 ```
 
@@ -1873,34 +1875,31 @@ woff字体是Web字体中最佳格式，他是一个开放的TrueType/OpenType�
 
 ## 字体图标
 
-图片是有诸多优点的，但是缺点很明显，比如图片不但增加了总文件的大小，还增加了很多额外的"http请求"，这都会大大降低网页的性能的。更重要的是图片不能很好的进行“缩放”，因为图片放大和缩小会失真。 我们后面会学习移动端响应式，很多情况下希望我们的图标是可以缩放的。此时，一个非常重要的技术出现了，额不是出现了，是以前就有，是被从新"宠幸"啦。。 这就是字体图标（iconfont).
+图片是有诸多优点的，但是缺点很明显，比如图片不但增加了总文件的大小，还增加了很多额外的"http请求"，这都会大大降低网页的性能的。更重要的是图片不能很好的进行“缩放”，因为图片放大和缩小会失真。 我们后面会学习移动端响应式，很多情况下希望我们的图标是可以缩放的。此时，一个非常重要的技术出现了，额不是出现了，是以前就有，是被重新"宠幸" 这就是字体图标（iconfont).
 
 ### 字体图标优点
 
-```
-可以做出跟图片一样可以做的事情,改变透明度、旋转度，等..
+可以做出跟图片一样可以做的事情,改变透明度、旋转度等
 但是本质其实是文字，可以很随意的改变颜色、产生阴影、透明效果等等...
 本身体积更小，但携带的信息并没有削减。
 几乎支持所有的浏览器
 移动端设备必备良药...
 
-```
-
 ### 字体图标使用流程
 
 总体来说，字体图标按照如下流程：
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/fontt.png" />
+<img src="media/fontt.png" />
 
 #### 设计字体图标
 
 假如图标是我们公司单独设计，那就需要第一步了，这个属于UI设计人员的工作， 他们在 illustrator 或 Sketch 这类矢量图形软件里创建 icon图标， 比如下图：
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/03.jpg" />
+<img src="media/03.jpg" />
 
-  之后保存为svg格式，然后给我们前端人员就好了。 
+之后保存为svg格式，然后给我们前端人员就好了。 
 
-  其实第一步，我们不需要关心，只需要给我们这些图标就可以了，如果图标是大众的，网上本来就有的，可以直接跳过第一步，进入第三步。
+其实第一步，我们不需要关心，只需要给我们这些图标就可以了，如果图标是大众的，网上本来就有的，可以直接跳过第一步，进入第三步。
 
 #### 上传生成字体包
 
@@ -1942,9 +1941,9 @@ http://www.iconfont.cn/
 
 [https://icons8.com/](https://icons8.com/)
 
-提供PNG免费下载，像素大能到500PX
+提供PNG免费下载，像素大能到500px
 
-![1513132290173](C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/1513132290173.png)
+![1513132290173](media/1513132290173.png)
 
 #### 下载兼容字体包
 
@@ -1954,9 +1953,9 @@ http://www.iconfont.cn/
 
 
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/fontt1.png" />
+<img src="media/fontt1.png" />
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/fontt2.png" />
+<img src="media/fontt2.png" />
 
 #### 字体引入到HTML
 
@@ -1964,20 +1963,20 @@ http://www.iconfont.cn/
 
 1. 首先把 以下4个文件放入到 fonts文件夹里面。 通俗的做法
 
-   ![1498032122244](C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/1498032122244.png)
+   ![1498032122244](media/1498032122244.png)
 
    ##### 第一步：在样式里面声明字体： 告诉别人我们自己定义的字体
 
    ```css
    @font-face {
-     font-family: 'icomoon';
-     src:  url('fonts/icomoon.eot?7kkyc2');
-     src:  url('fonts/icomoon.eot?7kkyc2#iefix') format('embedded-opentype'),
-       url('fonts/icomoon.ttf?7kkyc2') format('truetype'),
-       url('fonts/icomoon.woff?7kkyc2') format('woff'),
-       url('fonts/icomoon.svg?7kkyc2#icomoon') format('svg');
-     font-weight: normal;
-     font-style: normal;
+       font-family: 'icomoon';
+       src:  url('fonts/icomoon.eot?7kkyc2');
+       src:  url('fonts/icomoon.eot?7kkyc2#iefix') format('embedded-opentype'),
+           url('fonts/icomoon.ttf?7kkyc2') format('truetype'),
+           url('fonts/icomoon.woff?7kkyc2') format('woff'),
+           url('fonts/icomoon.svg?7kkyc2#icomoon') format('svg');
+       font-weight: normal;
+       font-style: normal;
    }
    ```
 
@@ -1985,16 +1984,16 @@ http://www.iconfont.cn/
 
    ```css
    span {
-   		font-family: "icomoon";
-   	}
+       font-family: "icomoon";
+   }
    ```
 
    ##### 第三步：盒子里面添加结构
 
    ```css
    span::before {
-   		 content: "\e900";
-   	}
+       content: "\e900";
+   }
    或者  
    <span></span>  
    ```
@@ -2005,7 +2004,7 @@ http://www.iconfont.cn/
 
    把压缩包里面的selection.json 从新上传，然后，选中自己想要新的图标，从新下载压缩包，替换原来文件即可。
 
-   <img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/fontt5.png" />
+   <img src="media/fontt5.png" />
 
 ## BFC(块级格式化上下文)
 
@@ -2019,7 +2018,7 @@ BFC(Block formatting context)
 
 分为 块级元素   行内元素  行内块元素 ，其实，它还有很多其他显示模式。
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/dis.png"  style="border: 1px dashed #ccc; padding: 5px;" />
+<img src="media/dis.png"/>
 
 ### 那些元素会具有BFC的条件
 
@@ -2033,7 +2032,7 @@ display 属性为 block, list-item, table 的元素，会产生BFC.
 
 这个BFC 有着具体的布局特性： 
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/box.gif" />
+<img src="media/box.gif" />
 
 有宽度和高度 ， 有 外边距margin  有内边距padding 有边框 border。
 
@@ -2088,7 +2087,7 @@ BFC能用来做什么？
 
 ```
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/fu.jpg" />
+<img src="media/fu.jpg" />
 (2) 解决外边距合并问题
 
 外边距合并的问题。
@@ -2102,18 +2101,15 @@ BFC能用来做什么？
 
 属于同一个BFC的两个相邻盒子的margin会发生重叠，那么我们创建不属于同一个BFC，就不会发生margin重叠了。
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/ma.png" />
+<img src="media/ma.png" />
 
 (3) 制作右侧自适应的盒子问题
 
 主要用到 
 
-```
 普通流体元素BFC后，为了和浮动元素不产生任何交集，顺着浮动边缘形成自己的封闭上下文
 
-```
-
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/you.png" />
+<img src="media/you.png" />
 
 ### BFC 总结
 
@@ -2129,7 +2125,7 @@ BFC就是页面上的一个隔离的独立容器，容器里面的子元素不�
 
  类似 爬山，由低出往高处爬
 
-  <img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/pa.png" width="400" />
+  <img src="media/pa.png" width="400" />
 
   <b>优雅降级 graceful degradation：</b>
 
@@ -2137,9 +2133,9 @@ BFC就是页面上的一个隔离的独立容器，容器里面的子元素不�
 
 类似蹦极，由高处往低处下落
 
-<img src="C:/Users/99344/Desktop/2018web/%E5%90%AC%E8%AF%BE/01.html%E5%92%8Ccss/css%E8%80%81%E5%B8%88%E7%AC%94%E8%AE%B0/media/xia.jpg" />
+<img src="media/xia.jpg" />
 
-　　区别：渐进增强是向上兼容，优雅降级是向下兼容。
+区别：渐进增强是向上兼容，优雅降级是向下兼容。
 
 个人建议： 现在互联网发展很快， 连微软公司都抛弃了ie浏览器，转而支持 edge这样的高版本浏览器，我们很多情况下没有必要再时刻想着低版本浏览器了，而是一开始就构建完整的效果，根据实际情况，修补低版本浏览器问题。
 
@@ -2203,11 +2199,159 @@ background-image: url('images/gyt.jpg');
 
 ```css
 background:url(test1.jpg) no-repeat scroll 10px 20px/50px 60px  ,
-	   url(test1.jpg) no-repeat scroll 10px 20px/70px 90px ,
-	   url(test1.jpg) no-repeat scroll 10px 20px/110px 130px c #aaa;
+url(test1.jpg) no-repeat scroll 10px 20px/70px 90px ,
+url(test1.jpg) no-repeat scroll 10px 20px/110px 130px c #aaa;
 ```
 
+## css盒子模型
 
+css盒子模型又称框模型(Box Model), 包含了元素内容(content), 内边距(padding), 边框(border), 外边距(margin)几个要素.
 
+![1555296613463](media/1555296613463.png)
 
+### box-sizing属性
 
+box-sizing属性是用户界面属性里的一种
+
+`box-sizing: content-box|padding-box|border-box|inherit`
+
+- content-box: 默认值, 可以使设置的宽度和高度应用到元素的内容框. 盒子的width只包含内容
+
+- border-box: 设置的width值其实是除margin之外的border+padding+element的总宽度.盒子的width包含border+padding+内容
+
+即总宽度=margin+width
+
+- inherit: 规定应从父元素继承box-sizing属性的值
+
+关于border-box的使用:
+
+一个box宽度为100%, 又想要两边有内边距, 这时候用就比较好
+
+全局设置border-box很好, 首先它符合直觉, 其次它可以省去一次又一次的加加减减, 它还有一个关键作用--让有边框的盒子正常使用百分比宽度
+
+# 面试题
+
+1. li标签转成了inline-block, 默认的li与li之间会产生空白间隔,是什么引起的?怎么解决?
+
+![1553736243532](media/1553736243532.png)
+
+```html
+<head>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        ul li {
+            list-style-type: none;
+            width: 10%;
+            height: 150px;
+            display: inline-block;
+        }
+        .part1 {
+            background-color: red;
+        }
+        .part2 {
+            background-color: blue;
+        }
+        .part3 {
+            background-color: yellow;
+        }
+        .part4 {
+            background-color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <ul>
+        <li class="part1">1</li>
+        <li class="part2">2</li>
+        <li class="part3">3</li>
+        <li class="part4">4</li>
+
+    </ul>
+</body>
+```
+
+这是因为浏览器的默认行为是把inline元素间的空白字符(空格换行tab)渲染成一个空格, 也就是我们上面的代码<li>换行后会产生换行字符,而他会变成一个空格, 当然空格就占用一个字符的宽度.
+
+解决方法:
+
+因为是li换行导致的, 那就把li代码全部写在一排
+
+```html
+<ul>
+    <li class="part1">1</li><li class="part2">2</li><li class="part3">3</li><li class="part4">4</li>
+
+</ul>
+```
+
+2. 行内元素有哪些？块级元素有哪些？ 空(void)元素有那些？
+
+行内元素: a, span, b, strong, i, em,
+
+块级元素: div, ul, li, h1~h6,
+
+行内块: input, img, textarea, td
+
+空元素: 没有内容的HTML元素, br, hr, meta, link, input, img
+
+3. 不定宽高的child在father内部的水平垂直居中的解决方案
+
+```html
+<head>
+    <style>
+        .father {
+            height: 100px;
+            line-height: 100px;
+            text-align: center;
+        }
+
+        .child {
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="father">
+        <div class="child">222</div>
+    </div>
+</body>
+```
+
+定宽高的:
+
+```html
+<head>
+    <style>
+        .father {
+            position: relative;
+            background-color: pink;
+            height: 100px;
+        }
+
+        .son {
+            height: 50px;
+            width: 50px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -25px;
+            margin-top: -25px;
+            background-color: #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="father">
+        <div class="son">222</div>
+    </div>
+</body>
+```
+
+![1553738268226](media/1553738268226.png)
+
+4.

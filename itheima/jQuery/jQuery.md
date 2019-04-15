@@ -351,5 +351,5 @@ var $$ = $.noConflict();//把jq的$改名为$$
 console.log($);//输出此时的$,现在是itcast库的$
 ```
 
-+
+
 
