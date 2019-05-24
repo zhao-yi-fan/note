@@ -371,7 +371,7 @@ axios.defaults.baseURL = 'https://www.easy-mock.com/mock/5cb165067aab7f78650d208
 axios.defaults.validateStatus = function validateStatus(status){
     return /^(2|3|4)\d{2}$/.test(status);
 }
-axios.get('proxy2').then((result)=>{
+axios.get('/proxy2').then((result)=>{
     console.log(result);
 })
 ```
@@ -732,13 +732,357 @@ fetch('https://www.easy-mock.com/mock/5cb165067aab7f78650d2087/example/proxy').t
 3. 当用户下拉加载更多或者点击第二页等页码按钮等时候, 重复第一步, 把对应要展示的页码传递给服务器, 服务器返回对应页码中的数据
 4. ...
 
+```javascript
+let matchRender = (function ($) {
+    let $userList = $('.userList'),
+        $wrapper = $userList.find('ul'),
+        $tip = $userList.find('.tip'),
+        $headerBox = $('.headerBox'),
+        $searchBtn = $headerBox.find('.searchBtn');
+
+
+    let limit = 10,//=> 每页展示的数量
+        page = 1,//=> 当前是第几页
+        pageNum = 1,//=> 总页数
+        total = 0,//=> 总条数
+        search = '',//=> 搜索的内容
+        isRun = false;//是否正在加载最新的数据
+
+    //=> QUERY-DATA:获取数据
+    let queryData = function queryData() {
+        axios.get('/getMathchList', {
+            params: {
+                limit,
+                page,
+                search
+            }
+        }).then(result => {
+            pageNum = parseFloat(result['pageNum']);
+            total = parseFloat(result['total']);
+            return result;
+        }).then(bindHTML);
+    }
+
+    //=> BIND-HTML:数据绑定
+    let bindHTML = function bindHTML(result) {
+        let { code, list = [] } = result;
+        if (parseFloat(code) !== 0) {
+            //=> 获取数据失败:这个失败不是服务器返回失败,而是获取的数据不是我们最终想要的而已,非状态码的失败
+            $wrapper.css('display', 'none');
+            $tip.css('display', 'block');
+            isRun = false;
+            return;
+        }
+        //=> 成功绑定数据
+        $wrapper.css('display', 'block');
+        $tip.css('display', 'none');
+        let $frg = $(document.createDocumentFragment());
+        list.forEach((item, index) => {
+            let { id, name, picture, sex, matchId, slogan, voteNum, isVote } = item;
+            /* 从列表点击跳转到详情页面:我们把用户的ID通过问号传递参数的方式传递给详情页面(?userId=xxx),到详情页面我们只需要获取到这个ID,然后根据传递ID不同展示不同的信息即可 */
+            $frg.append(`<li>
+                <a href="detail.html?userId=${id}">
+                    <img src="${picture}" alt="${name}" class="picture">
+                    <p class="title">
+                        <span>${name}</span>
+                        |
+                        <span>编号 #${matchId}</span>
+                    </p>
+                    <p class="slogan">${slogan}</p>
+                </a>
+                <div class="vote">
+                    <span class="voteNum">${voteNum}</span>
+                    ${parseFloat(isVote) === 0 ? `<a href="javascript:;" class="voteBtn">投他一票</a>` : ``}
+                </div>
+            </li>`);
+        });
+        $wrapper.append($frg);
+        $frg = null;
+
+        //=>最新数据加载完成
+        isRun = false;
+    }
+    return {
+        init: function init() {
+            //=> 开始展示第一页的内容
+            queryData();
+            //=> 下拉加载更多数据
+            $(window).on('scroll', () => {
+                let {
+                    clientHeight,
+                    scrollTop,
+                    scrollHeight
+                } = document.documentElement;
+
+                if (clientHeight + scrollTop + 200 >= scrollHeight) {
+                    //页面即将到达底部:加载更多数据
+                    //=>正在加载中是不允许加载新数据的
+                    if (isRun) return;//=>如果isRun已经为true了,就跳出判断,不进行数据加载
+                    if (page >= pageNum) return;
+                    isRun = true;
+                    page++;
+                    queryData();
+                }
+            })
+
+            //=> 点击搜索
+            $searchBtn.tap(() => {
+                if (isRun) return;
+                isRun = true;
+                search = $searchBtn.prev('input').val().trim();
+                //=> 还要把之前ul中的内容清空,然后展示最新搜索的信息即可
+                $wrapper.html('');
+                page = 1;
+                queryData();
+            });
+        }
+    }
+})(Zepto);
+matchRender.init();
+```
+
 
 
 ## 首页数据的下拉加载和搜索
 
+### EventTarget.addEventListener()
+
+> 方法将指定的监听器注册到 `EventTarget`上，当该对象触发指定的事件时，指定的回调函数就会被执行。 事件目标可以是一个文档上的元素 `Element`,`Document`和`Window`或者任何其他支持事件的对象 (比如 `XMLHttpRequest`)。
+
+> `addEventListener()`的工作原理是将实现`EventListener`的函数或对象添加到调用它的`EventTarget`上的指定事件类型的事件侦听器列表中。
+
+- 语法
+
+`target.addEventListener(type, listener[, options]);`
+`target.addEventListener(type, listener[, useCapture]);`
+`target.addEventListener(type, listener[, useCapture, wantsUntrusted]); `
+
+参数:
+
+type: 表示监听事件类型的字符串。
+
+listener: 当所监听的事件类型触发时，会接收到一个事件通知（实现了 `Event` 接口的对象）对象。listener 必须是一个实现了 EventListener接口的对象，或者是一个函数。
+
+options (可选):一个指定有关 `listener `属性的可选参数**对象**。可用的选项如下：
+
+- `capture`:  Boolean，表示 `listener` 会在该类型的事件捕获阶段传播到该 `EventTarget` 时触发。
+- `once`:  Boolean，表示 listener 在添加之后最多只调用一次。如果是true，listener会在其被调用之后自动移除。
+- `passive`: Boolean，设置为true时，表示 `listener` 永远不会调用 preventDefault()。如果 listener 仍然调用了这个函数，客户端将会忽略它并抛出一个控制台警告。
+- `mozSystemGroup`: 只能在 XBL 或者是 Firefox' chrome 使用，这是个 Boolean，表示 `listener `被添加到 system group。
+
+- `useCapture`  可选
+
+  `Boolean`，在DOM树中，注册了listener的元素， 是否要先于它下面的EventTarget，调用该listener。 当userCapture(设为true) 时，沿着DOM树向上冒泡的事件，不会触发listener。当一个元素嵌套了另一个元素，并且两个元素都对同一事件注册了一个处理函数时，所发生的事件冒泡和事件捕获是两种不同的事件传播方式。事件传播模式决定了元素以哪个顺序接收事件。进一步的解释可以查看 事件流 及 JavaScript Event order文档。 如果没有指定， `useCapture` 默认为 false 。 
+
+**注意:** 对于事件目标上的事件监听器来说，事件会处于“目标阶段”，而不是冒泡阶段或者捕获阶段。在目标阶段的事件会触发该元素（即事件目标）上的所有监听器，而不在乎这个监听器到底在注册时`useCapture` 参数值是true还是false。
+
+**注意:** `useCapture`  仅仅在现代浏览器最近的几个版本中是可选的。 例如 Firefox 6以前的版本都不是可选的。为了能够提供更广泛的支持，你应该提供这个参数。
+
+wantsUntrusted:如果为 `true `, 则事件处理程序会接收网页自定义的事件。此参数只适用于 Gecko（chrome的默认值为true，其他常规网页的默认值为false），主要用于附加组件的代码和浏览器本身。
+
+返回值
+
+`undefined`.
+
+### 下拉加载
+
+![1557892741455](media/1557892741455.png)
+
+`scrollTop + clientHeight + 200 >= scrollHeight`
+
+逻辑:
+
+一屏幕的高度加上卷上去的高度如果快达到页面真实高度就要加载数据
+
+在上一页数据没加载完之前,下一页加载数据不会触发
+
+在所有数据加载完成之后,最后一次下拉数据不会触发加载数据请求
+
+代码:
+
+```js
+let matchRender = (function ($) {
+    let limit = 10,//=> 每页展示的数量
+        page = 1,//=> 当前是第几页
+        pageNum = 1,//=> 总页数
+        total = 0,//=> 总条数
+        search = '',//=> 搜索的内容
+        isRun = false;//是否正在加载最新的数据
+
+    //=> QUERY-DATA:获取数据
+    let queryData = function queryData() {
+        axios.get('/getMathchList', {
+            params: {
+                limit,
+                page,
+                search
+            }
+        }).then(result => {
+            pageNum = parseFloat(result['pageNum']);
+            total = parseFloat(result['total']);
+            return result;
+        }).then(bindHTML);
+    }
+
+    //=> BIND-HTML:数据绑定
+    let bindHTML = function bindHTML(result) {
+        let { code, list = [] } = result;
+        if (parseFloat(code) !== 0) {
+
+        }
+        //=> 成功绑定数据
+        $wrapper.css('display', 'block');
+        $tip.css('display', 'none');
+        let $frg = $(document.createDocumentFragment());
+        list.forEach((item, index) => {
+
+        });
+        $wrapper.append($frg);
+        $frg = null;
+
+        //=>最新数据加载完成
+        isRun = false;
+    }
+    return {
+        init: function init() {
+            //=> 开始展示第一页的内容
+            queryData();
+            //=> 下拉加载更多数据
+            $(window).on('scroll', () => {
+                let {
+                    clientHeight,
+                    scrollTop,
+                    scrollHeight
+                } = document.documentElement;
+
+                if (clientHeight + scrollTop + 200 >= scrollHeight) {
+                    //页面即将到达底部:加载更多数据
+                    //=>正在加载中是不允许加载新数据的
+                    if (isRun) return;//=>如果isRun已经为true了,就跳出判断,不进行数据加载
+                    if (page >= pageNum) return;
+                    isRun = true;
+                    page++;
+                    queryData();
+                }
+            })
+        }
+    }
+})(Zepto);
+matchRender.init();
+```
+
+### 搜索
+
+- 逻辑
+
+> 点击搜索
+>
+> 获取输入框中的搜索内容
+>
+> 想服务器传输搜索内容的请求
+>
+> 需要把原来展示的内容数据清空,否则搜索返回的数据会追加到原来的数据之后
+>
+> 把返回的数据绑定到ul标签下
+>
+> 当搜索没有完成的时候,再次点击搜索按钮是不会重复发起请求的
+
+```javascript
+let matchRender = (function ($) {
+    let $userList = $('.userList'),
+        $wrapper = $userList.find('ul'),
+        $tip = $userList.find('.tip'),
+        $headerBox = $('.headerBox'),
+        $searchBtn = $headerBox.find('.searchBtn');
 
 
+    let limit = 10,//=> 每页展示的数量
+        page = 1,//=> 当前是第几页
+        pageNum = 1,//=> 总页数
+        total = 0,//=> 总条数
+        search = '',//=> 搜索的内容
+        isRun = false;//是否正在加载最新的数据
 
+    //=> QUERY-DATA:获取数据
+    let queryData = function queryData() {
+        axios.get('/getMathchList', {
+            params: {
+                limit,
+                page,
+                search
+            }
+        }).then(result => {
+            pageNum = parseFloat(result['pageNum']);
+            total = parseFloat(result['total']);
+            return result;
+        }).then(bindHTML);
+    }
+
+    //=> BIND-HTML:数据绑定
+    let bindHTML = function bindHTML(result) {
+        let { code, list = [] } = result;
+        if (parseFloat(code) !== 0) {
+
+        }
+        //=> 成功绑定数据
+        $wrapper.css('display', 'block');
+        $tip.css('display', 'none');
+        let $frg = $(document.createDocumentFragment());
+        list.forEach((item, index) => {
+
+        });
+        $wrapper.append($frg);
+        $frg = null;
+
+        //=>最新数据加载完成
+        isRun = false;
+    }
+    return {
+        init: function init() {
+            //=> 开始展示第一页的内容
+            queryData();
+            //=> 下拉加载更多数据
+            $(window).on('scroll', () => {
+                let {
+                    clientHeight,
+                    scrollTop,
+                    scrollHeight
+                } = document.documentElement;
+
+                if (clientHeight + scrollTop + 200 >= scrollHeight) {
+                    //页面即将到达底部:加载更多数据
+                    //=>正在加载中是不允许加载新数据的
+                    if (isRun) return;//=>如果isRun已经为true了,就跳出判断,不进行数据加载
+                    if (page >= pageNum) return;
+                    isRun = true;
+                    page++;
+                    queryData();
+                }
+            })
+
+            //=> 点击搜索
+            /* 
+            点击按钮触发函数
+            获取输入框中的内容
+            开始执行搜索
+            如果开始执行搜索,再搜索出结果之前,再点击搜索不可用
+            此时搜索出的结果放到了展示数据的后面,需要把展示数据清空,把搜索出的结果重新绑定到ul下
+            */
+            
+            $searchBtn.tap(() => {
+                if (isRun) return;
+                isRun = true;
+                search = $searchBtn.prev('input').val().trim();
+                //=> 还要把之前ul中的内容清空,然后展示最新搜索的信息即可
+                $wrapper.html('');
+                page = 1;
+                queryData();
+            });
+        }
+    }
+})(Zepto);
+matchRender.init();
+```
 
 
 

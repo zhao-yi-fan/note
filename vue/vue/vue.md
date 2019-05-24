@@ -1,4 +1,187 @@
-# Vue
+# 一、Vue介绍
+
+- vue是一个渐进式框架
+- vue全家桶：vuejs+vue-router+vuex+axios
+
+## 特点
+
+- 核心只关注视图层
+- 易学，轻量，灵活的特点
+- 适用于移动端项目
+- 渐进式框架
+
+## 渐进式的理解
+
+- 声明式渲染（无需关心如何实现）
+- 组件系统
+- 客户端路由（vue-router）
+- 大规模状态管理（vuex）
+- 构建工具（vue-cli）
+
+## vue的两个核心
+
+响应的数据变化
+
+- 当数据发生改变，视图会自动更新，不需要操作DOM
+
+组合的视图组件
+
+- ui页面映射为组件树
+- 划分组件可维护、可复用、可测试
+
+## MVC与MVVM
+
+### MVC
+
+- MVC——数据、表现、行为分离
+- model数据，view视图，controller控制器
+- MVC是单向的
+
+### MVVM
+
+- model数据，view视图，viewModel视图模型
+- MVVM是双向的
+- MVVM模式的框架：vue、angular
+
+## 兼容性
+
+​	因为vue中用了es5的Object.defineProperty语法，这个方法没有低版本的替代方法，所以vue不支持IE8及以下版本。
+
+# 二、vue语法
+
+## vm对象
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+        <script src="vue.js"></script>
+    </head>
+
+    <body>
+        <div id="app">
+            hi
+        </div>
+    </body>
+    <script>
+
+        let vm = new Vue({ // vm就是viewModel
+            el: '#app', // 挂载到的元素(querySelector)
+            data: { // 用于存放数据,不能放方法,因为data中的this指向的是window
+                msg: 'hello', // 可以通过vm.msg取到对应的内容
+                arr: [1, 2, 3]
+            },
+            template: `<h1>{{msg}}</h1>` // 把el所对应的元素替换成template中的内容
+
+        });
+
+        // vm实例对象上的方法
+        vm.$watch('msg', function (newVal, oldVal) {
+            // msg一变,就会触发回调函数
+            console.log(newVal, oldVal);
+        });
+
+        // 数据更新是异步的,会放到一个缓存队列中,等到最后更新一次
+        vm.msg = 'xxx'; // 数据变化后更新视图的操作是异步之心的
+        vm.msg = 'world'; // 更改两次msg,只会触发一次watch
+
+        vm.$nextTick(() => {// 如果不使用$nextTick, vm.$el.innerHTML中的内容则是hello
+            console.log(vm.$el.innerHTML);//=> world (vue挂载到的DOM元素中的内容)
+            console.log(vm.$options); // 向vm实例传的参数有哪些 {data, el, template...}
+
+        })
+
+    </script>
+
+</html>
+```
+
+## moustache模板语法
+
+- `{{}}`中可以放运算、取值、三元
+- `{{}}`只能写在标签内，不能写在属性中。在属性中要使用`v-bind`
+  - 错误写法：`<img src='{{imgSrc}}'>`
+- 只要在模板中使用了数据，就必须在vm实例上声明
+
+```html
+<body>
+    <div id="app">
+        {{msg}}<br>
+        {{flag==true?'正确':'错误'}}<br>
+        {{ {a:1,b:2} }}<br>
+        {{msg+'xxx'}}
+
+    </div>
+    <script src="vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'hello world', // 可以通过vm.msg取到对应的内容
+                flag: true
+            }
+        });
+        setTimeout(function () {
+            vm.msg = '你好世界'; // 双向绑定: 数据变化会影响视图更新
+        }, 3000);
+    </script>
+</body>
+```
+
+## 响应式数据变化
+
+### 响应式的原理
+
+- 响应式就是：当数据发生改变，视图会自动更新，不需要手动操作DOM
+- 其原理就是：循环data中的数据，一次增加getter和setter方法
+- 但是data对象中没有的项不会被增加getter和setter，也就不具有双向绑定的特性，如下：
+
+```javascript
+<div id="app">
+    <span>{{aaa}}</span>
+<span>{{obj.xxx}}</span>
+</div>
+<script src="vue.js"></script>
+<script>    
+    let vm = new Vue({
+        el: '#app',
+        data: {
+            // data中没有初始化aaa
+            obj: {} // data的obj中没有初始化obj.xxx
+            // 这样就会导致视图中的aaa和obj.xxx不会随着数据的变化进行自动更新
+        }
+    })
+// 以下两条语句也就不会使视图更新
+vm.aaa = 1111;
+vm.obj.xxx = 2222;
+</script>
+```
+
+- 所以，使用变量时，一定要先初始化，否则新加的属性不会导致页面渲染
+- 要在`data`中先初始化视图中用到的对象，才可以使其具有响应式，如下：
+
+```javascript
+let vm = new Vue({
+    el:'#app',
+    data:{
+        aaa: '', // 初始化aaa属性
+        obj: {xxx: ''} // 初始化obj中xxx属性
+    }
+})
+```
+
+### 数据响应的简易实现
+
+```javascript
+
+```
+
+
 
 ## 指令
 
@@ -32,13 +215,7 @@
 </script>
 ```
 
-
-
-![1550971232624](media/1550971232624.png)
-
-> 有两个属性有另外的写法
->
-> class,style属性
+> class,style属性有另外的写法
 >
 > `v-bind:class=""`和`v-bind:style=""`可以接收`字符串和数组`
 
@@ -1021,7 +1198,7 @@ v2.0组件
 
 ```
 
-## 组件间的通信
+## 组件
 
 ### 1.土办法
 
