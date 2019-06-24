@@ -3,7 +3,12 @@
 - vue是一个渐进式框架
 - vue全家桶：vuejs+vue-router+vuex+axios
 
-## 特点
+## 库和框架
+
+- 库：将代码集合成一个产品，库是我们调用中的方法实现自己的功能。
+- 框架：为解决一类问题而开发的产品，框架是我们再指定的位置编写好代码，框架帮我们调用，框架是库的升级版。
+
+## vue的特点
 
 - 核心只关注视图层
 - 易学，轻量，灵活的特点
@@ -33,11 +38,15 @@
 
 ### MVC
 
+![1559006396952](media/1559006396952.png)
+
 - MVC——数据、表现、行为分离
 - model数据，view视图，controller控制器
 - MVC是单向的
 
 ### MVVM
+
+![1559006564068](media/1559006564068.png)
 
 - model数据，view视图，viewModel视图模型
 - MVVM是双向的
@@ -46,6 +55,11 @@
 ## 兼容性
 
 ​	因为vue中用了es5的Object.defineProperty语法，这个方法没有低版本的替代方法，所以vue不支持IE8及以下版本。
+
+## 声明式和命令式
+
+- 自己写for是循环就是命令式（命令其按照自己的方式得到结果）
+- 生命式：利用数组的方法forEach(我们想要的式循环，内部帮我们去做)
 
 # 二、vue语法
 
@@ -187,7 +201,7 @@ let vm = new Vue({
 
 - 指令(directive)--补充了html的属性
 
-### v-bind:
+### v-bind
 
 > 动态地绑定一个或多个特性，或一个组件 prop 到表达式。
 
@@ -352,11 +366,7 @@ let vm = new Vue({
 
 ![1550910103832](media/1550910103832.png)
 
-## 事件
-
-- vue事件
-
-### v-on:
+### v-on
 
 `v-on:`
 
@@ -626,12 +636,6 @@ let vm = new Vue({
 
 ![1551060125214](media/1551060125214.png)
 
-### v-pre
-
-> 提高性能
->
-> 防止意外
-
 ### v-cloak
 
 ```html
@@ -848,7 +852,7 @@ new Vue({
 
 
 
-# vue-router
+## vue-router
 
 > 1. 容器
 >
@@ -1162,13 +1166,7 @@ new Vue({
 
 ![1551100665817](media/1551100665817.png)
 
-## 数据通信
 
-1. 用库
-
-   axios
-
-2. 原生fetch
 
 ## v1和v2区别
 
@@ -1386,8 +1384,6 @@ export default Vue.component('child', {
 
 ### 2.vuex
 
-
-
 ## vue2.0
 
 > 需要装`vue-loader`和`vue-style-loader`和`vue-html-loader`和`vue-template-compiler`
@@ -1410,7 +1406,7 @@ export default Vue.component('child', {
 
 > fetch 和 axios 和 vue-resource选其中一个
 
-# vue-cli启动器(脚手架)
+## vue-cli启动器(脚手架)
 
 > 命令行`vue list`
 >
@@ -1432,7 +1428,7 @@ export default Vue.component('child', {
 
 ![1551424231969](media/1551424231969.png)
 
-# 测试类型
+## 测试类型
 
 > 有三大类
 
@@ -1458,7 +1454,7 @@ export default Vue.component('child', {
 
 > 把库修改了之后放回原来的仓库的时候, 进行测试, 确保没有问题
 
-# 父子间通信
+## 父子间通信
 
 子组件:
 
@@ -1498,7 +1494,7 @@ export default {
 
 
 
-# vuex
+## vuex
 
 <img src="media/vuex.png">
 
@@ -1696,39 +1692,749 @@ vue辅助方法:
 
 > mapGetters  把getters映射成computed  注意:mapGetters, 数据之间还需要封装一层等等, 就可以使用mapGetters
 
-# 面试题
+## vue响应式数据变化
 
-问题一：构建的 vue-cli 工程都到了哪些技术，它们的作用分别是什么？
+```javascript
+// vue的特点 如果是对象会使用Object.defineProperty
+// 会把数组的方法重写
 
-1.vue.js: vue-cli工程的核心， 主要特点是 双向数据绑定 和 组件系统
+function render() {
+    console.log('模拟视图渲染');
+}
 
-2.vue-router: vue官方推荐使用的路由框架。
+// let obj = {
+//     name: 'jw',
+//     location: { x: 100, y: 100 }
+// }
 
-3.vuex: 专为vue.js应用项目开发的状态管理器， 主要用于维护vue组件间共用的一些 变量 和方法。
+let obj = [1, 2, 3];
 
-4.axios(或者fetch, ajax): 用于发起GET, POST等http请求， 基于Promise设计。
+let methods = ['pop', 'shift', 'unshift', 'sort', 'reverse', 'splice', 'push'];
 
-5.vux等： 专为vue设计的移动端UI组件库。
+// 先获取到原来的原型上的方法
+let arrayProto = Array.prototype;
+// 创建一个自己的原型 并且重写methods这些方法
+let proto = Object.create(arrayProto);
 
-6.创建一个emit.js文件， 用于vue事件机制的管理.
+methods.forEach(method => {
+    proto[method] = function () { // AOP 面向切片编程
+        render();
+        arrayProto[method].call(this, ...arguments);
+    }
+})
 
-7.webpack: 模块加载和vue-cli工程打包器
+function observer(obj) { // 把所有的属性定义成set/get的方式
+    if (Array.isArray(obj)) {
+        obj.__proto__ = proto;
+        return;
+    }
+    if (typeof obj == 'object') {
+        for (let key in obj) {
+            defineReactive(obj, key, obj[key]);
+        }
+    }
+}
+function defineReactive(data, key, value) {// 定义响应式数据变化、数据劫持
+    observer(value);// 对象中的属性还是一个对象
+    Object.defineProperty(data, key, {
+        get() {
+            return value;
+        },
+        set(newValue) {
+            observer(newValue); // 数据重写后也是一个对象
+            if (newValue !== value) {
+                render();
+                value = newValue;
 
-问题二：vue-cli 工程常用的 npm 命令有哪些？
+            }
+        }
+    })
+}
+observer(obj);
+// obj.location.x = 200;
+// obj.location = {// 数据重写后也是一个对象
+//     x: 110,
+//     y: 222
+// }
 
-下载node_modules资源包的命令:
+/* 如果想给对象增加一个不存在的属性 */
+// 用$set效率更高，可以直接对新增的属性渲染，而重写对象会把对象中的属性全部重新渲染
+//  1) vue中 如果给对象新增属性 是不会被监控的 可以用 vm.$set 
+//  2）也可以用obj.location ={...obj.location, a:1}
 
-`npm install`
+// obj.aa = 100;
+function $set(data, key, value) {
+    if(Array.isArray(data)){
+        return data.splice(key,1,value);
+    }
+    defineReactive(data, key, value);
+}
 
-启动vue-cli开发环境的npm命令:
+// $set(obj, 'a', 1);
+// obj.a = 100;
+// console.log(obj.a);
 
-`npm run dev`
+$set(obj,0,100);// 不支持数组的长度变化，也不支持数组的内容发生变化，必须通过上面的方法来触发更新，或者替换成一个新的数组
+console.log(obj);
+```
 
-vue-cli生成 生产环境部署资源的 npm 命令:
+### vue3：proxy方式的响应式数据变化
 
-`npm run build`
+```javascript
+// 使用proxy来实现数据的响应式变化
+// 可以支持数组，而且不用区分是对象还是数组
+// 兼容性 vue 3.0 会采用如果支持proxy  不支持就还是Object.defineProperty
+function render() {
+    console.log('模拟视图的更新')
+}
 
-用于查看vue-cli生产环境部署资源大小的npm命令:
+let obj = {
+    name: 'jw',
+    age: { age: 100 },
+    arr: []
+}
+let handler = {
+    get(target, key) {
+        // 如果取的值是对象就在这个对象进行数据劫持
+        if (typeof target[key] == 'object' && target[key] !== null) {
+            return new Proxy(target[key], handler)
+        }
+        return Reflect.get(target, key);
+    },
+    set(target, key, value) {
+        if(key === 'length') return true;// 防止数组长度改变，length的属性值变化也会触发视图更新
+        render();
+        return Reflect.set(target, key, value);
+    }
+}
 
-`npm run build --report`
+let proxy = new Proxy(obj, handler);
+// Object.defineProperty proxy 像墙 中间层
+proxy.age.age = 200;
+console.log(proxy.age.age);
+proxy.arr.push(123);
+proxy.arr[0]=100;
+console.log(proxy.arr)
+
+
+```
+
+## 数据绑定
+
+```html
+<body>
+    <!-- mustache 小胡子语法 可以做运算 取值 输出 三元 不能写js语法-->
+    <!-- 只要使用vue的数据就需要先声明 再使用 -->
+    <div id="app">
+        输出：{{msg}} {{1+1}} {{info.a}}
+        对象：{{info}} {{ {} }}
+        三元：{{flag?1:2}}
+        函数：{{ (function(){return 100})() }}
+        模板字符串：{{msg+'123'}}
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({
+            // el: '#app',
+            data: {
+                info: {},
+                msg: 'hello',
+                flag: true
+            }
+        });
+        vm.$mount('#app')
+        // 1.vm.$el 指代的就是当前的元素
+        // 2.vm.$nextTick 延迟执行 DOM操作时必备
+        // 3.vm.$watch 监控数据变化
+        // 4.vm.$data 当前数据对象
+        // 5.vm.$options 所有的选项
+        // 6.vm.$set
+        // 7.vm.$mount 挂载  单元测试 在内存中挂载vue实例 此时只能用$mount属性
+
+        // 可以观察某个数据 发生变化后触发此函数
+        vm.$watch('msg',function (newValue,oldValue){//DOM更新时异步的，会一起更改完才被监听
+            console.log(newValue,oldValue)
+        })
+
+        vm.msg = 'zf';
+        vm.msg = 'xxx'; // DOM更新是异步的
+        vm.$nextTick(function(){
+            console.log(vm.$el.innerHTML);
+
+        })
+
+    </script>
+</body>
+```
+
+## vue指令应用
+
+```html
+
+<body>
+    <!-- v-for 指令：v-开头 有特定功能的 操作DOM元素-->
+    <!-- 数据都需要循环来操作 {} string 最主要：[] 5  -->
+    <!-- for(let a of arr) -->
+    <!-- vue 2.5+ 版本要求循环的时候 必须增加key属性 为了做domdiff -->
+    <!-- v-bind动态绑定属性 所有的指令中的值 都是我们的变量，如果要是字符串需要加双引号-->
+    <!-- template vue自带的标签 无意义的标签 template上不能增加key属性 需要给真实的元素添加key-->
+    <!-- v-if / v-else / v-show -->
+    <!-- v-on 绑定事件 可以简写成@符号 并且事件参数是$event -->
+    <div id="app">
+        <!-- 对象 -->
+        <template v-for="(a,index) in arr">
+            <!-- 多个元素 需要区分名称 而且可以使用模板字符串 -->
+            <li :key="index+'_1'" :a="index+'_1'">
+                {{a}} {{index}}
+            </li>
+            <li :key=`${index}_2` :a=`${index}_2`>
+                {{a}} {{index}}
+            </li>
+        </template>
+
+        <!-- 数组 -->
+        <template v-for="(value, key) in {a:1}">
+            <!-- 多个元素 需要区分名称 而且可以使用模板字符串 -->
+            <li>
+                {{value}} {{key}}
+            </li>
+        </template>
+        <!-- 数字 -->
+        <template v-for="(value, key) in 5">
+            <!-- 多个元素 需要区分名称 而且可以使用模板字符串 -->
+            <li>
+                {{value}} {{key}}
+            </li>
+        </template>
+        <!-- v-if v-show区别 if处理DOM是否增加到页面上 show是style的操作 (show 不支持template写法) -->
+
+        <div v-if="false">
+            你好
+        </div>
+        <div v-else>
+            不好
+        </div>
+
+        <div v-show="false">你好</div>
+        <div v-show="true">不好</div>
+        {{flag}}<button v-on:click="fn($event)">切换</button>
+        <!-- 尽量不要给动态的数据 不要用key来渲染 可能会导致浪费性能-->
+        <!-- [香蕉,苹果,橘子] 点击 翻转 -->
+        <!-- 循环的时候最好给一个唯一标识 更改数据以后 索引一样 内容不一样 会重新渲染-->
+        <!-- 
+        <li x>香蕉</li> <li j>橘子</li>
+        <li p>苹果</li> <li p>苹果</li>
+        <li j>橘子</li> <li x>香蕉</li> 
+        -->
+
+        <!-- 输入框复用 加入不同的key就会重新渲染 -->
+        <div v-if="flag">
+            <label>珠峰</label>
+            <input type="text" key="1">
+        </div>
+        <div v-else="flag">
+            <label>姜文</label>
+            <input type="text" key="2">
+        </div>
+        <button @click="fn">切换</button>
+
+        <!-- 只渲染一次 渲染后会产生缓存 下次更新时 会直接从缓存中获取 v-once 可以有效的防止重新渲染-->
+        <div v-once>{{flag}}</div>
+        <!-- innerHTML 会导致 xss攻击 防止xss攻击 就不要把用户输入的内容直接显示出来-->
+        <!-- 比如输入<img src="a" onerror="alert()"> 找不到图片报错会弹框-->
+        <input type="text" :value="element" @input="(e)=>{element=e.target.value}">
+        <!-- 语法糖 -->
+        <input type="text" v-model="element">
+        <div v-html="element"></div>
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        // 所有的数据 都会合并到vm的实例上 但是会被data覆盖掉 不要声明相同的名字
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                arr: [1, 2, 3],
+                flag: true,
+                // fn: 123,
+                element: '<h1>hello</h1>'
+            },
+            methods: {
+                fn(e) {
+                    console.log(this);
+                    this.flag = !this.flag;
+                }
+            }
+        })
+    </script>
+</body>
+```
+
+## v-model绑定表单元素
+
+```html
+<body>
+    <div id="app">
+        <!-- v-model 是把value值绑定给元素 并且添加input事件 -->
+        <!-- v-bind 只是动态绑定属性 -->
+        <!-- v-model 可以放到任何地方 -->
+        <input type="text" v-model="msg">
+        <input type="text" :value="msg" @input="change($event)">
+        {{msg}}
+        <br>
+
+        <!-- 复选框有两个值 true/false -->
+        <input type="checkbox" v-model="check">{{check}}
+        <br>
+
+        <!-- 多个爱好 [] checkbox 需要给value的值 多个的时候-->
+        <input type="checkbox" v-model="checks" value="游泳">
+        <input type="checkbox" v-model="checks" value="健身">
+        <input type="checkbox" v-model="checks" value="吃饭"> {{checks}}
+        <br>
+
+        <!-- 实现radio的分组 也是通过这个v-model -->
+        男<input type="radio" value="男" v-model="gender">
+        女<input type="radio" value="女" v-model="gender">
+        <br>
+
+        <!-- select 选择一个-->
+        <select v-model="select">
+            <option value="111" key="111" disabled>请选择</option>
+            <option v-for="o in options" :key="o.id" :value="o.id">{{o.title}}</option>
+        </select>
+        {{select}}
+        <br>
+        <!-- select 选择多个 multiple多选属性 选择要按ctrl-->
+        <select v-model="select1" multiple>
+            <option value="111" key="111" disabled>请选择</option>
+            <option v-for="o in options" :key="o.id" :value="o.id">{{o.title}}</option>
+        </select>
+        {{select1}}
+        <br>
+
+        <!-- textarea -> input v-model -->
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'hello',
+                check: true,
+                checks: [],
+                gender: '男',
+                select: '111',
+                select1: [],
+                options: [
+                    { title: '数学', id: 1 },
+                    { title: '语文', id: 2 },
+                    { title: '英语', id: 3 },
+                ]
+            },
+            methods: {
+                change(e) {
+                    this.msg = e.target.value;
+                }
+            }
+        })
+    </script>
+</body>
+```
+
+## vue的指令和过滤器
+
+### 自定义指令
+
+```html
+<body>
+    <!-- 指令的作用 操作dom 有特定功能 -->
+    <!-- 自定义指令 -->
+    <style>
+        .content {
+            background-color: red;
+            height: 100px;
+            width: 100px;
+        }
+    </style>
+    <div id="app">
+        <div v-color="'red'">
+            xxx
+        </div>
+        <!-- popover -->
+        <div v-click-outside="hide">
+            <input type="text" @focus="show">
+            <div class="content" type="text" v-if="isShow">
+                content
+                <button>点我</button>
+            </div>
+        </div>
+        <!-- 获取焦点的指令 -->
+        <input type="text" v-focus="xxx">
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        // 全局指令 不需要每个组件都引用 只需要全局引用下即可
+        Vue.directive('color', function (el, bingdings, vnode) { // context
+            el.style.border = `1px solid ${bingdings.value}`
+            // console.log(this);// window
+        });
+        let vm = new Vue({
+            el: '#app',
+            // 图片懒加载  v-scroll都是用指令实现
+            directives: {
+                // 指令也有生命周期，五个周期
+                focus: {// 默认调用的方法是bind和update
+                    bind(el) {
+                        console.log('el绑定到页面上执行');
+                    },
+                    inserted(el) { // 这个元素插入到了页面中 执行的钩子
+                        el.focus()
+                    },
+                    // 所有的数据发生变化 都会重新执行
+                    update(el) { // 依赖的数据发生变化 会触发此方法
+                        console.log(el)
+                    }
+                },
+                'click-outside'(el, bingdings, vnode) {
+                    // 绑定给document  捕获到事件发生在谁身上
+                    document.addEventListener('click', (e) => {
+                        // 如果当前元素内的不管的 点击外面就隐藏content标签
+
+                        if (!el.contains(e.target)) {// e.target 点哪个标签就是哪个标签
+                            vnode.context[bingdings.expression]();// vnode.context包含了所有的vue方法 bingdings.expression指令等于的变量hide  将hide方法执行
+                        }
+                    })
+                }
+            },
+            data: {
+                xxx: 'hello',
+                isShow: false,
+            },
+            methods: {
+                show() {
+                    this.isShow = true;
+                },
+                hide() {
+                    this.isShow = false;
+                }
+            }
+        })
+    </script>
+</body>
+```
+
+### 过滤器
+
+```html
+<body>
+    <!-- 指令的作用 操作dom 有特定功能 -->
+    <!-- 自定义指令 -->
+    <style>
+        .content {
+            background-color: red;
+            height: 100px;
+            width: 100px;
+        }
+    </style>
+    <div id="app">
+        <!-- | 管道符 用来过滤的 -->
+        {{xx | toUpper(3)}}
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <!-- 需要对展现的数据进行包装 但是不能改变原来的数据 hello -->
+    <!-- 过滤器和指令都是没有this指向的 -->
+    <script>
+        Vue.filter('toUpper', function (value, count = 1) {
+            // 过滤器函数收到xx的值作为第一个参数
+            return value.slice(0, count).toUpperCase() + value.slice(count);
+        });
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                xx: 'hello'
+            },
+            methods: {
+            }
+        })
+    </script>
+</body>
+```
+
+## computed/watch和computed/method
+
+```html
+<body>
+    <div id="app">
+        <!-- {{firstName + lastName}} -->
+        <!-- 如果在外部改变xx的值 会重新渲染视图 getName会重新执行一次 getName执行是多余的 所以才会用到computed -->
+        <!-- 标签中不允许{{xxx()}} 带()，如果带()，就把xxx变成计算属性或者过滤器 -->
+        {{fullName}} {{xx}}
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        // computed 和 method的区别  method没缓存 computed有缓存
+        // computed 和 watch的区别 watch能异步 computed不能异步
+        // 什么时候用watch、computed 如果是简单的事件 数据变化发送调用接口就用watch。如果是计算一个值的结果 就用computed
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                firstName: '姜',
+                lastName: '文',
+                xx: '123',
+                fullName: ''
+            },
+            watch: { // vm.$watch
+                firstName: { // 写成对象的目的 为了可以传递参数 immediate deep {a:{a:'1'}}
+                    handler(newVal, oldVal) {
+                        setTimeout(() => {
+                            this.fullName = this.firstName + this.lastName;
+                        }, 1000)
+                    },
+                    immediate: true, // 视图渲染首先会立即执行一遍
+                    deep: true // 只要属性发生变化 就会触发此函数 默认只监控一层 使用递归消耗性能
+                },
+                lastName: {
+                    handler(newVal, oldVal) {
+                        this.fullName = this.firstName + this.lastName;
+                    },
+                    immediate: true
+
+                }
+                /* firstName(newVal, oldVal) {
+                    this.fullName = this.firstName + this.lastName;
+                },
+                lastName(newVal, oldVal) {
+                    this.fullName = this.firstName + this.lastName;
+                } */
+            },
+            // computed 他是基于 Object.defineProperty  getter / setter
+            // 计算属性，不是一个方法，被调用时不加()
+            // vuex 我们希望通过vuex来实现双向绑定 （全选，多选）
+            // computed: {// computed会有缓存 如果以来的数据不发生变化 不会重新执行方法
+            //     // computed对象下的属性也是vm下的属性，可以直接this.getName
+            //     getName: {
+            //         /* console.log('刷新了');
+            //         return this.firstName + this.lastName; */
+            //         get() {
+            //             console.log('刷新了');
+            //             return this.firstName + this.lastName;
+            //         },
+            //         set(val) {
+            //             this.xx = val;
+            //         }
+            //     }
+            // },
+            /* methods: {
+                getName() {
+                    console.log('刷新了');
+                    return this.firstName + this.lastName;
+                }
+            } */
+        })
+
+    </script>
+</body>
+```
+
+![1559169038648](media/1559169038648.png)
+
+## vue的动画应用
+
+### 单个元素动画
+
+![1559182030388](media/1559182030388.png)
+
+- `npm i animate.css`
+- `npm i velocity-animate@beta`
+
+```html
+<link rel="stylesheet" href="./node_modules/animate.css/animate.css">
+</head>
+
+<body>
+    <style>
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            /* opacity: 0.2 */
+        }
+
+        /* 1.transition标签 vue自带的动画 */
+        /* 改名：在transition标签中加name v-就变成了 name属性值- */
+        .fade-enter {
+            opacity: 0
+        }
+
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity 1s linear;
+        }
+
+        /* 默认从当前状态变化 */
+        /* .v-leave {
+            opacity: 1
+        } */
+        .fade-leave-to {
+            opacity: 0
+        }
+
+        /* 2. animate.css库 */
+        /* .bounce-enter-active {
+            animation: bounceIn 1s ease-in
+        }
+
+        .bounce-leave-active {
+            animation: bounceOut 1s ease-out
+        } */
+    </style>
+    <div id="app">
+        <button @click="isShow=!isShow">点击</button>
+        <!-- 1. -->
+        <!-- 
+        <transition name="fade">
+            <div class="box" v-show="isShow">content</div>
+        </transition> 
+        -->
+        <!-- 2.animate.css库 name="bounce" 可以指定动画名字 -->
+        <!-- 
+        <transition name="bounce">
+            <div class="box animated" v-show="isShow">content</div>
+        </transition> 
+        -->
+        <!-- 3.animate.css库 可以指定进入和离开的动画类名 -->
+        <!-- 
+        <transition 
+            enter-active-class="bounceIn"
+            leave-active-class="bounceOut"
+        >
+            <div class="box animated" v-show="isShow">content</div>
+        </transition>
+        -->
+        <!-- 4.使用js写动画 -->
+        <!-- 
+        <transition @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
+            <div class="box animated" v-show="isShow">content</div>
+        </transition> 
+        -->
+        <!-- 5.使用velocity.js -->
+        <transition @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter" @leave="leave">
+            <div class="box animated" v-show="isShow">content</div>
+        </transition>
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script src="./node_modules/velocity-animate/velocity.js"></script>
+    <script>
+        // 常见能触发动画的操作 v-if v-show v-for 路由切换
+        // css 添加动画 animation transition
+        // js 添加动画 自带的钩子 velocity库
+        // 动画分为 单个动画和多个动画
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                isShow: false,
+            },
+            methods: {
+                // 4.
+                /* beforeEnter(el) {
+                    el.style.color = "purple"
+                },
+                enter(el, done) {
+                    setTimeout(() => {
+                        el.style.color = "yellow";
+                    }, 1000)
+                    setTimeout(() => {
+                        done();
+                    }, 2000)
+                },
+                afterEnter(el) {
+                    el.style.color = "blue"
+                } */
+                // 5.使用velocity.js
+                beforeEnter(el) {
+                    el.style.opacity = 0;
+                    el.style.color = "purple"
+                },
+                enter(el, done) {
+                    Velocity(el, { opacity: 1 }, { duration: 1000, complete: done });
+                },
+                afterEnter(el) {
+                    el.style.color = "blue"
+                },
+                leave(el, done) {
+                    // 在离开的时候 还需要自己手动重置回去
+                    Velocity(el, { opacity: 0 }, { duration: 1000, complete: done })
+                }
+            }
+        })
+    </script>
+</body>
+```
+
+### 多个元素动画
+
+```html
+<body>
+    <style>
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            /* opacity: 0.2 */
+        }
+
+        .fade-enter {
+            opacity: 0
+        }
+
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity 1s linear;
+        }
+
+        /* 默认从当前状态变化 */
+        /* .v-leave {
+            opacity: 1
+        } */
+        .fade-leave-to {
+            opacity: 0
+        }
+
+    </style>
+    <div id="app">
+        <input type="text" v-model="filter">
+        <transition-group name="fade">
+            <div class="box" v-if="isShow" v-for="(d,index) in computedData" :key="d.title">{{d.title}}</div>
+        </transition-group>
+
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script src="./node_modules/velocity-animate/velocity.js"></script>
+    <script>
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                isShow: true,
+                filter:'',
+                dataList: [
+                    { title: '标题1' },
+                    { title: '标题2' },
+                    { title: '标题3' },
+                    { title: '标题4' },
+                ]
+            },
+            methods: {
+            },
+            computed: {
+                computedData() {
+                    return this.dataList.filter(item=>{
+                        // item 当前循环的每一项，看一下是否包含filter属性 如果包含就留下
+                        return item.title.includes(this.filter)
+                    });
+                }
+            }
+        })
+    </script>
+</body>
+```
 
