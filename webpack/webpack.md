@@ -281,13 +281,315 @@ module.exports = {
 
 ## 样式处理（1）
 
-在webpack如何解析css模块
+在index.html模板中是不允许引入css文件的，因为模板打包完会原封不动的到打包文件夹中，如果引入了css文件，此时会找不到打包文件夹外面的css文件，所以需要把css文件引入js文件中，一起打包，此时就需要css-loader，如果直接打包，js文件中是不会处理引入的 css文件的。
 
+![1563192809497](media/1563192809497.png)
 
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <!-- 模板 -->
+  <link rel="stylesheet" href="./index.css">不允许
+</body>
+</html>
+```
+
+打包提示需要引入loader
+
+![1563192873373](media/1563192873373.png)
+
+- css-loader是解析css文件里专属的语法，比如@import
+
+```css
+/* a.css */
+body {
+  color: yellow;
+}
+/* index.css */
+@import './a.css';
+body {
+  background: red;
+}
+```
+
+- style-loader是把打包好的css文件插入到模板引擎中的
+
+```javascript
+let path = require('path');
+let HtmlWebpackPlugin = require('html-webpack-plugin')
+
+module.exports = {
+  devServer: {
+    port: 3000,
+    progress: true,
+    contentBase: './build',
+    open: true,
+    compress: true,
+  },
+  mode: 'production',
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.[hash:8].js',
+    path: path.resolve(__dirname, 'build'),
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: 'index.html',
+      minify: {
+        removeAttributeQuotes: true,
+        collapseWhitespace: true,
+      },
+      hash: true,
+    })
+  ],
+  module: { // 模块
+    rules: [ // 规则 css-loader  解析 @import这种语法的
+      // style-loader 它是把css 插入到head的标签中
+      // loader的特点 希望功能单一
+      // loader的用法 一个loader就用字符串
+      // { test: /\.css$/, use: 'css-loader' }
+      // 多个loader需要用 []
+      // loader的顺序 默认是从右向左执行  从下到上执行
+      // 先使用css-loader打包好之后再使用style-loader插入模板
+      // { test: /\.css$/, use: ['style-loader','css-loader'] }
+      // loader还可以写成 对象方式，好处是可以再写一个参数
+      {
+        test: /\.css$/, use: [
+          {
+            loader: 'style-loader',
+            options: {
+            }
+          },
+          'css-loader']
+      }
+    ]
+  }
+}
+```
+
+- 我们自己在html模板head中写的样式优先级不是最高，可以配置style-loader的属性
+
+![1563194277543](media/1563194277543.png)
+
+```javascript
+{
+    test: /\.css$/, use: [
+        {
+            loader: 'style-loader', // 插入模板head标签的位置
+            options: {
+                insertAt: 'top' // 插入head标签顶部
+            }
+        },
+        'css-loader']
+}
+```
+
+![1563195134306](media/1563195134306.png)
+
+- 配置less
+
+安装`yarn add less less-loader -D`
+
+`less-loader`需要用`less`来进行转化
+
+```javascript
+/*index.less*/
+body {
+  div {
+    border: 1px solid #dadade;
+  }
+}
+/*index.js*/
+let str = require('./a.js')
+console.log(str)
+require('./index.css')
+require('./index.less')
+/*webpack.config.js*/
+module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'style-loader',
+            options: {
+              insertAt: 'top'
+            }
+          },
+          'css-loader'
+        ]
+      },
+      {  // 可以处理less文件
+        test: /\.less$/,
+        use: [
+          { // 把css文件插入到模板中
+            loader: 'style-loader',
+            options: {
+              insertAt: 'top' // 插入模板head标签的位置
+            }
+          },
+          'css-loader', // @import 解析路径
+          'less-loader' // 把less 解析成 css
+        ]
+      }
+    ]
+  }
+```
+
+同样可以配置`sass`需要安装`node-sass`和`sass-loader`，`sass-loader`需要放在下面先执行
+
+`stylus`需要安装`stylus`和`stylus-loader`
 
 ## 样式处理（2）
 
+抽离模板中的style标签中css样式为link，抽离css插件`mini-css-extract-plugin`
 
+安装`yarn add mini-css-extract-plugin -D`
+
+- 引入同一个'mini-css-extract-plugin'
+
+```javascript
+/*webpack.config.js*/
+let path = require('path');
+let HtmlWebpackPlugin = require('html-webpack-plugin')
+let MiniCssExtractPlugin = require('mini-css-extract-plugin');
+module.exports = {
+  mode: 'production',
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.[hash:8].js',
+    path: path.resolve(__dirname, 'build'),
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: 'index.html',
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'main.css' // 抽离出css文件名
+    }),
+  ],
+  module: {
+    rules: [
+      { // 我们不希望css抽离出来再放到模板的style标签中，要把style-loader去掉
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader'
+        ]
+      },
+      { // 引入同一个'mini-css-extract-plugin'会全都抽离成一个文件main.css。
+      // 也可以拷贝，引入两个'mini-css-extract-plugin'，分别new两个实例和用这两个的loader。比如一个用来抽离.css文件到main.css，一个用来抽离.less文件到main1.css，虽然是不同的两个css文件，但他们内容是一样的。有可能.less文件less-loader完成之后，和.css文件一起css-loader。
+        test: /\.less$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'less-loader'
+        ]
+      }
+    ]
+  }
+}
+
+/*main.css*/
+body {
+  color: yellow;
+}
+body {
+  background: red;
+  transform: 45deg
+}
+body div {
+  border: 1px solid #dadade;
+}
+```
+
+![1563201113774](media/1563201113774.png)
+
+- 引入两个'mini-css-extract-plugin'，分别new两个实例和用这两个的loader
+
+```javascript
+/*webpack.config.js*/
+let path = require('path');
+let HtmlWebpackPlugin = require('html-webpack-plugin')
+let MiniCssExtractPlugin = require('mini-css-extract-plugin');
+let MiniCssExtractPlugin1 = require('mini-css-extract-plugin');
+module.exports = {
+  mode: 'production',
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.[hash:8].js',
+    path: path.resolve(__dirname, 'build'),
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: 'index.html',
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'main.css'
+    }),
+    new MiniCssExtractPlugin1({
+      filename: 'main1.css'
+    })
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader'
+        ]
+      },
+      {
+        test: /\.less$/,
+        use: [
+          MiniCssExtractPlugin1.loader,
+          'css-loader',
+          'less-loader'
+        ]
+      }
+    ]
+  }
+}
+/*main.css*/
+body {
+  color: yellow;
+}
+body {
+  background: red;
+  transform: 45deg
+}
+body div {
+  border: 1px solid #dadade;
+}
+/*main1.css*/
+body {
+  color: yellow;
+}
+body {
+  background: red;
+  transform: 45deg
+}
+body div {
+  border: 1px solid #dadade;
+}
+```
+
+- 希望添加的属性自动加前缀
+
+插件包`autoprefixer`和loader`postcss-loader`
+
+安装`yarn add postcss-loader autoprefixer`
 
 ## 转化es6语法
 
