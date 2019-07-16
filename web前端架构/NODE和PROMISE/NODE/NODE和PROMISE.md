@@ -1,33 +1,3 @@
-# GIT
-
-## 集中式对比分布式
-
-
-
-## 常用的LINUX命令
-
-
-
-## 基础工作流程
-
-
-
-## 一些细节问题
-
-
-
-## 关于GIT的回滚
-
-
-
-## 团队协作开发的基础流程
-
-
-
-## 分支处理和团队协作
-
-
-
 # NODE
 
 ## NODE基础概念
@@ -1364,55 +1334,6 @@ let dirname = path.resolve();
 
 ## process的一点知识
 
-
-
-# PROMISE A+
-
-## 复习PROMISE的使用
-
-
-
-## 封装基础版的PROMISE库
-
-
-
-## 异常报错按照REJECTED状态处理
-
-
-
-## 实现THEN方法的链式调用
-
-
-
-## 实现CATCH方法
-
-
-
-## 实现PROMISE.CALL方法
-
-
-
-# 存储方案
-
-## 本地存储和服务器存储
-
-
-
-## localStorage和cookie
-
-
-
-# Express
-
-## 初始express
-
-
-
-## express里面的中间件
-
-
-
-## 基于express写API处理
 
 
 

@@ -479,7 +479,7 @@ module.exports = {
   ],
   module: {
     rules: [
-      { // 我们不希望css抽离出来再放到模板的style标签中，要把style-loader去掉
+      { // 我们不希望css抽离出来再放到模板的style标签中，样式都放在style会造成阻塞，要把style-loader去掉
         test: /\.css$/,
         use: [
           MiniCssExtractPlugin.loader,
