@@ -591,6 +591,58 @@ body div {
 
 安装`yarn add postcss-loader autoprefixer`
 
+需要新建`postcss.config.js`配置文件，这个配置文件里面要用到`autoprefixer`插件
+
+![1563263760659](media/1563263760659.png)
+
+```javascript
+/*postcss.config.js*/
+module.exports = {
+  plugins: [require('autoprefixer')({
+    "browsers": [  // 9.6.0版本之后不能使用"browsers"
+      "defaults",
+      "not ie < 11",
+      "last 2 versions",
+      "> 1%",
+      "iOS 7",
+      "last 3 iOS versions"
+    ]
+  })
+  ]
+}
+// 更改后
+module.exports = {
+  plugins: [require('autoprefixer')({
+    "overrideBrowserslist": [
+      "defaults",
+      "not ie < 11",
+      "last 2 versions",
+      "> 1%",
+      "iOS 7",
+      "last 3 iOS versions"
+    ]
+  })
+  ]
+}
+```
+
+打包后的main.css
+
+```css
+/*main.css*/
+body {
+  color: yellow;
+}
+body {
+  background: red;
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg)
+}
+body div {
+  border: 1px solid #dadade;
+}
+```
+
 ## 转化es6语法
 
 
