@@ -1,15 +1,3 @@
-## 编辑工具
-
-> dreamweaver  
-
-> sublime
-
-> HBuilder
-
-> Visual Studio Code
-
-> WebStorm
-
 ## 网页是如何形成的
 
 > 编写代码--->浏览器渲染--->变成网页
@@ -570,9 +558,3 @@ textarea 文本域
    用于指定表单的名称，以区分同一个页面中的多个表单。
 
 注意：  每个表单都应该有自己表单域。
-
-# 查文档
-
-W3C :  http://www.w3school.com.cn/
-
-MDN: https://developer.mozilla.org/zh-CN/
