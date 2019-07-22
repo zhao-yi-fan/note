@@ -1,78 +1,76 @@
 ## 获取节点
 
-```
-获取当前节点的父级节点
-console.log(my$("uu").parentNode);
-获取当前节点的父级元素
-console.log(my$("uu").parentElement);
-获取当前节点的子级节点
-console.log(my$("uu").childNodes);
-获取当前节点的子级元素
-console.log(my$("uu").children);
+获取当前节点的父级节点`my$("uu").parentNode`
 
+获取当前节点的父级元素`my$("uu").parentElement`
 
-获取当前节点的第一个子级节点
-console.log(my$("uu").firstChild);
-获取当前节点的第一个子级元素
-console.log(my$("uu").firstElementChild);
-获取当前节点的最后一个子级节点
-console.log(my$("uu").lastChild);
-获取当前节点的最后一个子级元素
-console.log(my$("uu").lastElementChild);
-//sibling:兄弟 同胞
-获取当前节点的前一个兄弟节点
-console.log(my$("uu").previousSibling);
-获取当前节点的前一个兄弟元素
-console.log(my$("uu").previousElementSibling);
-获取当前节点的后一个兄弟节点
-console.log(my$("uu").nextSibling);
-获取当前节点的后一个兄弟元素
-console.log(my$("uu").nextElementSibling);
-```
+获取当前节点的子级节点`my$("uu").childNodes`
+
+获取当前节点的子级元素`my$("uu").children`
+
+获取当前节点的第一个子级节点`my$("uu").firstChild`
+
+获取当前节点的第一个子级元素`my$("uu").firstElementChild`
+
+获取当前节点的最后一个子级节点`my$("uu").lastChild`
+
+获取当前节点的最后一个子级元素`my$("uu").lastElementChild`
+
+sibling:兄弟 同胞
+
+获取当前节点的前一个兄弟节点`my$("uu").previousSibling`
+
+获取当前节点的前一个兄弟元素`my$("uu").previousElementSibling`
+
+获取当前节点的后一个兄弟节点`my$("uu").nextSibling`
+
+获取当前节点的后一个兄弟元素`my$("uu").nextElementSibling`
 
 ## innerText和textContent
 
-```javascript
-//设置标签中的文本内容,应该使用textContent属性,谷歌,火狐支持,IE8不支持
-//设置标签中的文本内容,应该使用innerText属性,谷歌,火狐,IE8都支持
+设置标签中的文本内容,应该使用textContent属性,谷歌,火狐支持,IE8不支持
 
-//如果这个属性在浏览器中不支持,那么这个属性的类型是undefined
-//判断这个属性的类型 是不是undefined,就知道浏览器是否支持
+设置标签中的文本内容,应该使用innerText属性,谷歌,火狐,IE8都支持
 
-```
+如果这个属性在浏览器中不支持,那么这个属性的类型是undefined
+
+判断这个属性的类型 是不是undefined,就知道浏览器是否支持
 
 ## 三大系列:
 
+在style 标签 中设置的样式属性获取不到
+
+style 属性 中设置的样式属性是可以获取到的
+
+获取元素的样式,下面的方式不可用了
+
+console.log(my$("dv1").style.width);
+
+console.log(my$("dv1").style.height);
+
+以后获取元素的宽和高,应该使用offset系列来获取
+
+### offset系列
+
+父级元素没有脱离文档流:
+
+子级元素的`offsetLeft`或者`offsetTop`=父级元素margin+父级元素padding+父级元素border+自己的margin
+
+父级元素脱离文档流:
+
+子级元素的`offsetLeft`或者`OffsetTop`=自己的left和自己的margin
+
 ```javascript
-//在style 标签 中设置的样式属性获取不到
-//style 属性 中设置的样式属性是可以获取到的
-//获取元素的样式,下面的方式不可用了
-//console.log(my$("dv1").style.width);
-//console.log(my$("dv1").style.height);
-//以后获取元素的宽和高,应该使用offset系列来获取
-
-```
-
-
-
-### offset系列:
-
-```javascript
-//父级元素没有脱离文档流:
-//子级元素的offsetLeft或者offsetTop=父级元素margin+父级元素padding+父级元素border+自己的margin
-//父级元素脱离文档流:
-//子级元素的offsetLeft或者OffsetTop=自己的left和自己的margin
-
 offsetLeft/offsetTop:到左边和上边不算自己的边框
+
 offsetWidth:获取元素的宽度(有边框)
+
 offsetHeight:获取元素的高度(有边框)
-
-
 ```
 
 #### offset系列浅析
 
-1.offsetLeft:HTMLElement.offsetLeft(DOM对象的offsetLeft属性来获取left)是一个只读属性,`返回当前元素左上角相对于HTMLElement.offsetParent节点的左边界偏移的像素值.`
+1.offsetLeft:HTMLElement.offsetLeft(DOM对象的offsetLeft属性来获取left)是一个只读属性,**返回当前元素左上角相对于HTMLElement.offsetParent节点的左边界偏移的像素值.**
 2.offsetWidth指当前元素的宽=border+padding+width;(宽含边框)
 offsetHeight指当前元素的高=border+padding+height;(高含边框)
 
@@ -166,7 +164,7 @@ offsetHeight=dv.border+dv.padding+dv.height=20+12+100=132;
 
 父元素相对定位还是绝对定位都不会对子元素的offset类有影响.
 
-`下面两种是子元素绝对定位的情况`
+下面两种是子元素绝对定位的情况
 
 **第一种情况:子元素dv没有设置left和top值.**
 
@@ -198,7 +196,7 @@ offsetHeight=dv.border+dv.padding+dv.height=20+12+100=132;
 }
 ```
 
-`子元素先定位,没有设置left的时候,父元素的padding-left还会有效果,(因为此时的left有一个默认值,默认值不是0,其实默认值就是padding-left的值).如果加了left:10,那么padding-left会失效,因为定位开始了,以left优先.top同理.`
+子元素先定位,没有设置left的时候,父元素的padding-left还会有效果,(因为此时的left有一个默认值,默认值不是0,其实默认值就是padding-left的值).如果加了left:10,那么padding-left会失效,因为定位开始了,以left优先.top同理.
 
 子元素#dv的:
 
@@ -210,7 +208,7 @@ offsetWidth=dv.border+dv.padding+dv.width=20+13+100=133;
 
 offsetHeight=dv.border+dv.padding+dv.height=20+12+100=132;
 
-`下面两种是子元素相对定位的情况`
+下面两种是子元素相对定位的情况
 
 **第一种情况:子元素dv没有设置left和top值.**
 
@@ -238,7 +236,7 @@ offsetHeight=dv.border+dv.padding+dv.height=132;
 
 (4).当父元素 **没有** 定位,子元素 **有** 定位时
 
-`下面两种是子元素绝对定位的情况`
+下面两种是子元素绝对定位的情况
 
 **第一种情况:子元素dv没有设置left和top值.**
 
@@ -264,7 +262,7 @@ offsetWidth=dv.border+dv.padding+dv.width=20+13+100=133;
 
 offsetHeight=dv.border+dv.padding+dv.height=20+12+100=132;
 
-`下面两种是子元素相对定位的情况`
+下面两种是子元素相对定位的情况
 
 **第一种情况:子元素dv没有设置left和top值.**
 
@@ -308,14 +306,18 @@ console.log(this.scrollTop);
 
 #### getScroll兼容代码
 
-body  html  window
+body、html、window的关系
+
+window不能用scrollLeft(没有这个属性),用pageYOffset.而且pageYOffset属性是只读的,只能获取,不能设置.
+`documentElement`就是html
+
+`documentElement`和`body`有scrollLeft这个属性.
+
+IE6 7 8需要用`documentElement`
+
+谷歌需要用`body`
 
 ```javascript
-//window不能用scrollLeft(没有这个属性),用pageYOffset.而且pageYOffset属性是只读的,只能获取,不能设置.
-//documentElement就是html
-//documentElement和body有scrollLeft这个属性.
-//IE6 7 8需要用documentElement
-//谷歌需要用body
 function getScroll(){
     return {
         left:window.pageYOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0;
@@ -324,16 +326,19 @@ function getScroll(){
 }
 ```
 
+### client系列
+
+`clientWidth`:可视区域的宽度,没有边框
+
+`clientHeight`:可视区域的高度,没有边框
+
+`clientLeft`:左边框的宽度
+
+`clientTop`:上边框的宽度
+
+`clientX`:可视区域的横坐标
+
+`clientY`:可视区域的纵坐标
 
 
-### client系列:
-
-```
-clientWidth:可视区域的宽度,没有边框
-clientHeight:可视区域的高度,没有边框
-clientLeft:左边框的宽度
-clientTop:上边框的宽度
-clientX:可视区域的横坐标
-clientY:可视区域的纵坐标
-```
 
