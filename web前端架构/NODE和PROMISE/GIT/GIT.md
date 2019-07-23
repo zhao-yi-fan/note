@@ -207,6 +207,10 @@ GIT的常规流程：
      `$git init`创建本地仓库
      `$git remote add [远程地址名(默认origin)] [远程仓库GIT地址]`让本地仓库和远程仓库保持连接
      `$git remote -v`查看连接（origin是连接的名称，一般都用这个名字，当然自己可以随便设置）
+
+     ![1563884390124](media/1563884390124.png)
+
+     显示了可以抓取和推送的origin的地址。如果没有推送权限，就看不到push的地址。
      `$git remote rm origin`移出本地仓库和远程仓库的链接
      `$git remote update origin`更新链接通道
      ![1563577915957](media/1563577915957.png)
@@ -221,40 +225,64 @@ GIT的常规流程：
      ![1563580891081](media/1563580891081.png)
 
 3. 各自和中央服务器同步信息
-   
+
    **任何一个中央仓库在刚创建时是没有分支的，第一次pull是拉取不了的，第一次push才会创建msater分支**：
-   
+
    `$git push -u origin master`：由于远程库是空的，我们第一次推送master分支时，加上了`-u`参数，GIT不但会把本地的master分支内容推送到远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。
-`$git push origin master`：把本地仓库master中的信息同步到远程仓库master中，**需要使用gitHub的用户密码来进行权限校验**：一般都是组长在远程仓库中把 组员的账号都放到一个小组中 ，这样组员用自己的账号也有权限操作仓库了，最好在本地的GIT配置中把用户名和邮箱修改为和gitHub账号相同的信息
+   `$git push origin master`：把本地仓库master中的信息同步到远程仓库master中，**需要使用gitHub的用户密码来进行权限校验**：一般都是组长在远程仓库中把 组员的账号都放到一个小组中 ，这样组员用自己的账号也有权限操作仓库了，最好在本地的GIT配置中把用户名和邮箱修改为和gitHub账号相同的信息
    （每一次PUSH之前最好都pull一下：如果有冲突在本地处理一下冲突，然后再推送。）
    `$git pull origin master`：把远程仓库master中的信息同步到本地仓库master中
-使用**空**中央仓库，A push之后，B pull不下来的原因是A提交了自己的master分支，中央仓库中的master是A的，B指定origin master时，中央仓库中的master是A的，并不是中央仓库的
-   
+   使用**空**中央仓库，A push之后，B pull不下来的原因是A提交了自己的master分支，中央仓库中的master是A的，B指定origin master时，中央仓库中的master是A的，并不是中央仓库的
+
    ![1563585430865](media/1563585430865.png)
    下面不是空中央仓库的流程：
-   
+
    ![1563584514880](media/1563584514880.png)
    ![1563584711271](media/1563584711271.png)
 
 ### SSH警告
 
+ssh比https速度快，前提是需要在GitHub的个人设置`SSH and GPG keys`或者指定一个仓库的`Deploy keys`绑定本地电脑的SSH key，才可以使用ssh方式与GitHub传输。
+
+GitHub账户的`SSH keys`，相当于这个账号最高级 key，只要这个账号有的权限（任何项目），都可以操作 。
+
+仓库的`Deploy keys`，是这个仓库专有的key，用这个key，只能操作这个项目，其他项目都没有权限。
+
+https url是有效网址可以直接打开，但是用户每次通过git提交的时候都需要输入用户名和密码。ssh url配置一次之后就能永久使用。GitHub配置ssh  key的目的是为了git提交代码的时候，不需要繁琐的验证过程，简化操作步骤。
+
 当第一次使用Git的`clone`或者`push`命令连接GitHub时，会得到一个警告：
 
-```
-The authenticity of host 'github.com (xx.xx.xx.xx)' can't be established.
-RSA key fingerprint is xx.xx.xx.xx.xx.
-Are you sure you want to continue connecting (yes/no)?
-```
+![1563891878689](media/1563891878689.png)
 
 这是因为Git使用SSH连接，而SSH连接在第一次验证GitHub服务器的Key时，需要你确认GitHub的Key的指纹信息是否真的来自GitHub的服务器，输入`yes`回车即可。
 
 Git会输出一个警告，告诉你已经把GitHub的Key添加到本机的一个信任列表里了：
 
+这个警告只会出现一次，后面的操作就不会有任何警告了。
+
 ```
 Warning: Permanently added 'github.com' (RSA) to the list of known hosts.
 ```
 
-这个警告只会出现一次，后面的操作就不会有任何警告了。
+![1563892813240](media/1563892813240.png)
+
+再次克隆提示需要把`id_rsa.pub`文件中的key粘贴到新建一个Keys的Key中，title随便起。
+
+![1563892791687](media/1563892791687.png)
+
+![1563893664907](media/1563893664907.png)
+
+
+
+需要新建一个keys
+
+![1563892659893](media/1563892659893.png)
+
+如果id_rsa、id_rsa.pub两个文件已存在出现该错误可删除俩个文件，重新执行
+
+`ssh-keygen -t rsa -C "993445491@qq.com"`：.shh文件夹会重新生成id_rsa、id_rsa.pub两个文件及新的Key
+
+重新执行上述步骤添加到GitHub中即可
 
 如果实在担心有人冒充GitHub服务器，输入`yes`前可以对照[GitHub的RSA Key的指纹信息](https://help.github.com/articles/what-are-github-s-ssh-key-fingerprints/)是否与SSH连接给出的一致。
 
@@ -346,6 +374,8 @@ Warning: Permanently added 'github.com' (RSA) to the list of known hosts.
 7. 将本地master分支中的内容提交到远程仓库中
 
 ### 多人协作
+
+当从远程仓库克隆时，实际上Git自动把本地的master分支和远程的master分支对应起来了，并且，远程仓库的默认名称是`origin`
 
 ## gitHub的应用
 
