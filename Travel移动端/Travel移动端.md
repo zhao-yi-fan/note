@@ -12,20 +12,6 @@ index-swiper分支存放具体功能开发完成时的代码
 - `git merge origin/index-swiper`把线上index-swiper分支上新增的内容合并到本地的master分支
 - `git push`把master新增的内容也提交到线上
 
-## 轮播图
-
-- `vue-awesome-swiper`
-
-## 发送ajax
-
-- `fetch`
-- `axios` 推荐 在node服务器发送http请求 在浏览器端可以发送xhr请求
-- `vue-resource`
-
 ## better-scroll
 
 
-
-## localStorage
-
-HTML5新API
