@@ -50,38 +50,31 @@ https://blog.csdn.net/weixin_39495540/article/details/79740790
 
 - 模板语法
 
-> Mustache语法: `{{msg}}`
->
-> Html赋值: `v-html=""`
->
-> 绑定属性: `v-bind:id=""` id是绑定属性的名字
->
-> 使用表达式: `{{ok?'YES':'NO'}}`接口查询状态值
->
-> 文本赋值: `v-text=""`
->
-> 指令: `v-if=""`
->
-> 过滤器: `{{message|capitalize}}和v-bind:id="raw|formatId"`
+Mustache语法: `{{msg}}`
+
+Html赋值: `v-html=""`
+
+绑定属性: `v-bind:id=""` id是绑定属性的名字
+
+使用表达式: `{{ok?'YES':'NO'}}`
+
+文本赋值: `v-text=""`过滤器: `{{message|capitalize}}和v-bind:id="raw|formatId"`
 
 - Class和Style绑定
 
-> 对象语法: `v-bind:class="{active:isActive,'text-danger':hasError}"`
->
-> 数组语法:
->
-> ```html
-> <div v-bind:class="[activeClass, errorClass]">
-> ```
->
-> ```javascript
-> data: {
->     activeClass:'active',
->     errorClass: 'text-danger'
-> }
-> ```
->
-> style绑定-对象语法:`v-bind:style="{color:activeColor,fontSize:fontSize+'px'}"`
+对象语法: `v-bind:class="{active:isActive,'text-danger':hasError}"`
+
+数组语法:
+
+```javascript
+<div v-bind:class="[activeClass, errorClass]">
+data: {
+ activeClass:'active',
+ errorClass: 'text-danger'
+}
+```
+
+style绑定-对象语法:`v-bind:style="{color:activeColor,fontSize:fontSize+'px'}"`
 
 - 条件渲染
 
