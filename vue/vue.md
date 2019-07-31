@@ -197,7 +197,7 @@ let vm = new Vue({
 
 
 
-## 指令
+## 指令（14个）
 
 指令(directive)--补充了html的属性
 
@@ -2446,6 +2446,95 @@ console.log(proxy.arr)
                 }
             }
         })
+    </script>
+</body>
+```
+
+## 组件的应用
+
+- 组件的通信：七八种方式
+
+props
+
+events事件
+
+parent
+
+children
+
+ref
+
+eventBus
+
+vuex
+
+- render方法：扩展组件element-ui  iview render方法的使用
+
+```html
+<body>
+    <div id="app">{{ a }}</div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+      let vm = new Vue({
+        // el: '#app',
+        data: {
+          a: 'hello'
+        },
+        // template:`<p ref="aaa"><span>aaa</span></p>`,
+        beforeCreate() {
+          // 钩子函数 在new Vue的时候 会最先调用这个钩子 一般不会做太多功能，底层中可以做一些链（给一些生命周期加属性，可以给实例上挂属性，所有的地方都有这个属性）
+          console.log(this) // 会初始化自己的生命周期，事件方法 $on $emit
+          console.log(this.$el) // undefined 无法获取真实dom元素的
+        },
+        created() {
+          // 响应式的数据变化观察 this.$el
+          // debugger
+          console.log(this.$el) // undefined dom元素还没有真正替换到页面上，无法获取真实dom元素的
+        }
+        // template: `<div>222</div>`, // vue-cli
+        /* render(createElement) { // 像react，虚拟dom 就是一个对象
+        // <div on:click="xxx" id="1"></div>
+        return createElement('div', {
+          attrs: {
+            id: 1
+          },
+          on: {
+            click(){
+              alert(1)
+            }
+          }
+        }, 'hello');
+      }, */
+        /* beforeMount() { // 这个方法基本用不到，检测有没有template属性，有的话会把这个 template 渲染成一个render函数
+        console.log('beforeMount')
+      }, */
+        /* mounted() { // 唯一的区别 这个里面可以获取真实的元素 this.$el
+        // 最好在mounted中发送ajax，因为可以获取DOM元素。不要在created中发送Ajax
+        // 在mounted使用DOM会有问题
+        this.a = 'world'
+        // console.log(this.$el.innerHTML) //=> hello
+        this.$nextTick(() => { // $nextTick() 原理是 promise.then, setImmediate, MutationObserver, setTimeout这些方法都是异步的，把回调函数放到这些方法中做延迟
+          console.log(this.$el.innerHTML); // 只要操作DOM 就增加$nextTick()
+        })
+      }, */
+        // beforeUpdate() { // 在更新之前再做一次修改
+        //   this.a = '140';s'd
+        // },
+        // updated() { // 不能再修改值了，这个钩子不要更改数据， 如果需要监控数据更改用watch
+        //   console.log('更新后')
+        //   // this.a = '500' // 会无限循环
+        //   console.log(this.a) //=> 140
+        // },
+        // 当组件销毁的时候会触发，路由切换的时候，手动销毁的时候
+        /* beforeDestroy() {
+        console.log('销毁前'); // 一般情况下 用来清除定时器 移除绑定的方法事件
+      }, */
+        /* destroyed() {
+        console.log('销毁后')
+      } */
+      })
+      // activeted ...
+      // vm.$destroy(); // 属性、数据、响应式的数据变化去掉，不会影响DOM的渲染
     </script>
 </body>
 ```
