@@ -596,6 +596,50 @@ body div {
 ![1563263760659](media/1563263760659.png)
 
 ```javascript
+/*webpack.config.js*/
+let path = require('path');
+let HtmlWebpackPlugin = require('html-webpack-plugin')
+let MiniCssExtractPlugin = require('mini-css-extract-plugin');
+module.exports = {
+  mode: 'production',
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.[hash:8].js',
+    path: path.resolve(__dirname, 'build'),
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: 'index.html',
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'main.css'
+    }),
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader', // 解析css之前就要加前缀
+          'postcss-loader',
+          
+        ]
+      },
+      {
+        test: /\.less$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'less-loader'
+        ]
+      }
+    ]
+  }
+}
+
 /*postcss.config.js*/
 module.exports = {
   plugins: [require('autoprefixer')({
@@ -643,18 +687,985 @@ body div {
 }
 ```
 
+- 压缩css文件、js文件体积
+  在npmjs中`mini-css-extract-plugin`包下推荐用`optimize-css-assets-webpack-plugin`压缩css文件体积，还有配套`terser-webpack-plugin`js文件压缩体积。
+
+```javascript
+/* webpack.config.js */
+let path = require('path');
+let HtmlWebpackPlugin = require('html-webpack-plugin')
+let MiniCssExtractPlugin = require('mini-css-extract-plugin');
+let OptimizeCss =  require('optimize-css-assets-webpack-plugin');
+let TerserJSPlugin = require('terser-webpack-plugin');
+module.exports = {
+  optimization:{ // 优化项
+    minimizer:[
+      new TerserJSPlugin({}), // 压缩js文件体积
+      new OptimizeCss({}), // 压缩css文件体积
+    ]
+  },
+  mode: 'production',
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.[hash:8].js',
+    path: path.resolve(__dirname, 'build'),
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: 'index.html',
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'main.css'
+    }),
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader', // 解析css之前就要加前缀
+          'postcss-loader',
+        ]
+      },
+      {
+        test: /\.less$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'less-loader'
+        ]
+      }
+    ]
+  }
+}
+```
 
 ## 转化es6语法
 
+在js文件中如果用到了箭头函数，没有引入babel，打包之后没有变成普通函数，仍然是箭头函数。
+
+需要把源文件转化的加载器，转化成另一种文件，就要用到`babel-loader`
+
+转化需要babel的核心模块`@babel/core`，调用transform方法
+
+需要`@babel/preset-env`告诉如何将es6转化es5的转化模块，可以将标准的语法转换成低级的语法
+
+如果有`class A{}`语法，打包提示要安装`@babel/plugin-proposal-class-properties`插件
+
+如果有`@log`语法，打包提示需要安装`@babel/plugin-proposal-class-properties`，去babel官网看，还需要安装`@babel/plugin-proposal-decorators`
+
+```javascript
+/* index.js */
+let str = require('./a.js')
+console.log(str)
+
+require('./index.css')
+
+require('./index.less')
+
+fn = () => {
+  console.log('sss')
+}
+
+@log // 类的装饰器 装饰类或者属性
+class A { // new A() a=1 // es7写法
+  a = 1;
+}
+
+let a = new A()
+console.log(a.a)
+
+function log (target) {
+  console.log(target); // 查看被修饰的A类
+}
+```
+
+```javascript
+/* webpack.config.js */
+let path = require('path');
+let HtmlWebpackPlugin = require('html-webpack-plugin')
+let MiniCssExtractPlugin = require('mini-css-extract-plugin');
+let OptimizeCss = require('optimize-css-assets-webpack-plugin');
+let TerserJSPlugin = require('terser-webpack-plugin');
+module.exports = {
+  optimization: 
+    minimizer: [
+      new TerserJSPlugin({}),
+      new OptimizeCss({}),
+    ]
+  },
+  mode: 'development',
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.[hash:8].js',
+    path: path.resolve(__dirname, 'build'),
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: 'index.html',
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'main.css'
+    }),
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: {
+          loader: 'babel-loader',
+          options: { // options可以写在外面也可以写在里面 用babel-loader 需要把es6->es5
+            presets: [ // 映射
+              '@babel/preset-env'
+            ],
+            plugins: [
+              ["@babel/plugin-proposal-decorators", { "legacy": true }],
+              ["@babel/plugin-proposal-class-properties", { "loose": true }] // 转化class A{}语法
+            ]
+          }
+        }
+      },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+        ]
+      },
+      {
+        test: /\.less$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'less-loader'
+        ]
+      }
+    ]
+  }
+}
+```
+
 ## 处理js语法及校验
 
+### 代码转换babel
 
+如果写了generator语法会报错
+
+```javascript
+// generator语法，处理异步
+function* gen (params) {
+  yield 1;
+}
+console.log(gen().next())
+```
+
+regeneratorRuntime is not defined
+
+`@babel/plugin-transform-runtime`将更高级语法转化低级语法
+
+![1564876556355](media/1564876556355.png)
+
+在生产环境需要`npm install --save @babel/runtime`
+
+如果写`'aaa'.includes('a')`语法，上面的插件是不支持实例上的方法调用，还需要引入`@babel/runtime-corejs3`**这里没有实现，有问题**
+
+`polyfill`这个选项在v7中通过将其设置为默认值而被删除。
+
+```javascript
+/* a.js */
+module.exports = 'aaaaa'
+require('core-js')
+class B {
+
+}
+
+// generator语法，处理异步
+function* gen (params) {
+  yield 1;
+}
+console.log(gen().next())
+
+'aaa'.includes('a')
+```
+
+```javascript
+/* webpack.config.js */
+let path = require('path');
+let HtmlWebpackPlugin = require('html-webpack-plugin')
+let MiniCssExtractPlugin = require('mini-css-extract-plugin');
+let OptimizeCss = require('optimize-css-assets-webpack-plugin');
+let TerserJSPlugin = require('terser-webpack-plugin');
+module.exports = {
+  optimization: {
+    minimizer: [
+      // new TerserJSPlugin({}),
+      new OptimizeCss({}),
+    ]
+  },
+  mode: 'development',
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.[hash:8].js',
+    path: path.resolve(__dirname, 'build'),
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: 'index.html',
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'main.css'
+    }),
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              '@babel/preset-env'
+            ],
+            plugins: [
+              ["@babel/plugin-proposal-decorators", { "legacy": true }],
+              ["@babel/plugin-proposal-class-properties", { "loose": true }],
+              [
+                "@babel/plugin-transform-runtime",
+                {
+                  corejs: 3, // [].includes这样的实例方法只适用于core-js@3。
+                  proposals: true
+                }
+              ]
+            ]
+          }
+        },
+        include: path.resolve(__dirname, 'src'),
+        exclude: /node_modules/
+      },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader', // 解析css之前就要加前缀
+          'postcss-loader',
+
+        ]
+      },
+      {
+        test: /\.less$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'less-loader'
+        ]
+      }
+    ]
+  }
+}
+```
+
+### 校验规范eslint
+
+可以到eslint官网自定义eslint配置后下载`eslintrc.json`文件，之后在文件前面加`.`使用
+
+![1564896462662](media/1564896462662.png)
+
+需要引入`eslint`和`eslint-loader`
+
+```javascript
+let path = require('path');
+let HtmlWebpackPlugin = require('html-webpack-plugin')
+let MiniCssExtractPlugin = require('mini-css-extract-plugin');
+let OptimizeCss = require('optimize-css-assets-webpack-plugin');
+let TerserJSPlugin = require('terser-webpack-plugin');
+module.exports = {
+  optimization: {
+    minimizer: [
+      // new TerserJSPlugin({}), // 压缩js文件体积
+      new OptimizeCss({}),
+    ]
+  },
+  mode: 'development',
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.[hash:8].js',
+    path: path.resolve(__dirname, 'build'),
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: 'index.html',
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'main.css'
+    }),
+  ],
+  module: {
+    rules: [ // loader 默认是从右边向左边执行 从下到上执行
+      { // 为了代码解析和代码校验分开，写在两个对象中，也是可以写在一个{}中的，但是需要加enforce: 'pre'配置项；也可以代码校验写在代码解析的下边。
+        test: /\.js$/,
+        use: {
+          loader: 'eslint-loader',
+          options: {
+            enforce: 'pre' // previous：强制执行顺序.js文件eslint-loader先执行 post：后执行
+          }
+        }
+      },
+      {
+        test: /\.js$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              '@babel/preset-env'
+            ],
+            plugins: [
+              ["@babel/plugin-proposal-decorators", { "legacy": true }],
+              ["@babel/plugin-proposal-class-properties", { "loose": true }],
+              [
+                "@babel/plugin-transform-runtime",
+                // {
+                //   corejs: 3,
+                //   proposals: true
+                // }
+              ]
+            ]
+          }
+        },
+        include: path.resolve(__dirname, 'src'),
+        exclude: /node_modules/
+      },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+
+        ]
+      },
+      {
+        test: /\.less$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'less-loader'
+        ]
+      }
+    ]
+  }
+}
+```
 
 ## 全局变量引入问题
 
+### loader的几种类型
 
+`pre`：前面执行的loader
+
+`normal`：普通loader
+
+内联loader
+
+`postloader`：后置loader
+
+### 全局暴露变量
+
+引入jquery被webpack打包之后是在闭包中，没有挂到window对象上，别的js文件并不能使用jquery。此时需要引入`expose-loader`。
+
+1. expose-loader暴露到window上
+
+- 不需要在`webpack.config.js`配置的情况
+
+```javascript
+// 把jquery使用expose-loader替换成$全局对象
+import $ from 'expose-loader?$!jquery'
+// expose-loader 暴露 全局的loader 内联的loader
+console.log(window.$);
+```
+
+- 在`webpack.config.js`配置的情况
+
+```javascript
+// 使用
+import $ from 'jquery'
+console.log(window.$);
+```
+
+```javascript
+let path = require('path');
+let HtmlWebpackPlugin = require('html-webpack-plugin')
+let MiniCssExtractPlugin = require('mini-css-extract-plugin');
+let OptimizeCss = require('optimize-css-assets-webpack-plugin');
+let TerserJSPlugin = require('terser-webpack-plugin');
+module.exports = {
+  optimization: {
+    minimizer: [
+      // new TerserJSPlugin({}),
+      new OptimizeCss({}),
+    ]
+  },
+  mode: 'development',
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.[hash:8].js',
+    path: path.resolve(__dirname, 'build'),
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: 'index.html',
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'main.css'
+    }),
+  ],
+  module: {
+    rules: [
+      {
+        test: require.resolve('jquery'), // 只要引用了jquery就匹配到
+        use: 'expose-loader?$'
+      },
+      // {
+      //   test: /\.js$/,
+      //   use: {
+      //     loader: 'eslint-loader',
+      //     options: {
+      //       enforce: 'pre'
+      //     }
+      //   }
+      // },
+      {
+        test: /\.js$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              '@babel/preset-env'
+            ],
+            plugins: [
+              ["@babel/plugin-proposal-decorators", { "legacy": true }],
+              ["@babel/plugin-proposal-class-properties", { "loose": true }],
+              [
+                "@babel/plugin-transform-runtime",
+                // {
+                //   corejs: 3,
+                //   proposals: true
+                // }
+              ]
+            ]
+          }
+        },
+        include: path.resolve(__dirname, 'src'),
+        exclude: /node_modules/
+      },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+
+        ]
+      },
+      {
+        test: /\.less$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'less-loader'
+        ]
+      }
+    ]
+  }
+}
+```
+
+- providePlugin 给每个模块中都注入$，但是没有在window上
+
+```javascript
+let webpack = require('webpack');// webpack.ProvidePlugin
+module.exports = {
+  optimization: {
+    minimizer: [
+      // new TerserJSPlugin({}),
+      new OptimizeCss({}),
+    ]
+  },
+  mode: 'development',
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.[hash:8].js',
+    path: path.resolve(__dirname, 'build'),
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: 'index.html',
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'main.css'
+    }),
+    new webpack.ProvidePlugin({ // 在每个模块中都注入$
+      $: 'jquery'
+    })
+  ],
+}
+```
+
+```javascript
+// 使用
+console.log($); // 在每个模块中注入$对象，并没有在window上
+```
+
+3. 使用CDN在index.html引入jquery，可以在每一个模块使用window.$或者$
+
+```html
+<head>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+</head>
+<body>
+    <!-- 模板 -->
+    <div>内容区</div>
+</body>
+```
+
+4. 引入不打包
+
+如果已经把jquery变成每个模块都引入了，单个模块有强迫症，仍然要`import jquery from 'jquery'`，这样会把单独引入的jquery会打包，需要在webpack.config.js配置忽略打包。
+
+```javascript
+/* index.js */
+import $ from 'jquery';
+console.log($);
+```
+
+```html
+<!-- index.html -->
+<head>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+</head>
+<body>
+    <!-- 模板 -->
+    <div>内容区</div>
+</body>
+```
+
+```javascript
+/* webpack.config.js */
+let path = require('path');
+let HtmlWebpackPlugin = require('html-webpack-plugin')
+let MiniCssExtractPlugin = require('mini-css-extract-plugin');
+let OptimizeCss = require('optimize-css-assets-webpack-plugin');
+let TerserJSPlugin = require('terser-webpack-plugin');
+module.exports = {
+  optimization: {
+    minimizer: [
+      // new TerserJSPlugin({}), 
+      new OptimizeCss({}), 
+    ]
+  },
+  mode: 'development',
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.[hash:8].js',
+    path: path.resolve(__dirname, 'build'),
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: 'index.html',
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'main.css'
+    }),
+  ],
+  externals: { // 打包时忽略
+    jquery: '$'
+  },
+  module: {
+    rules: [
+      // {
+      //   test: /\.js$/,
+      //   use: {
+      //     loader: 'eslint-loader',
+      //     options: {
+      //       enforce: 'pre'
+      //     }
+      //   }
+      // },
+      {
+        test: /\.js$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              '@babel/preset-env'
+            ],
+            plugins: [
+              ["@babel/plugin-proposal-decorators", { "legacy": true }],
+              ["@babel/plugin-proposal-class-properties", { "loose": true }],
+              [
+                "@babel/plugin-transform-runtime",
+                // {
+                //   corejs: 3,
+                //   proposals: true
+                // }
+              ]
+            ]
+          }
+        },
+        include: path.resolve(__dirname, 'src'),
+        exclude: /node_modules/
+      },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+
+        ]
+      },
+      {
+        test: /\.less$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'less-loader'
+        ]
+      }
+    ]
+  }
+}
+```
 
 ## 图片处理
+
+1. 在js中创建图片来引入
+
+**如果直接`image.src='./logo.jpg'`打包会直接认为是个字符串**
+
+需要引入`file-loader`，打包默认会在内部生成一张图片 到build目录下，把生成的图片的名字返回来
+
+```javascript
+import logo from './logo.jpg' // 打包时会生成一个哈希戳的图片名字到打包文件夹下。把图片引入，返回的结果是一个新的图片地址url
+console.log(logo)
+let image = new Image();
+image.src = logo; // 就是一个普通的图片
+document.body.appendChild(image);
+```
+
+```javascript
+let path = require('path');
+let HtmlWebpackPlugin = require('html-webpack-plugin')
+let MiniCssExtractPlugin = require('mini-css-extract-plugin');
+let OptimizeCss = require('optimize-css-assets-webpack-plugin');
+let TerserJSPlugin = require('terser-webpack-plugin');
+module.exports = {
+  optimization: {
+    minimizer: [
+      // new TerserJSPlugin({}),
+      new OptimizeCss({}),
+    ]
+  },
+  mode: 'development',
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.[hash:8].js',
+    path: path.resolve(__dirname, 'build'),
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: 'index.html',
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'main.css'
+    }),
+  ],
+  externals: {
+    jquery: '$'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.html$/,
+        use: 'html-withimg-loader'
+      },
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: 'file-loader'
+      },
+      {
+        test: /\.js$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              '@babel/preset-env'
+            ],
+            plugins: [
+              ["@babel/plugin-proposal-decorators", { "legacy": true }],
+              ["@babel/plugin-proposal-class-properties", { "loose": true }],
+              [
+                "@babel/plugin-transform-runtime",
+                // {
+                //   corejs: 3,
+                //   proposals: true
+                // }
+              ]
+            ]
+          }
+        },
+        include: path.resolve(__dirname, 'src'),
+        exclude: /node_modules/
+      },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+
+        ]
+      },
+      {
+        test: /\.less$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'less-loader'
+        ]
+      }
+    ]
+  }
+}
+```
+
+2. 在css引入 background('url)
+
+```javascript
+/* index.js */
+import './index.css'
+```
+
+```css
+div{
+  width: 100px;
+  height: 100px;
+  background: url('./logo.jpg') 
+  /* css中直接引入，因为有file-loader了，相当于require("./logo.jpg") */
+}
+```
+
+3. `<img src="" alt=""/>`在标签中引入图片，需要引入`html-withimg-loader`
+
+```html
+<body>
+    <!-- 模板 -->
+    <div>内容区</div>
+    <img src="./logo.jpg" alt="">
+</body>
+```
+
+```javascript
+let path = require('path');
+let HtmlWebpackPlugin = require('html-webpack-plugin')
+let MiniCssExtractPlugin = require('mini-css-extract-plugin');
+let OptimizeCss = require('optimize-css-assets-webpack-plugin');
+let TerserJSPlugin = require('terser-webpack-plugin');
+module.exports = {
+  optimization: {
+    minimizer: [
+      // new TerserJSPlugin({}),
+      new OptimizeCss({}),
+    ]
+  },
+  mode: 'development',
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.[hash:8].js',
+    path: path.resolve(__dirname, 'build'),
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: 'index.html',
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'main.css'
+    }),
+  ],
+  externals: {
+    jquery: '$'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.html$/,
+        use: 'html-withimg-loader'
+      },
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: 'file-loader'
+      },
+      {
+        test: /\.js$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              '@babel/preset-env'
+            ],
+            plugins: [
+              ["@babel/plugin-proposal-decorators", { "legacy": true }],
+              ["@babel/plugin-proposal-class-properties", { "loose": true }],
+              [
+                "@babel/plugin-transform-runtime",
+                // {
+                //   corejs: 3,
+                //   proposals: true
+                // }
+              ]
+            ]
+          }
+        },
+        include: path.resolve(__dirname, 'src'),
+        exclude: /node_modules/
+      },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+
+        ]
+      },
+      {
+        test: /\.less$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'less-loader'
+        ]
+      }
+    ]
+  }
+}
+```
+
+- 对打包图片做限制，如果有些图片比较小，我们不希望图片发送http请求，直接用base64第一次就加载出来。我们的图片要小于多少k的时候 用base64 来转化，否则用file-loader产生真实的图片
+
+```javascript
+let path = require('path');
+let HtmlWebpackPlugin = require('html-webpack-plugin')
+let MiniCssExtractPlugin = require('mini-css-extract-plugin');
+let OptimizeCss = require('optimize-css-assets-webpack-plugin');
+let TerserJSPlugin = require('terser-webpack-plugin');
+module.exports = {
+  optimization: {
+    minimizer: [
+      // new TerserJSPlugin({}),
+      new OptimizeCss({}),
+    ]
+  },
+  mode: 'development',
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.[hash:8].js',
+    path: path.resolve(__dirname, 'build'),
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: 'index.html',
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'main.css'
+    }),
+  ],
+  externals: {
+    jquery: '$'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.html$/,
+        use: 'html-withimg-loader'
+      },
+      {
+        test: /\.(png|jpg|gif)$/,
+        // 做一个限制 当我们的图片 小于多少k的时候 用base64 来转化
+        // 否则用file-loader产生真实的图片
+        // use: 'file-loader' // 打包把图片生成一个新图片
+        use: {
+          loader: 'url-loader', // 转化为base64
+          options: {
+            limit: 200 * 1024 // 图片小于2M的时候直接转化为base64，不会打包成一个新图片
+          }
+        }
+      },
+      {
+        test: /\.js$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              '@babel/preset-env'
+            ],
+            plugins: [
+              ["@babel/plugin-proposal-decorators", { "legacy": true }],
+              ["@babel/plugin-proposal-class-properties", { "loose": true }],
+              [
+                "@babel/plugin-transform-runtime",
+                // {
+                //   corejs: 3,
+                //   proposals: true
+                // }
+              ]
+            ]
+          }
+        },
+        include: path.resolve(__dirname, 'src'),
+        exclude: /node_modules/
+      },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+
+        ]
+      },
+      {
+        test: /\.less$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'less-loader'
+        ]
+      }
+    ]
+  }
+}
+```
 
 
 
