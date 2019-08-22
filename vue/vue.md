@@ -2452,6 +2452,8 @@ console.log(proxy.arr)
 
 ## 组件的应用
 
+### 生命周期
+
 - 组件的通信：七八种方式
 
 props
@@ -2480,8 +2482,12 @@ vuex
         data: {
           a: 'hello'
         },
+        methods: {
+          bbb: function() {}
+        },
         // template:`<p ref="aaa"><span>aaa</span></p>`,
         beforeCreate() {
+          // debugger;
           // 钩子函数 在new Vue的时候 会最先调用这个钩子 一般不会做太多功能，底层中可以做一些链（给一些生命周期加属性，可以给实例上挂属性，所有的地方都有这个属性）
           console.log(this) // 会初始化自己的生命周期，事件方法 $on $emit
           console.log(this.$el) // undefined 无法获取真实dom元素的
@@ -2489,8 +2495,8 @@ vuex
         created() {
           // 响应式的数据变化观察 this.$el
           // debugger
-          console.log(this.$el) // undefined dom元素还没有真正替换到页面上，无法获取真实dom元素的
-        }
+          console.log(this) // undefined dom元素还没有真正替换到页面上，无法获取真实dom元素的
+        },
         // template: `<div>222</div>`, // vue-cli
         /* render(createElement) { // 像react，虚拟dom 就是一个对象
         // <div on:click="xxx" id="1"></div>
@@ -2508,15 +2514,17 @@ vuex
         /* beforeMount() { // 这个方法基本用不到，检测有没有template属性，有的话会把这个 template 渲染成一个render函数
         console.log('beforeMount')
       }, */
-        /* mounted() { // 唯一的区别 这个里面可以获取真实的元素 this.$el
-        // 最好在mounted中发送ajax，因为可以获取DOM元素。不要在created中发送Ajax
-        // 在mounted使用DOM会有问题
-        this.a = 'world'
-        // console.log(this.$el.innerHTML) //=> hello
-        this.$nextTick(() => { // $nextTick() 原理是 promise.then, setImmediate, MutationObserver, setTimeout这些方法都是异步的，把回调函数放到这些方法中做延迟
-          console.log(this.$el.innerHTML); // 只要操作DOM 就增加$nextTick()
-        })
-      }, */
+        mounted() {
+          // 唯一的区别 这个里面可以获取真实的元素 this.$el
+          // 最好在mounted中发送ajax，因为可以获取DOM元素。不要在created中发送Ajax
+          // 在mounted使用DOM会有问题
+          this.a = 'world'
+          // console.log(this.$el.innerHTML) //=> hello
+          this.$nextTick(() => {
+            // $nextTick() 原理是 promise.then, setImmediate, MutationObserver, setTimeout这些方法都是异步的，把回调函数放到这些方法中做延迟
+            console.log(this.$el.innerHTML) // 只要操作DOM 就增加$nextTick()
+          })
+        },
         // beforeUpdate() { // 在更新之前再做一次修改
         //   this.a = '140';s'd
         // },
@@ -2530,12 +2538,166 @@ vuex
         console.log('销毁前'); // 一般情况下 用来清除定时器 移除绑定的方法事件
       }, */
         /* destroyed() {
-        console.log('销毁后')
-      } */
+          console.log('销毁后')
+        } */
       })
       // activeted ...
-      // vm.$destroy(); // 属性、数据、响应式的数据变化去掉，不会影响DOM的渲染
+      // vm.$destroy(); // 手动销毁。属性、数据、响应式的数据变化去掉，不会影响DOM的渲染
     </script>
+  </body>
+```
+
+### 全局组件
+
+```javascript
+<body>
+  <div id="app">
+    <my-button/>
+    <!-- 上面这种是不符合 w3c规范的，如果多次使用只会出现第一次 hr img br才符合自闭合 -->
+    <my-button :info="xxx"></my-button>
+  </div>
+  <script src="./node_modules/vue/dist/vue.js"></script>
+  <!-- 组件的类型：全局组件 局部组件 函数式组件 异步组件 -->
+  <!-- 为什么要有组件：复用，方便维护，拆分方便，每个组件间作用域是隔离的，组件间互不干扰，组件间的数据传递，组件就是一个自定义的标签，可以代表一些特定的功能。主要封装 css html js .vue文件 -->
+  <script>
+    // 数据来源 data props
+    // 全局组件 在任何组件中可以直接使用，而且不需要引入，在组件的模板中用
+    Vue.component('my-button',{// 每个组件都有自己的生命周期
+      props:['info'],
+      data(){ // 组件的数据必须市函数类型
+        return {msg:'点我啊'} // 保证数据不会互相影响 所以通过一个函数返回一个唯一的对象
+      },
+      template:`<button>点我</button>`
+    })
+    let vm = new Vue({ // 根实例的数据必须是对象类型，但是自定义的组件必须是函数类型
+      el: '#app',
+      data: {
+        xxx:'试试'
+      }
+    })
+    // 父组件传递给子组件通过属性传递
+  </script>
 </body>
+```
+
+### 局部组件、props、$attrs批量传值
+
+```javascript
+<body>
+    <div id="app">
+      <my-button :info="xxx" a="1" b="2" c="3"></my-button>
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+      let vm = new Vue({
+        el: '#app',
+        data: {
+          xxx: '试试'
+        },
+        components: {
+          'my-button': {
+            inheritAttrs: false, // 不在DOM上显示传递的属性，否则没有接收到的属性都会在DOM上充当属性
+            props: ['info'],
+            data() {
+              return { msg: '点我啊' }
+            },
+            // this.$attrs 表示所有没有被用到的属性，可以批量传递属性
+            mounted() {
+              console.log(this.$attrs)
+            },
+            template: '<button>{{info}}-<my v-bind="$attrs"></my></button>',
+            components: {
+              my: {
+                props: ['a', 'b', 'c'],
+                template: '<span>{{a}}{{b}}{{c}}</span>',
+                mounted() {
+                  console.log(this.$attrs)
+                }
+              }
+            }
+          }
+        }
+      })
+    </script>
+  </body>
+```
+
+### 子传父$emit
+
+```javascript
+<body>
+  <div id="app">
+    <!-- .native 修饰符 相当于给组件的模板最外层添加事件 -->
+    <!-- <my-button @click.native="show2"></my-button> -->
+    <my-button @click="show2" @mouseup="show1"></my-button>
+  </div>
+  <script src="./node_modules/vue/dist/vue.js"></script>
+  <script>
+    Vue.component('my-button',{
+      data(){
+        return {msg:'点我啊'}
+      },
+      // this.$attrs (v-bind) this.$listeners (v-on)
+      // 一个个传递方法
+      // template:`<div><button @mouseup="$listeners.mouseup" @click="$listeners.click">{{msg}}</button></div>`,
+      // 把事件整体传入 事件必须是存在的事件
+      // template: `<div><button v-on="$listeners">{{msg}}</button></div>`,
+      // 触发自己身上的click事件
+      template: `<div><button @click="$emit('click')">{{msg}}</button></div>`,
+      
+
+    })
+    let vm = new Vue({
+      el: '#app',
+      methods:{
+        show1(){
+          console.log('父亲111')
+        },
+        show2(){
+          console.log('父亲222')
+        }
+      }
+    })
+  </script>
+</body>
+```
+
+### $props传值验证
+
+```javascript
+<body>
+    <div id="app">
+      <my-button :msg="1" :arr="[1,2,3]" username="zhufeng"></my-button>
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+      Vue.component('my-button', {
+        props: {
+          msg: {
+            // required和default冲突，必填就没有默认值
+            type: Number, // 校验类型
+            default: 100
+            // required:true
+          },
+          arr: {
+            // 对象和数组默认值必须通过函数返回
+            type: Array,
+            default: () => [1, 2, 3]
+          },
+          username: {
+            type: String,
+            validator(value) { // 参数是自己的值，如果不符合验证会报错
+              return value.length == 7
+            }
+          }
+        },
+        template: `<div><button>{{msg}}{{arr}}</button></div>`
+      })
+      let vm = new Vue({
+        el: '#app',
+        methods: {}
+      })
+    </script>
+  </body>
 ```
 
