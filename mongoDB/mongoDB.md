@@ -132,25 +132,25 @@ httpinterface=true
 
 语法：`db.dropDatabase()`
 
-## 集合操作
+## 6.集合操作
 
-### 查看集合帮助
+### 6.1查看集合帮助
 
 语法：`db.students.help()`
 
-### 查看数据库下的集合
+### 6.2查看数据库下的集合
 
 语法：`show collections`
 
-### 创建集合
+### 6.3创建集合
 
-#### 创建一个空集合
+#### 6.3.1创建一个空集合
 
 语法：`db.createCollection(collection_name)`
 
 - collection_name集合的名称
 
-#### 创建集合并插入一个文档
+#### 6.3.2创建集合并插入一个文档
 
 语法：`db.collection_Name.insert(document_name)`
 
@@ -158,9 +158,9 @@ httpinterface=true
 
 
 
-## 插入文档
+## 7.插入文档
 
-### insert
+### 7.1insert
 
 语法：`db.collection_name.insert(document)`
 
@@ -175,7 +175,7 @@ WriteResult({"nInserted": 1})
 db.students.insert({_id:1,name:'zfpx',age:1})
 ```
 
-### save
+### 7.2save
 
 语法：`db.collection_name.save(document)`
 
@@ -192,9 +192,9 @@ WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
 ```
 
 
-## 更新文档
+## 8.更新文档
 
-### 语法
+### 8.1语法
 
 ```
 db.collection.update(
@@ -207,7 +207,7 @@ db.collection.update(
 )
 ```
 
-### 参数
+### 8.2参数
 
 - query查询条件，指定要更新符合哪些条件的文档
 - update更新后的对象或指定一些更新的操作符
@@ -216,7 +216,7 @@ db.collection.update(
 - upsert可选，这个参数的意思是，如果不存在符合条件的记录时是否插入updateObj，默认时false，不插入
 - multi可选，mongodb默认只更新找到的第一条记录，如果这个参数为true，就更新所有符合条件的记录
 
-### upsert
+### 8.3upsert
 
 将`students`集合中数据中`name`是zfpx2的值修改为zfpx22
 
@@ -227,7 +227,7 @@ WriteResult({ "nInserted" : 1 })
 WriteResult({ "nMatched" : 0, "nUpserted" : 1, "nModified" : 0, "_id" : 2 })
 ```
 
-### multi
+### 8.4multi
 
 如果有多条name是zfpx2的数据只更新一条,如果想全部更新需要指定`{multi:true}`的参数
 
@@ -240,9 +240,9 @@ WriteResult({ "nMatched" : 2, "nUpserted" : 0, "nModified" : 2 });
 
 ![1550473345988](media/1550473345988.png)
 
-## 更新操作符
+## 9.更新操作符
 
-### $set
+### 9.1$set
 
 直接指定更新后的值
 
@@ -250,7 +250,7 @@ WriteResult({ "nMatched" : 2, "nUpserted" : 0, "nModified" : 2 });
 db.c3.update({name:'zfpx2'},{$set:{age:10}},{multi:true});
 ```
 
-### $inc
+### 9.2$inc
 
 在原基础上累加
 
@@ -258,7 +258,7 @@ db.c3.update({name:'zfpx2'},{$set:{age:10}},{multi:true});
 db.c3.update({name:'zfpx2'},{$inc:{age:1}},{multi:true});
 ```
 
-### $unset
+### 9.3$unset
 
 删除指定的键
 
@@ -266,7 +266,7 @@ db.c3.update({name:'zfpx2'},{$inc:{age:1}},{multi:true});
 db.c3.update({name:'zfpx2'},{$unset:{age:1}},{multi:true});
 ```
 
-### $push
+### 9.4$push
 
 向数组中添加元素
 
@@ -276,7 +276,7 @@ var result = db.student.update({name:'张三'},{
 });
 ```
 
-### $ne
+### 9.5$ne
 
 `$ne`类似于MYSQL的 `not in` 或者`not exists`
 
@@ -284,7 +284,7 @@ var result = db.student.update({name:'张三'},{
 db.student.update({name:'zfpx1',hobbys:{$ne:'smoking'}},{$push:{"hobbys":"smoking"}});
 ```
 
-### $addToSet
+### 9.6$addToSet
 
 向集合中添加元素
 
@@ -292,7 +292,7 @@ db.student.update({name:'zfpx1',hobbys:{$ne:'smoking'}},{$push:{"hobbys":"smokin
 db.student.update({name:'zfpx1'},{$addToSet:{"hobbys":"smoking"}});
 ```
 
-### $each
+### 9.7$each
 
 把数组中的元素逐个添加到集合中
 
@@ -301,7 +301,7 @@ var hobbys = ["A",'B'];
 db.student.update({name:'zfpx1'},{$addToSet:{hobbys:{$each:hobbys}}});
 ```
 
-### $pop
+### 9.8$pop
 
 从数组中移除指定的索引中对应的元素
 
@@ -309,15 +309,15 @@ db.student.update({name:'zfpx1'},{$addToSet:{hobbys:{$each:hobbys}}});
 db.student.update({name:'zfpx1'},{$pop:{hobbys:1}});
 ```
 
-### 修改指定索引元素
+### 9.9修改指定索引元素
 
 ```
 db.c3.update({name:'zfpx1'},{$set:{"hobbys.0":"smoking2"}});
 ```
 
-## 删除文档
+## 10.删除文档
 
-### 语法
+### 10.1语法
 
 ```
 db.collection.remove(
@@ -328,12 +328,12 @@ db.collection.remove(
 )
 ```
 
-### 参数
+### 10.2参数
 
 - query：（可选）删除的文档的条件
 - justOne：（可选）如果设为true或1，则只删除匹配到的多个文档中的第一个
 
-### 实例
+### 10.3实例
 
 删除worker集合里name是zfpx2的所有文档数据
 
@@ -353,9 +353,9 @@ WriteResult({ "nRemoved" : 1 })
 
 ![1550472964865](media/1550472964865.png)
 
-## 查询文档
+## 11.查询文档
 
-### find
+### 11.1find
 
 语法：`db.collection_name.find()`
 
@@ -373,7 +373,7 @@ db.students.find()
 
 ![1550473169233](media/1550473169233.png)
 
-### 查询指定列
+### 11.2查询指定列
 
 语法：`db.collection_name.find({queryWhere},{key:1,key:1})`
 
@@ -390,7 +390,7 @@ db.students.find()
 > db.students.find({},{age:1})
 ```
 
-### findOne
+### 11.3findOne
 
 查询匹配结果的第一条数据
 
@@ -406,7 +406,7 @@ db.students.find()
 
 ![1550473244117](media/1550473244117.png)
 
-### $in
+### 11.4$in
 
 查询字段在某个范围内
 
@@ -414,19 +414,19 @@ db.students.find()
 
 `db.student.find({age:{$in:[30,100]}},{name:1,age:1})`
 
-### $nin
+### 11.5$nin
 
 查询字段不在某个范围内
 
 `db.student.find({age:{$nin:[30,100]}},{name:1,age:1})`
 
-### $not
+### 11.6$not
 
 对特定条件取反
 
 - `db.student.find({age:{$not:{$gte:20,$lte:30}}})`
 
-### array
+### 11.7array
 
 对数组的查询
 
@@ -449,11 +449,11 @@ $slice:["$array", [startIndex, ] length ] （startIndex可以省略，默认从0
 db.stu.find({},{friends:{$slice:[0,3]}});  "friends" : [ "A", "B", "C" ]
 ```
 
-### where
+### 11.8where
 
 `db.student.find({$where:"this.age>30"},{name:1,age:1});`
 
-### cursor
+### 11.9cursor
 
 - 游标不是查询结果，而是查询的一个返回资源或者接口，通过这个接口，可以逐条读取数据
 
@@ -466,11 +466,11 @@ var result = db.student.find();
 
 ```
 
-## 条件操作符
+## 12.条件操作符
 
 条件操作符用于比较两个表达式并从mongoDB集合中获取数据
 
-### 大于操作符
+### 12.1大于操作符
 
 语法：
 
@@ -488,7 +488,7 @@ var result = db.student.find();
 db.students.find({age:{$gt:30}})
 ```
 
-### 大于等于操作符
+### 12.2大于等于操作符
 
 **语法**
 
@@ -506,7 +506,7 @@ db.students.find({age:{$gt:30}})
 db.students.find({age: {$gte: 30}}) 
 ```
 
-### 小于操作符
+### 12.3小于操作符
 
 **语法**
 
@@ -524,7 +524,7 @@ db.students.find({age: {$gte: 30}})
 db.students.find({age: {$lt: 30}}) 
 ```
 
-### 小于等于操作符
+### 12.4小于等于操作符
 
 **语法**
 
@@ -542,7 +542,7 @@ db.students.find({age: {$lt: 30}})
 db.students.find({age: {$lte: 30}}) 
 ```
 
-### 同时使用$gte和$lte
+### 12.5同时使用$gte和$lte
 
 **语法**
 
@@ -560,7 +560,7 @@ db.students.find({age: {$lte: 30}})
 db.students.find({age: {$gte: 30, $lte: 50}})
 ```
 
-### 等于
+### 12.6等于
 
 **语法**
 
@@ -578,7 +578,7 @@ db.students.find({age: {$gte: 30, $lte: 50}})
 db.students.find({"age": 30})`
 ```
 
-### 使用_id进行查询
+### 12.7使用_id进行查询
 
 **语法**
 
@@ -595,7 +595,7 @@ db.students.find({"age": 30})`
 { "_id" : ObjectId("5adb666ecd738e9771638985"), "name" : "zzzz" }
 ```
 
-### 查询结果集的条数
+### 12.8查询结果集的条数
 
 **语法**
 
@@ -611,7 +611,7 @@ db.students.find({"age": 30})`
 db.students.find().count()
 ```
 
-### 正则匹配
+### 12.9正则匹配
 
 **语法**
 
@@ -639,9 +639,9 @@ db.students.find({name:/^zhang/})
 
 ![1550473420954](media/1550473420954.png)
 
-## 与和或
+## 13.与和或
 
-### and
+### 13.1and
 
 find方法可以传入多个键(key)，每个键(key)以逗号隔开
 
@@ -657,7 +657,7 @@ find方法可以传入多个键(key)，每个键(key)以逗号隔开
 db.students.find({name:'zfpx',age:1})
 ```
 
-### or
+### 13.2or
 
 **语法**
 
@@ -679,7 +679,7 @@ db.collection_name.find(
 db.students.find({$or:[{age:30},{age:50}]})
 ```
 
-### and和or联用
+### 13.3and和or联用
 
 **语法**
 
@@ -704,9 +704,9 @@ db.collection_name.find(
 db.students.find({name:'zfpx',$or:[{age:30},{age:50}]})
 ```
 
-## 分页查询
+## 14.分页查询
 
-### limit
+### 14.1limit
 
 读取指定数量的数据记录 
 
@@ -727,7 +727,7 @@ db.students.find({name:'zfpx',$or:[{age:30},{age:50}]})
 db.students.find().limit(3)
 ```
 
-### skip
+### 14.2skip
 
 跳过指定数量的数据，skip方法同样接受一个数字参数作为跳过的记录条数 
 
@@ -748,7 +748,7 @@ db.students.find().limit(3)
 db.students.find().skip(3)
 ```
 
-### skip+limit
+### 14.3skip+limit
 
 通常用这种方式来实现分页功能 
 
@@ -770,7 +770,7 @@ db.students.find().skip(3)
 db.students.find().skip(3).limit(3);
 ```
 
-### sort排序
+### 14.4sort排序
 
 sort()方法可以通过参数指定排序的字段，并使用 1 和 -1 来指定排序的方式，其中 1 为升序排列，而-1是用于降序排列。 **语法**
 
@@ -790,7 +790,7 @@ sort()方法可以通过参数指定排序的字段，并使用 1 和 -1 来指�
 db.students.find().sort({age:1})
 ```
 
-## 执行脚本
+## 15.执行脚本
 
 ```javascript
 var username = 'zfpx';
@@ -833,7 +833,7 @@ connecting to: students
 write WriteResult({ "nInserted" : 1 })
 ```
 
-## 备份与导出
+## 16.备份与导出
 
 ```
 mongodump
@@ -856,9 +856,9 @@ mongorestore
 // mongorestore --host 127.0.0.1 --port 27017 ./backup
 ```
 
-## 权限
+## 17.权限
 
-### 创建用户
+### 17.1创建用户
 
 - 使用`use admin`进入我们的admin库
 - 使用`db.createUser`方法来创建集合
@@ -904,20 +904,20 @@ db.createUser({
 
 给使用的数据库添加用户
 
-### 查询用户
+### 17.2查询用户
 
 `db.system.users.find()`
 
-### 删除用户
+### 17.3删除用户
 
 `db.system.users.remove({user:'zfpx'})`
 
-### 启动数据库权限检查
+### 17.4启动数据库权限检查
 
 `mongod --auth`
 `mongo  -u zfpx -p 123456 127.0.0.1:27017/admin`
 
-### 鉴权
+### 17.5鉴权
 
 ```
 use admin;
@@ -926,9 +926,9 @@ db.auth('zfpx','zfpx');
 
 - 正确返回1，如果错误返回0
 
-## 索引
+## 18.索引
 
-### 准备数据
+### 18.1准备数据
 
 ```
 var db = connect('school');//选择users数据库
@@ -940,7 +940,7 @@ print(users.length);
 db.users.insert(users);
 ```
 
-### 打印出查询时间
+### 18.2打印出查询时间
 
 ```
 var startTime = Date.now();
@@ -950,13 +950,13 @@ records.forEach(function(item){printjson(item)});
 print(Date.now() - startTime);
 ```
 
-### 建立索引
+### 18.3建立索引
 
 ```
 db.users.ensureIndex({name:1});
 ```
 
-## 附录
+## 19.附录
 ### mongoVue卸载
 
 安装不上的话用msiexec命令进行安装
@@ -1084,16 +1084,16 @@ db.users.ensureIndex({name:1});
 
 - db.students.unsetWriteConcern( ) - unsets the write concern for writes to the collection
 
-## 角色
+## 20.角色
 
-### 数据库用户角色
+### 20.1数据库用户角色
 
 针对每一个数据库进行控制。
 
 - read :提供了读取所有非系统集合，以及系统集合中的system.indexes, system.js, system.namespaces
 - readWrite: 包含了所有read权限，以及修改所有非系统集合的和系统集合中的system.js的权限
 
-### 数据库管理角色
+### 20.2数据库管理角色
 
 每一个数据库包含了下面的数据库管理角色。
 
@@ -1101,7 +1101,7 @@ db.users.ensureIndex({name:1});
 - dbAdmin：一些数据库对象的管理操作，但是没有数据库的读写权限。（参考：[http://docs.mongodb.org/manual/reference/built-in-roles/#dbAdmin）](http://docs.mongodb.org/manual/reference/built-in-roles/#dbAdmin%EF%BC%89)
 - userAdmin：为当前用户创建、修改用户和角色。拥有userAdmin权限的用户可以将该数据库的任意权限赋予任意的用户。
 
-### 集群管理权限
+### 20.3集群管理权限
 
 - admin数据库包含了下面的角色，用户管理整个系统，而非单个数据库。这些权限包含了复制集和共享集群的管理函数。
 - clusterAdmin：提供了最大的集群管理功能。相当于clusterManager, clusterMonitor, and hostManager和dropDatabase的权限组合。
@@ -1109,7 +1109,7 @@ db.users.ensureIndex({name:1});
 - clusterMonitor：仅仅监控集群和复制集。
 - hostManager：提供了监控和管理服务器的权限，包括shutdown节点，logrotate, repairDatabase等。 备份恢复权限：admin数据库中包含了备份恢复数据的角色。包括backup、restore等等。
 
-### 所有数据库角色
+### 20.4所有数据库角色
 
 - admin数据库提供了一个mongod实例中所有数据库的权限角色：
 - readAnyDatabase：具有read每一个数据库权限。但是不包括应用到集群中的数据库。
@@ -1117,15 +1117,15 @@ db.users.ensureIndex({name:1});
 - userAdminAnyDatabase：具有userAdmin每一个数据库权限，但是不包括应用到集群中的数据库。
 - dbAdminAnyDatabase：提供了dbAdmin每一个数据库权限，但是不包括应用到集群中的数据库。
 
-### 超级管理员权限
+### 20.5超级管理员权限
 
 - root: dbadmin到admin数据库、useradmin到admin数据库以及UserAdminAnyDatabase。但它不具有备份恢复、直接操作system.*集合的权限，但是拥有root权限的超级用户可以自己给自己赋予这些权限。
 
-### 备份恢复角色
+### 20.6备份恢复角色
 
 backup、restore；
 
-### 内部角色
+### 20.7内部角色
 
 __system
 

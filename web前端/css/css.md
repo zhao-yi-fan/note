@@ -1,8 +1,3 @@
-## CSS的发展历程
-
-从HTML被发明开始，样式就以各种形式存在。不同的浏览器结合它们各自的样式语言为用户提供页面效果的控制。最初的HTML只包含很少的显示属性。
-随着HTML的成长，为了满足页面设计者的要求，HTML添加了很多显示功能。但是随着这些功能的增加，HTML变的越来越杂乱，而且HTML页面也越来越臃肿。于是CSS便诞生了。
-
 ## CSS初识
 
 CSS(Cascading Style Sheets)    美化样式
@@ -1713,7 +1708,6 @@ outline : outline-color ||outline-style || outline-width
 右下角可以拖拽： 
 
 <textarea></textarea>
-
 右下角不可以拖拽： 
 
 ```html

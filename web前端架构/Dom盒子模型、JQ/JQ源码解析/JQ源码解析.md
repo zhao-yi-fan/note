@@ -126,29 +126,20 @@ Fn().aa();
 
 - JQ选择器: 基于各种选择器创建JQ实例(JQ对象)
 
-> 参数:
->
-> 1. selector 选择器的类型(一般都是字符串, 但是支持函数或者元素对象)
-> 2. context 基于选择器获取元素时指定的上下文(默认document)
+参数:
+
+selector 选择器的类型(一般都是字符串, 但是支持函数或者元素对象)
+
+context 基于选择器获取元素时指定的上下文(默认document)
 
 - JQ对象: 一个类数组结构(JQ实例), 这个类数组集合中包含了获取到的元素
 
-> ​    0: div.tabBox
-> ​    length: 1
-> ​    context: document  (默认的)
-> ​    selector: '.tabBox'
-> ​    \__proto\_\_: jQuery.prototype
-> ​        add
-> ​        ...
-> ​        \_\_proto__: Object.prototype
-> ​            hasOwnProperty
-> ​            ...
 
 ```javascript
 console.log($('.tabBox'));
 ```
 
-> 可以看到输出的JQ对象\_\_proto\_\_指向的是Object, 是浏览器的问题, 只是没检测到JQ, 别的类库是可以检测到的
+可以看到输出的JQ对象\_\_proto\_\_指向的是Object, 是浏览器的问题, 只是没检测到JQ, 别的类库是可以检测到的
 
 ![1546268013217](media/1546268013217.png)
 
@@ -321,17 +312,15 @@ init = jQuery.fn.init = function( selector, context ) {
 
 - 分析选择器源码, 我们发现selector传递的值支持三种类型
 
->     1. string: 基于选择器获取元素
->     2. 元素对象 selector.nodeType: 把JS对象转换为JQ对象
->     3. 函数: 把传递的函数执行, 把JQ当做实参传递给函数  selector(jQuery)
+    1. string: 基于选择器获取元素
+    2. 元素对象 selector.nodeType: 把JS对象转换为JQ对象
+    3. 函数: 把传递的函数执行, 把JQ当做实参传递给函数  selector(jQuery)
 
 - 参数是字符串和元素对象上面都提到了, 所以只针对函数作为选择器的参数进行理解:
 
->     通过源码分析出选择器中参数还可以是函数, 
->
->     \$(​\$ =>{}), 函数调用选择器, 参数是函数时, 函数会执行, 而且传递的给函数的实参是jQuery. 
->
->     这样就可以把函数当做选择器的参数.
+通过源码分析出选择器中参数还可以是函数, \$(​\$ =>{}), 函数调用选择器, 参数是函数时, 函数会执行, 而且传递的给函数的实参是jQuery. 
+
+这样就可以把函数当做选择器的参数.
 
 ```javascript
 $(function ($) {
@@ -342,9 +331,9 @@ $(function ($) {
 
 ![1546271014688](media/1546271014688.png)
 
-> 有时怕\$被改成别的, \$()就不起作用了. 
->
-> 正好函数的形参可以随便设置一个值, 反正都是接收的jQuery.**可以设置为\$.**
+有时怕\$被改成别的, \$()就不起作用了. 
+
+正好函数的形参可以随便设置一个值, 反正都是接收的jQuery.**可以设置为\$.**
 
 ```javascript
 $ = '哈哈哈';
@@ -358,9 +347,9 @@ jQuery(function ($) {
 
 ![1546271078535](media/1546271078535.png)
 
-> 正是用到了JQ选择器参数是函数, 函数会自动执行的特性, 
->
-> **可以把jQuery(() => {}) 当做自执行函数, 前提是需要引入JQ库**
+正是用到了JQ选择器参数是函数, 函数会自动执行的特性, 
+
+**可以把jQuery(() => {}) 当做自执行函数, 前提是需要引入JQ库**
 
 ```javascript
 jQuery(() => {
@@ -559,7 +548,7 @@ $.ajax({
 
 ## 基于JQ完成选项卡
 
-> HTML文件
+HTML文件
 
 ```html
 <div class="tabBox">
@@ -574,9 +563,9 @@ $.ajax({
 </div>
 ```
 
-> js文件
->
-> 当HTML结构都加载完成执行函数
+js文件
+
+当HTML结构都加载完成执行函数
 
 ```javascript
 jQuery(function ($) {
@@ -596,7 +585,7 @@ jQuery(function ($) {
     })
 })
 ```
-> 也可以
+也可以
 
 ```javascript
 jQuery(function ($) {
