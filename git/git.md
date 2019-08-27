@@ -240,51 +240,9 @@ GIT的常规流程：
    ![1563584514880](media/1563584514880.png)
    ![1563584711271](media/1563584711271.png)
 
-### SSH警告
-
-ssh比https速度快，前提是需要在GitHub的个人设置`SSH and GPG keys`或者指定一个仓库的`Deploy keys`绑定本地电脑的SSH key，才可以使用ssh方式与GitHub传输。
-
-GitHub账户的`SSH keys`，相当于这个账号最高级 key，只要这个账号有的权限（任何项目），都可以操作 。
-
-仓库的`Deploy keys`，是这个仓库专有的key，用这个key，只能操作这个项目，其他项目都没有权限。
-
-https url是有效网址可以直接打开，但是用户每次通过git提交的时候都需要输入用户名和密码。ssh url配置一次之后就能永久使用。GitHub配置ssh  key的目的是为了git提交代码的时候，不需要繁琐的验证过程，简化操作步骤。
-
-当第一次使用Git的`clone`或者`push`命令连接GitHub时，会得到一个警告：
-
-![1563891878689](media/1563891878689.png)
-
-这是因为Git使用SSH连接，而SSH连接在第一次验证GitHub服务器的Key时，需要你确认GitHub的Key的指纹信息是否真的来自GitHub的服务器，输入`yes`回车即可。
-
-Git会输出一个警告，告诉你已经把GitHub的Key添加到本机的一个信任列表里了：
-
-这个警告只会出现一次，后面的操作就不会有任何警告了。
-
-```
-Warning: Permanently added 'github.com' (RSA) to the list of known hosts.
-```
-
-![1563892813240](media/1563892813240.png)
-
-再次克隆提示需要把`id_rsa.pub`文件中的key粘贴到新建一个Keys的Key中，title随便起。
-
-![1563892791687](media/1563892791687.png)
-
-![1563893664907](media/1563893664907.png)
 
 
 
-需要新建一个keys
-
-![1563892659893](media/1563892659893.png)
-
-如果id_rsa、id_rsa.pub两个文件已存在出现该错误可删除俩个文件，重新执行
-
-`ssh-keygen -t rsa -C "993445491@qq.com"`：.shh文件夹会重新生成id_rsa、id_rsa.pub两个文件及新的Key
-
-重新执行上述步骤添加到GitHub中即可
-
-如果实在担心有人冒充GitHub服务器，输入`yes`前可以对照[GitHub的RSA Key的指纹信息](https://help.github.com/articles/what-are-github-s-ssh-key-fingerprints/)是否与SSH连接给出的一致。
 
 ## 分支处理和团队协作
 
@@ -387,4 +345,72 @@ Warning: Permanently added 'github.com' (RSA) to the list of known hosts.
   - 基于master分支发布
   - 基于gh-pages分支发布
 - GUI：配置WB的VCS
+
+## SSH警告
+
+ssh比https速度快，前提是需要在GitHub的个人设置`SSH and GPG keys`或者指定一个仓库的`Deploy keys`绑定本地电脑的SSH key，才可以使用ssh方式与GitHub传输。
+
+GitHub账户的`SSH keys`，相当于这个账号最高级 key，只要这个账号有的权限（任何项目），都可以操作 。
+
+仓库的`Deploy keys`，是这个仓库专有的key，用这个key，只能操作这个项目，其他项目都没有权限。
+
+https url是有效网址可以直接打开，但是用户每次通过git提交的时候都需要输入用户名和密码。
+
+ssh url配置一次之后就能永久使用。GitHub配置ssh  key的目的是为了git提交代码的时候，不需要繁琐的验证过程，简化操作步骤。
+
+当第一次使用Git的`clone`或者`push`命令连接GitHub时，会得到一个警告：
+
+![1563891878689](media/1563891878689.png)
+
+这是因为Git使用SSH连接，而SSH连接在第一次验证GitHub服务器的Key时，需要你确认GitHub的Key的指纹信息是否真的来自GitHub的服务器，输入`yes`回车即可。
+
+Git会输出一个警告，告诉你已经把GitHub的Key添加到本机的一个信任列表里了：
+
+这个警告只会出现一次，后面的操作就不会有任何警告了。
+
+```
+Warning: Permanently added 'github.com' (RSA) to the list of known hosts.
+```
+
+![1563892813240](media/1563892813240.png)
+
+再次克隆提示需要把`id_rsa.pub`文件中的key粘贴到新建一个Keys的Key中，title随便起。
+
+![1563892791687](media/1563892791687.png)
+
+![1563893664907](media/1563893664907.png)
+
+
+
+需要新建一个keys
+
+![1563892659893](media/1563892659893.png)
+
+如果id_rsa、id_rsa.pub两个文件已存在出现该错误可删除俩个文件，重新执行
+
+`ssh-keygen -t rsa -C "993445491@qq.com"`：.shh文件夹会重新生成id_rsa、id_rsa.pub两个文件及新的Key
+
+重新执行上述步骤添加到GitHub中即可
+
+如果实在担心有人冒充GitHub服务器，输入`yes`前可以对照[GitHub的RSA Key的指纹信息](https://help.github.com/articles/what-are-github-s-ssh-key-fingerprints/)是否与SSH连接给出的一致。
+
+## 换源报错
+
+```
+ssh: Could not resolve hostname github.com: Name or service not known.fatal: Could not read from remote repository.
+```
+
+配置完公钥后想要进行远端github上clone出现错误；或者本地仓库换ssh源，进行拉取操作出现错误。
+
+这是因为配置git时要验证是否成功。
+
+输入：`ssh -T git@github.com`
+
+如果第一次会提示是否continue，输入yes会出现
+
+```
+You’ve successfully authenticated, but GitHub does not provide shell access 。这就表示已成功连上github。
+```
+
+![1566879129657](media/1566879129657.png)
 
