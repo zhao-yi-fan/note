@@ -2624,7 +2624,7 @@ vuex
 
 ### 子传父$emit
 
-```javascript
+```html
 <body>
   <div id="app">
     <!-- .native 修饰符 相当于给组件的模板最外层添加事件 -->
@@ -2664,7 +2664,7 @@ vuex
 
 ### $props传值验证
 
-```javascript
+```html
 <body>
     <div id="app">
       <my-button :msg="1" :arr="[1,2,3]" username="zhufeng"></my-button>

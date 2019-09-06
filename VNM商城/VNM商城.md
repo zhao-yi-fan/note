@@ -189,7 +189,7 @@ style绑定-对象语法:`v-bind:style="{color:activeColor,fontSize:fontSize+'px
 >
 > 给不同的router-view定义名字,  通过名字进行对应组件的渲染 
 
-## Vue-resource和Axios
+## Vue-resource
 
 ### vue-resource使用
 
@@ -201,7 +201,7 @@ style绑定-对象语法:`v-bind:style="{color:activeColor,fontSize:fontSize+'px
 >
 > 通过npm安装
 >
-> `npm install vue-ressource --save`
+> `npm install vue-resource --save`
 
 ![1550302879876](media/1550302879876.png)
 
@@ -244,47 +244,6 @@ Vue.http.interceptors.push((request, next)=>{
 - Post请求
 - JSONP请求
 - 全局拦截器使用
-
-### axios基础介绍
-
-- 安装方式
-
-> `<script src="https://unpkg.com/axios/dist/axios.min.js"></script>`
->
-> `npm install axios --save`
-
-- API
-
-> `axios.request(config)`
->
-> `axios.get(url[,config])`
->
-> `axios.delete(url[,config])`
->
-> `axios.head(url[,config])`
->
-> `axios.options(url[,config])`
->
-> `axios.post(url[,data[,config]])`
->
-> `axios.put(url[,data[,config]])`
->
-> `axios.patch(url[,data[,config]])`
-
-```javascript
-function getUserAccount(){
-    return axios.get('/user/12345');
-}
-function getUserPermissions(){
-    return axios.get('/user/12345/permissions');
-}
-
-axios.all([getUserAccount(), getUserPermissions()]).then(axios.spread(function(acct, perms){
-    // Both request are now complete
-}))
-```
-
-
 
 ### 实现图片懒加载
 
