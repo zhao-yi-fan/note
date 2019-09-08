@@ -1,19 +1,5 @@
 ## node.js介绍
 
-### 为什么学node.js?
-
-企业需求:
-
-`具有服务端开发经验更好`
-
-`front-end`
-
-`back-end`
-
-`基本的网站开发能力`:服务端 前端 运维部署
-
-`多人社区`:cnodejs.org
-
 ### node.js是什么?
 
 node.js是技术, 不是后台的语言
@@ -95,40 +81,6 @@ node.js是技术, 不是后台的语言
   - gulp
   - npm
 
-### 预备知识:
-
-- html
-- css
-- js
-- 简单的命令行操作
-  - cd
-  - dir
-  - ls
-  - mkdir
-  - rm
-- 具有服务端开发经验更佳
-
-### 资源
-
-<深入浅出node.js>
-
-- 作者:朴灵  偏理论,几乎没有任何实战内容,理解原理底层有帮助
-
-<node.js权威指南>
-
-- API讲解
-- 没有实战
-
-JavaScript标准参考教程(alpha):http://javascript.ruanyifeng.com/
-
-Node入门: http://www.dodebeginner.org/index-zh-cn.html
-
-官方API文档:http://nodejs.org/dist/lastest-v6.x/docs/api/
-
-CNODE社区:http://cnodejs.org
-
-CNODE-新手入门:http://cnodejs.org/getstart
-
 ### 能学到什么:
 
 - B/S变成模型
@@ -141,7 +93,7 @@ CNODE-新手入门:http://cnodejs.org/getstart
   - 以前认知的JavaScript只能通过`script`标签来加载
   - 在Node中可以像`@import()`一样来引用加载JavaScript脚本文件
   - Node常用API
-  - 异步变成
+  - 异步编程
     - 回调函数
     - Promise
     - async
@@ -210,8 +162,6 @@ const data = fs.readFileSync('./笔记.md')
 console.log('同步读取', data.toString())
 // data.toString()
 ```
-
-
 
 ### Buffer-内存
 
@@ -344,11 +294,9 @@ cmd->>node --version   可以查看版本号
 
 文件名不要使用`node.js`来命名,也就是说除了`node`这个名字随便起(会直接打开文件),最好也不要用中文
 
-用cmd    Git Bah    cld      都可以    在js文件目录按shift+鼠标右键   或者在sublime中装terminal插件
+用`cmd`、`Git Bash`、`cld` 都可以、在js文件目录按shift+鼠标右键、或者在sublime中装terminal插件
 
-cls清屏
-
-
+`cls`清屏
 
 #### 读写文件
 
@@ -395,14 +343,10 @@ fs.readFile('./data/hello.txt', function(error,data){
 })
 ```
 
-
-
 文件写入
 
 ```javascript
 var fs = require('fs')
-
-
 
 //第一个参数:文件路径
 //第二个参数:文件内容
@@ -423,12 +367,8 @@ fs.writeFile('./data/你好.md', '大家好,我是Node.js', function(error){
         console.log('写入成功了');
         
     }
-
-    
 })
 ```
-
-
 
 #### http
 
@@ -517,8 +457,6 @@ const server = http.createServer((req, res) => {
 server.listen(3000);
 ```
 
-
-
 ## Node中的JavaScript
 
 - EcmaScript
@@ -569,7 +507,7 @@ server.listen(3000);
 
 
 
-​	Node 为 JavaScript提供了很多服务器级别的API,这些API绝大多数都被包装到一个具名的核心模块中了.
+Node 为 JavaScript提供了很多服务器级别的API,这些API绝大多数都被包装到一个具名的核心模块中了.
 
 例如文件操作的`fs`核心模块,http服务构建的`http`模块,`path`路径操作模块,`os`操作系统信息模块....
 
@@ -680,23 +618,6 @@ json数据: 'application/json'
 
 <img src="media/客户端渲染.png">
 
-## 处理留言案例发表留言功能:
-
-- 路径
-- 设计好的请求路径
-- $GET 直接或查询字符串数据
-- Node 中需要咱们自己动手来解析
-  - url.parse()
-- /pinglun?name=jack&message=hello
-- split('?')
-- name=javk&message=hello
-- split('&')
-- name=jack  msssage=hello
-- forEach()
-- name=jack.split('=')
-- 0 key
-- 1 value
-
 ## 如何解析请求路径中的查询字符串
 
 -  url.parse()
@@ -714,15 +635,9 @@ json数据: 'application/json'
     - a.com 还会请求 a
     - a 告诉浏览器你往 b
 
-
-
 ## npm
 
-- 全称`node package manager`
-
-### npm网站
-
-> npmjs.com
+全称`node package manager`
 
 ### npm 命令行工具
 
@@ -783,8 +698,6 @@ npm install --global npm
 ```shell
 npm install  --save  esri-loader@1.0.0
 ```
-
-
 
 ### 解决npm被墙问题
 
@@ -884,302 +797,6 @@ Is this OK? (yes) yes
 对于目前来讲,最有用的是那个`dependencies`选项, 可以用来帮我们保存第三方包的依赖信息
 
 
-
-## Express
-
-- 高度封装了 http 模块
-- 第三方 Web 开发模块
-- 更加专注于业务, 而非底层细节
-- 知其所以然
-
-原生的 http 在某些方面表现不足以应对我们的开发需求, 所以我们就需要使用框架来加快我们的开发效率, 框架的目的就是提高效率, 让我们的代码更高度统一.
-
-在 Node 中, 有很多 Web 开发框架, 我们这里以`express`为主
-
-- http://expressjs.com/
-
-### 起步
-
-安装:
-
-```shell
-npm install --save express
-```
-
-#### hello world:
-
-```javascript
-var express = require('express')
-
-var app = express()
-
-app.get('/', function (req, res) {
-    res.end('hello world')
-})
-
-app.listen(3000, function () {
-    console.log('express app is running ...');
-    
-})
-```
-
-#### 基本路由
-
-路由器
-
-- 请求方法
-- 请求路径
-- 请求处理函数
-
-get:
-
-```javascript
-// 当你以 GET 方法请求 / 的时候, 执行对应的处理函数
-app.get('/', function (req,res) {
-    res.send('hello world!')
-})
-```
-
-post:
-
-```javascript
-// 当你以 POST 方法请求 / 的时候, 指定对应的处理函数
-app.post('/', function (req, res) {
-    res.send('Got a POST request')
-})
-```
-
-
-
-#### 静态服务
-
-```javascript
-// /public资源
-app.use(express.static('public'))
-
-// /files资源
-app.use(express.static('files'))
-
-// /public/public资源
-app.use('/public', express.static('public'))
-
-// /static/public资源
-app.use('/static', express.static('public'))
-
-app.use('/static', express.static(path.join(__dirname, 'public')))
-
-
-
-```
-
-### 在Express中配置使用 `art-template`模板引擎
-
-- [art-template - GitHub仓库](https://github.com/aui/art-template)
-- [art-template 官方文档](https://aui.github.io/art-template/)
-
-安装
-
-```shell
-npm install --save art-template
-npm install --save express-art-template
-```
-
-配置:
-
-```javascript
-app.engine('art', require('express-art-template'));
-```
-
-使用:
-
-```javascript
-app.get('/', function (req, res) {
-    // express 默认会去项目中的 views 目录找 index.html
-    res.render('index.html', {
-        title: 'hello world'
-    })
-})
-```
-
-如果希望修改默认的`views`视图渲染存储目录, 可以:
-
-```javascript
-// 注意:第一个参数 views 千万不要写错
-app.set('views', 目录路径)
-```
-
-### 在 Express 获取表单 GET 请求参数
-
-Express 内置了一个 API, 可以直接通过 `req.query`来获取
-
-```javascript
-req.query
-```
-
-
-
-### 在 Express 获取表单 POST 请求体数据
-
-在 Express 中没有内置获取表单 POST 请求体的 API, 这里我们需要使用一个第三方包: `body-parser`
-
-安装:
-
-```shell
-npm install --save body-parser
-```
-
-配置:
-
-```javascript
-var express = require('express')
-// 0. 引包
-var bodyParser = require('body-parser')
-
-var app = express()
-
-// 配置 body-parser
-// 只要加入这个配置, 则在 req 请求对象上会多出来一个属性:body
-// 也就是说你就可以直接通过 req.body 来获取表单 POST 请求体数据了
-app.use(bodyParser.urlencoded({ extended: false }))
-
-app.use(bodyParser.json())
-
-```
-
-使用:
-
-```javascript
-app.use(function (req, res) {
-    res.setHeader('Content-Type', 'text/plain')
-    res.write('you posted:\n')
-    // 可以通过 req.body 来获取表单 POST 请求体数据
-    res.end(JSON.stringify(req.body, null, 2))
-})
-```
-
-#### 设计操作数据的 API 文件模块
-
-```javasc
-/** 
- * student.js
- * 数据操作文件模块
- * 职责: 操作文件中的数据, 只处理数据, 不关心业务
- */
-
-
- /** 
-  * 获取所有学生列表
- */
-exports.find = function () {
-
-}
-
- /** 
-  * 添加保存学生
- */
-exports.save = function () {
-    
-}
-
- /** 
-  * 更新学生信息
- */
-exports.updata = function () {
-    
-}
-
- /** 
-  * 删除学生信息
- */
-exports.delete = function () {
-    
-}
-```
-
-
-
-### CRUD案例
-
-- 使用文件来保存数据(锻炼异步编码)
-
-#### 起步
-
-- 初始化
-- 安装依赖
-- 模板处理
-
-#### 路由设计
-
-| 请求方法 |     请求路径     | get 参数 | post 参数                  | 备注             |
-| -------- | :--------------: | -------- | -------------------------- | ---------------- |
-| GET      |    /students     |          |                            | 渲染首页         |
-| GET      |  /students/new   |          |                            | 渲染学生添加页面 |
-| POST     |  /students/new   |          | name, age, gender, hobbies | 处理添加学生请求 |
-| GET      |  /students/edit  | id       |                            | 渲染学生编辑页面 |
-| GET      |  /students/edit  |          | id,name,gender, hobbies    | 处理编辑学生请求 |
-| GET      | /students/delete | id       |                            | 处理删除请求     |
-
-#### 提取路由模块
-
-router.js:
-
-```javascript
-/**
- * router.js 路由模块
- * 职责:
- *      处理路由
- *      根据不同的请求方法+请求路径设置具体的请求处理函数
- * 模块职责要单一, 不要乱写
- * 我们划分模块的目的就是为了增强项目代码的可维护性
- * 提升开发效率
- */
-
-// Express 提供了一种更好的方式
-// 专门用来包装路由的
-var express = require('express')
-
-// 1. 创建一个路由容器
-var router = express.Router()
-
-// 2. 把路由挂载到 router 路由容器中
-router.get('/students', function (req, res) {
-    
-})
-router.get('/students/new', function (req, res) {
-   
-})
-router.post('/students/new', function (req, res) {
-        
-})
-router.get('/students/edit', function (req, res) {
-
-})
-router.post('/students/edit', function (req, res) {
-
-})
-router.get('/students/delete', function (req, res) {
-
-})
-
-// 3. 把router 导出
-module.exports = router
-```
-
-app.js:
-
-```javascript
-var router = require('./require')
-
-// 挂载路由
-app.use(router)
-```
-
-
-
-## MongoDB 
-
-- 所有方法都封装好了
-
 ## Node中的模块系统
 
 使用 Node 编写应用程序主要就是在使用:
@@ -1244,8 +861,6 @@ exports.d = {
     foo: 'bar'
 }
 ```
-
-
 
 导出单个成员(拿到的就是:函数,字符串):
 
@@ -1444,9 +1059,7 @@ say()
 //      有些人还喜欢玩一些花哨的东西,例如! # $ ,也和分号有一样的作用,但不推荐使用    !`hello`.toString()
 ```
 
-书籍:《编写可维护的JavaScript》
-
-### 软件开发版本:
+### 软件开发版本
 
 设计到软件工程学:
 
@@ -1464,7 +1077,7 @@ say()
 
 文件操作路径
 
-```
+```javascript
 // 在操作文件的相对路径中
 // ./data/a.txt 相对于当前文件
 // data/a.txt   相对于当前文件
@@ -1501,7 +1114,7 @@ require('/data/foo.js')
 
 ```
 
-### 修改完代码自动重启
+### nodemon
 
 我们这里可以使用一个第三方命令行工具, `nodemon` 来帮我们解决频繁修改代码重启服务器问题/
 
@@ -1524,15 +1137,3 @@ nodemon app.js
 ```
 
 只要是通过`nodemon app.js`启动的服务, 则它会监视你的文件变化, 当文件发生变化的时候, 自动帮你重启服务器.
-
-### webstrom
-
-1. Node.js代码提示助手
-
-File -> Settings -> Language & Frameworks -> 第五个 Node.js and NPM 中的Coding assistance for Node.js 打勾,会出现 Node.js 代码提示
-
-2. 左下角的 Terminal 是内嵌的命令行工具, 打开就直接是该文件夹下的路径
-
-### HTTP状态码
-
-<img src="media/HTTP状态码.png">

@@ -1366,15 +1366,15 @@ function AJAX() {
 
 Promise是ES6中新增加的内置类：目的是为了管理异步操作的
 
-1. new Promise()创建类的一个实例, 每一个实例都可以管理一个异步操作
-  必须传递一个回调函数进去(回调函数中管理你的异步操作), 不传递会报错
-  回调函数中会有两个参数
-  `resolve`: 异步操作成功做的事情(代指成功后的事件队列 => 成功后要做的所有的事情都存放到成功这个事件队列中)
-  `reject`: 异步操作失败做的事情(代指失败后的事件队列)
-  `new Promise()`的时候立即把回调函数执行了(Promise是同步的)
-2. 基于Promise.prototype.then方法(还有catch/finally两个方法)向成功队列和失败队列中依次加入需要处理的事情
-3. 如果是多个THEN调用, 不是像我们想象的依次把增加的方法执行
-  异步操作成功或者失败, 先把第一个THEN中的方法执行, 每当执行一个THEN会返回一个新的Promise实例, 这个实例管控的是第一个THEN中方法执行的是成功还是失败
+1. `new Promise()`创建类的一个实例, 每一个实例都可以管理一个异步操作
+     必须传递一个回调函数进去(回调函数中管理你的异步操作), 不传递会报错
+     回调函数中会有两个参数
+     `resolve`: 异步操作成功做的事情(代指成功后的事件队列 => 成功后要做的所有的事情都存放到成功这个事件队列中)
+     `reject`: 异步操作失败做的事情(代指失败后的事件队列)
+       `new Promise()`的时候立即把回调函数执行了(Promise是同步的)
+2. 基于`Promise.prototype.then`方法(还有catch/finally两个方法)向成功队列和失败队列中依次加入需要处理的事情
+3. 如果是多个then调用, 不是像我们想象的依次把增加的方法执行
+     异步操作成功或者失败, 先把第一个then中的方法执行, 每当执行一个THEN会返回一个新的Promise实例, 这个实例管控的是第一个then中方法执行的是成功还是失败
 
 ```javascript
 let promise1 = new Promise((resolve, reject) => {
@@ -1390,17 +1390,17 @@ let promise1 = new Promise((resolve, reject) => {
 });
 promise1.then(
     result => {
-        console.log('THEN1 OK', result);
+        console.log('then1 OK', result);
     },
     msg => {
-        console.log('THEN1 NO', msg);
+        console.log('then1 NO', msg);
     }
 ).then(
     result => {
-        console.log('THEN2 OK', result);
+        console.log('then2 OK', result);
     },
     msg => {
-        console.log('THEN2 NO', msg);
+        console.log('then2 NO', msg);
     }
 );
 ```
@@ -1427,11 +1427,11 @@ promise1.then(result => {
     // 第一个CATCH
     // 1. 异步请求失败会执行它
     // 2. 第一个THEN方法失败也会执行它
-    console.log('CATCH1', msg);
+    console.log('catch1', msg);
 }).then(result => {
-    console.log('THEN2 OK', result);
+    console.log('then2 OK', result);
 }).catch(msg => {
-    console.log('CATCH2', msg);
+    console.log('catch2', msg);
 });
 ```
 
