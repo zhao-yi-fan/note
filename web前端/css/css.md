@@ -1291,8 +1291,6 @@ float      浮 漏 特
 
 <img src="media/yl.jpg"/>
 
-最普通的，最为常用的结构
-
 ### 两列左窄右宽型
 
 <img src="media/ll.jpg"/>
@@ -1408,26 +1406,6 @@ float      浮 漏 特
 
 background-position   背景定位
 
-如果，说浮动， 关键在一个 “浮” 字上面， 那么 我们的定位，关键在于一个 “位” 上。
-
-### 为什么要用定位？
-
-那么定位，最长运用的场景在那里呢
-
-第一幅图， 小黄色块可以再图片上移动：
-
-<img src="media/1.gif"/>
-
-第二幅图， 左右箭头压住图片：
-
-<img src="media/2.gif"/>
-
-第三幅图,  hot 在盒子外面多出一块，更加突出：
-
-<img src="media/it.png"/>
-
-以上三个小地方，如果用标准流或者浮动，实现会比较复杂或者难以实现，此时用定位来做
-
 ### 元素的定位属性
 
 元素的定位属性主要包括定位模式和边偏移两部分。
@@ -1440,8 +1418,6 @@ background-position   背景定位
 | bottom     | 底部偏移量，定义元素相对于其父元素下边线的距离 |
 | left       | 左侧偏移量，定义元素相对于其父元素左边线的距离 |
 | right      | 右侧偏移量，定义元素相对于其父元素右边线的距离 |
-
-也就说，以后定位要和边偏移搭配使用了， 比如 top: 100px;  left: 30px; 等等
 
 2、定位模式(定位的分类)
 
@@ -1462,13 +1438,9 @@ position属性的常用值
 
 静态定位是所有元素的默认定位方式，当position属性的取值为static时，可以将元素定位于静态位置。 所谓静态位置就是各个元素在HTML文档流中默认的位置。
 
-上面的话翻译成白话：  就是网页中所有元素都默认的是静态定位,其实就是标准流的特性。
-
 在静态定位状态下，无法通过边偏移属性（top、bottom、left或right）来改变元素的位置。
 
-PS： 静态定位其实没啥可说的。
-
-静态定位唯一的用处：  就是 取消定位。 position: static;
+静态定位唯一的用处：  就是 取消定位。 
 
 ### 相对定位relative(自恋型)
 
@@ -1485,7 +1457,7 @@ PS： 静态定位其实没啥可说的。
 
 就是说，相对定位的盒子仍在标准流中，它后面的盒子仍以标准流方式对待它。（相对定位不脱标）
 
-如果说浮动的主要目的是 让多个块级元素一行显示，那么定位的主要价值就是 移动位置， 让盒子到我们想要的位置上去。
+如果说浮动的主要目的是 让多个块级元素一行显示，那么定位的主要价值就是 移动位置，让盒子到我们想要的位置上去。
 
 ### 绝对定位absolute (拼爹型)
 
@@ -1513,8 +1485,6 @@ PS： 静态定位其实没啥可说的。
 
 #### 子绝父相
 
-这个“子绝父相”太重要了，是我们学习定位的口诀，时时刻刻记住的。
-
 这句话的意思是 子级是绝对定位的话， 父级要用相对定位。
 
 首先， 我们说下， 绝对定位是将元素依据最近的已经定位绝对、固定或相对定位）的父元素（祖先）进行定位。
@@ -1529,51 +1499,9 @@ PS： 静态定位其实没啥可说的。
 
 所以，我们可以得出如下结论：
 
-因为子级是绝对定位，不会占有位置， 可以放到父盒子里面的任何一个地方。
+因为子级是绝对定位，不会占有位置，可以放到父盒子里面的任何一个地方。
 
 父盒子布局时，需要占有位置，因此父亲只能是 相对定位. 
-
-这就是子绝父相的由来。
-
-### 绝对定位的盒子水平/垂直居中
-
-普通的盒子是左右margin 改为 auto就可， 但是对于绝对定位就无效了
-
-定位的盒子也可以水平或者垂直居中，有一个算法。
-
-1. 首先left 50%   父盒子的一半大小
-2. 然后走自己外边距负的一半值就可以了 margin-left。
-
-```html
-<head>
-    <style>
-        .father {
-            width: 200px;
-            height: 200px;
-            background-color: rgb(0, 255, 102);
-            position: relative;
-        }
-
-        .son {
-            width: 50px;
-            height: 50px;
-            background-color: pink;
-            position: absolute;
-            left: 50%;
-            margin-left: -25px;
-            top: 50%;
-            margin-top: -25px;
-        }
-    </style>
-</head>
-<body>
-    <div class="father">
-        <div class="son"> </div>
-    </div>
-</body>
-```
-
-![1553663027698](media/1553663027698.png)
 
 ### 固定定位fixed(认死理型)
 
@@ -1627,8 +1555,6 @@ ie6等低版本浏览器不支持固定定位。
 ### 元素的显示与隐藏
 
 在CSS中有三个显示和隐藏的单词比较常见，我们要区分开，他们分别是 display visibility 和 overflow。
-
-他们的主要目的是让一个元素在页面中消失，但是不在文档源码中删除。 最常见的是网站广告，当我们点击类似关闭不见了，但是我们重新刷新页面，它们又会出现和你玩躲猫猫！！
 
 #### display 显示
 
@@ -1747,7 +1673,6 @@ vertical-align 不影响块级元素中的内容对齐，它只针对于 行内�
 1. 给img vertical-align:middle | top等等。  让图片不要和基线对齐。
 2. <img src="media/1633.png"/>
 3. 给img 添加 display：block; 转换为块级元素就不会存在问题了。
-4. <img src="media/sina1.png"/>
 
 ## 溢出的文字隐藏
 
@@ -1755,20 +1680,20 @@ vertical-align 不影响块级元素中的内容对齐，它只针对于 行内�
 
 white-space设置或检索对象内文本显示方式。通常我们使用于强制一行显示内容 
 
-normal : 　默认处理方式
-nowrap : 　强制在同一行内显示所有文本，直到文本结束或者遭遇br标签对象才换行。
+normal :默认处理方式
+nowrap :强制在同一行内显示所有文本，直到文本结束或者遭遇br标签对象才换行。
 
 可以处理中文
 
 ### text-overflow 文字溢出
 
-text-overflow : clip | ellipsis
+`text-overflow : clip | ellipsis`
 
 设置或检索是否使用一个省略标记（...）标示对象内文本的溢出
 
-clip : 　不显示省略标记（...），而是简单的裁切 
+clip : 不显示省略标记（...），而是简单的裁切 
 
-ellipsis : 　当对象内文本溢出时显示省略标记（...）
+ellipsis :当对象内文本溢出时显示省略标记（...）
 
 注意一定要首先强制一行内显示，再次和overflow属性  搭配使用
 
@@ -2223,6 +2148,53 @@ box-sizing属性是用户界面属性里的一种
 
 全局设置border-box很好, 首先它符合直觉, 其次它可以省去一次又一次的加加减减, 它还有一个关键作用--让有边框的盒子正常使用百分比宽度
 
+## @import和link引入样式的区别
+
+1. 从属关系区别
+
+`@import`是 CSS 提供的语法规则，只有导入样式表的作用；`link`是HTML提供的标签，不仅可以加载 CSS 文件，还可以定义 RSS、rel 连接属性等。
+
+2. 加载顺序区别
+
+加载页面时，`link`标签引入的 CSS 被同时加载；`@import`引入的 CSS 将在页面加载完毕后被加载。
+
+3. 兼容性区别
+
+`@import`是 CSS2.1 才有的语法，故只可在 IE5+ 才能识别；`link`标签作为 HTML 元素，不存在兼容性问题。
+
+4. DOM可控性区别
+
+可以通过 JS 操作 DOM ，插入`link`标签来改变样式；由于DOM方法是基于文档的，无法使用`@import`的方式插入样式。
+
+引入：
+
+```css
+@import url("green.css");
+div {
+  background-color: blue;
+}
+```
+
+```html
+<head>
+    <style>
+        @import url("./green.css");
+    </style>
+    <link rel="stylesheet" href="./blue.css" />
+</head>
+<body>
+    <div style="width:50px;height:50px;"></div>
+</body>
+```
+
+虽然@import会在页面执行结束后加载，但是如果写在普通样式之前，还是会被后面的覆盖，并不是说最后加载会把其他渲染好的样式覆盖掉。
+
+实际上，浏览器渲染的动作一般会执行多次的。最后一次渲染，一定是基于之前加载过的所有样式整合后渲染树进行绘制页面的，已经被渲染过的页面元素，也会被重新渲染。
+
+那么我们就可以把@import这种导入 CSS 文件的方式理解成一种替换，CSS 解析引擎在对一个 CSS 文件进行解析时，如在文件顶部遇到@import，将被替换为该@import导入的 CSS 文件中的全部样式。
+
+@import引入的样式会被层叠掉。其虽然后被加载，却会在加载完毕后置于样式表顶部，最终渲染时自然会被下面的同名样式层叠。
+
 # 面试题
 
 1. li标签转成了inline-block, 默认的li与li之间会产生空白间隔,是什么引起的?怎么解决?
@@ -2290,62 +2262,3 @@ box-sizing属性是用户界面属性里的一种
 行内块: input, img, textarea, td
 
 空元素: 没有内容的HTML元素, br, hr, meta, link, input, img
-
-3. 不定宽高的child在father内部的水平垂直居中的解决方案
-
-```html
-<head>
-    <style>
-        .father {
-            height: 100px;
-            line-height: 100px;
-            text-align: center;
-        }
-
-        .child {
-            display: inline-block;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="father">
-        <div class="child">222</div>
-    </div>
-</body>
-```
-
-定宽高的:
-
-```html
-<head>
-    <style>
-        .father {
-            position: relative;
-            background-color: pink;
-            height: 100px;
-        }
-
-        .son {
-            height: 50px;
-            width: 50px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            margin-left: -25px;
-            margin-top: -25px;
-            background-color: #ccc;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="father">
-        <div class="son">222</div>
-    </div>
-</body>
-```
-
-![1553738268226](media/1553738268226.png)
-
-4.

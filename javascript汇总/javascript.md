@@ -1807,3 +1807,49 @@ console.log(Object.is(NaN,NaN));//=> true
 set对象的方法
 
 ### add()
+
+## ES6的模块导入与导出
+
+### export
+
+export后必须跟语句，如声明、for、if等都是语句，export不能导出匿名函数，也不能导出某个已经声明的变量，如：
+
+```javascript
+export const bar = function (){}; // 合法
+export bar; // 非法
+export 1; // 非法
+export function foo () {}; // 合法，后跟的是声明语句
+export { foo }; // 合法，后面跟的{}理解为语句，就像if后面的{}一样
+export { foo as bar}; // 合法
+export { foo: foo }; // 非法，后面的{}被解析成对象
+```
+
+### export default
+
+export default在整个模块中只能出现一次，后只能是具体的值，如1,2,3,再比如一个函数声明（非表达式），或者是一个类声明（与函数声明一个意思），或者匿名函数，只要是能用变量接收的都可以
+
+```javascript
+export default 1; //合法
+export default function foo() {}; // 合法，因为function foo()能被变量接收， 如 var bar = function () {}
+export default const bar = 1; // 非法，因为var a = const bar = 1;是不合法的
+export default { foo }; // 合法，{}被理解为一个对象
+export default { foo: foo } // 合法
+```
+
+导出语句只能出现在模块的顶级作用域中，不能被其他语句包括
+
+### import
+
+```javascript
+import {x,y} from './test.js';
+import * as some from './test.js'; // 命名空间导入
+import './test.js';
+import {default as test} from './test.js';
+```
+
+### 导入再导出
+
+```javascript
+export {some} from './test.js'
+export * form './test.js'
+```

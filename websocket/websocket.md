@@ -1,5 +1,9 @@
 # 传输的方式
 
+## 应用场景： 
+
+聊天 弹幕 股票 客服系统 游戏 canvas版的你画我猜
+
 ## HTTP协议
 
 应用层协议，基于TCP协议。
@@ -296,12 +300,13 @@ app.listen(3000)
 另起一个websocket服务
 
 ```javascript
-// 启动一个TCP协议的服务器
+// 启动一个TCP协议的服务器 模拟握手
+// 复用了HTTP的过程
 let net = require('net')
 const CODE = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11';
 let crypto = require('crypto');
 let server = net.createServer(function (socket) {
-    // once来自于EventEmitter 
+    // once来自于EventEmitter
     // on 每次都会执行
     // once 只会执行一次
     socket.once('data', function (data) {
@@ -328,14 +333,33 @@ let server = net.createServer(function (socket) {
                 ].join('\r\n'); // 响应字符串
                 socket.write(response);
                 // 后面所有的格式都是基于websocket协议的
-                socket.on('data', function (data) {
-
+                socket.on('data', function (buffers) { // data默认是一个Buffer
+                    let fin = buffers[0] & 0b10000000 == 0b10000000; // 结束位是true还是false
+                    let opcode = buffers[0] & 0b00001111; // 操作码
+                    let isMask = buffers[1] & 010000000 == 0b10000000; // 是否进行了掩码
+                    let payloadLength = buffers[1] & 0b0111111; // 后七位全是1
+                    let mask = buffers.slice(2, 6); // 掩码键
+                    let payload = buffers.slice(6); // 携带的真实数据
+                    unmask(payload, mask); // 对数据进行反掩码
+                    // payload = [h,e,l,l,o]
+                    let response = Buffer.alloc(2 + payloadLength);
+                    response[0] = 0b10000000 | opcode;
+                    response[1] = payloadLength;
+                    payload.copy(response, 2);
+                    console.log(response);
+                    socket.write(response);
                 })
             }
         }
     })
-})
+});
+function unmask (payload, mask) {
+    for (let i = 0; i < payload.length; i++) {
+        payload[i] ^= mask[i % 4];
+    }
+}
 server.listen(9999);
+
 
 /*
 【请求行】
@@ -348,7 +372,6 @@ Sec-WebSocket-Key: nkn9FKfNeUAg/SCLsFaD+w==\r\n
 \r\n
 【无请求体】：因为没有请求体 有两个空行就结束了
  */
-
 /*
 【响应行】
 HTTP/1.1 101 Switching Protocols\r\n
@@ -358,5 +381,581 @@ Connection: Upgrade\r\n
 Sec-WebSocket-Accept: knnYRiRuQnwyP6A12QAMUeE1Pvc=\r\n
 【无响应体】
 */
+```
+
+## socket.io
+
+IE9才出现websocket，为了做兼容，socket.io做处理了。
+
+`socket.io`是一个WebSocket库，包括了客户端的js和服务器端的nodejs，它的目标是构建可以在不同浏览器和移动设备上使用的实时应用。
+
+### socket.io的特点
+
+- 易用性：socket.io封装了服务端和客户端，使用起来非常简单方便。
+- 跨平台：socket.io支持跨平台，这就意味着你有了更多的选择，可以在自己喜欢的平台下开发实时应用。
+- 自适应：它回自动根据浏览器从WebSocket、AJAX长轮询、iframe流等等各种方式中选择最佳的方式来实现网络实时应用，非常方便和人性化，而且支持的浏览器最低达IE5.5。
+
+### 初步使用
+
+#### 安装部署
+
+使用npm安装socket.io
+
+```javascript
+$ npm install socket.io
+```
+
+#### 启动服务
+
+创建 `app.js` 文件
+
+```javascript
+var express = require('express');
+var path = require('path');
+var app = express();
+
+app.get('/', function (req, res) {
+    res.sendFile(path.resolve('index.html'));
+});
+
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
+
+io.on('connection', function (socket) {
+    console.log('客户端已经连接');
+    socket.on('message', function (msg) {
+        console.log(msg);
+        socket.send('sever:' + msg);
+    });
+});
+server.listen(80);
+```
+
+#### 客户端引用
+
+服务端运行后会在根目录动态生成socket.io的客户端js文件 客户端可以通过固定路径`/socket.io/socket.io.js`添加引用
+客户端加载socket.io文件后会得到一个全局的对象io
+`connect`函数可以接受一个`url`参数，url可以socket服务的http完整地址，也可以是相对路径，如果省略则表示默认连接当前路径
+
+创建index.html文件
+
+```html
+<script src="/socket.io/socket.io.js"></script>
+<script>
+ window.onload = function(){
+    const socket = io.connect('/');
+    //监听与服务器端的连接成功事件
+    socket.on('connect',function(){
+        console.log('连接成功');
+    });
+    //监听与服务器端断开连接事件
+    socket.on('disconnect',function(){
+       console.log('断开连接');
+    });
+ };
+</script>
+```
+
+#### 发送消息
+
+成功建立连接后，我们可以通过`socket`对象的`send`函数来互相发送消息 修改index.html
+
+```javascript
+var socket = io.connect('/');
+socket.on('connect',function(){
+   //客户端连接成功后发送消息'welcome'
+   socket.send('welcome');
+});
+//客户端收到服务器发过来的消息后触发
+socket.on('message',function(message){
+   console.log(message);
+});
+```
+
+修改app.js
+
+```javascript
+var io = require('scoket.io')(server);
+io.on('connection',function(socket){
+  //向客户端发送消息
+  socket.send('欢迎光临');
+  //接收到客户端发过来的消息时触发
+  socket.on('message',function(data){
+      console.log(data);
+  });
+});
+```
+
+### 深入分析
+
+#### send方法
+
+- `send`函数只是`emit`的封装
+- `node_modules\socket.io\lib\socket.js`源码
+
+```javascript
+function send(){
+  var args = toArray(arguments);
+  args.unshift('message');
+  this.emit.apply(this, args);
+  return this;
+}
+```
+
+`emit`函数有两个参数
+
+- 第一个参数是自定义的事件名称,发送方发送什么类型的事件名称,接收方就可以通过对应的事件名称来监听接收
+- 第二个参数是要发送的数据
+
+#### 服务端事件
+
+| 事件名称   | 含义                   |
+| ---------- | ---------------------- |
+| connection | 客户端成功连接到服务器 |
+| message    | 接收到客户端发送的消息 |
+| disconnect | 客户端断开连接         |
+| error      | 监听错误               |
+
+#### 客户端事件
+
+| 事件名称   | 含义                   |
+| ---------- | ---------------------- |
+| connect    | 成功连接到服务器       |
+| message    | 接收到服务器发送的消息 |
+| disconnect | 客户端断开连接         |
+| error      | 监听错误               |
+
+### 划分命名空间
+
+#### 服务器端划分命名空间
+
+- 可以把服务分成多个命名空间，默认`/`,不同空间内不能通信
+
+```javascript
+io.on('connection', function (socket) {
+    //向客户端发送消息 
+    socket.send('/ 欢迎光临'); //接收到客户端发过来的消息时触发 
+    socket.on('message', function (data) {
+        console.log('/' + data);
+    });
+});
+io.of('/news').on('connection', function (socket) { //向客户端发送消息 
+    socket.send('/news 欢迎光临');
+    //接收到客户端发过来的消息时触发
+    socket.on('message', function (data) {
+        console.log('/news ' + data);
+    });
+});
+```
+
+#### 客户端连接命名空间
+
+```javascript
+window.onload = function(){
+    var socket = io.connect('/');
+    //监听与服务器端的连接成功事件
+    socket.on('connect',function(){
+        console.log('连接成功');
+        socket.send('welcome');
+    });
+    socket.on('message',function(message){
+        console.log(message);
+    });
+    //监听与服务器端断开连接事件
+    socket.on('disconnect',function(){
+        console.log('断开连接');
+    });
+
+    var news_socket = io.connect('/news');
+    //监听与服务器端的连接成功事件
+    news_socket.on('connect',function(){
+        console.log('连接成功');
+        socket.send('welcome');
+    });
+    news_socket.on('message',function(message){
+        console.log(message);
+    });
+    //监听与服务器端断开连接事件
+    news_socket.on('disconnect',function(){
+        console.log('断开连接');
+    });
+};
+```
+
+### 房间
+
+- 可以把一个命名空间分成多个房间，一个客户端可以同时进入多个房间。
+- 如果在大厅里广播 ，那么所有在大厅里的客户端和任何房间内的客户端都能收到消息。
+- 所有在房间里的广播和通信都不会影响到房间以外的客户端
+
+#### 进入房间
+
+```javascript
+socket.join('chat');//进入chat房间
+```
+
+#### 离开房间
+
+```javascript
+socket.leave('chat');//离开chat房间
+```
+
+### 全局广播
+
+广播就是向多个客户端都发送消息
+
+#### 向大厅和所有人房间内的人广播
+
+```javascript
+io.emit('message','全局广播');
+```
+
+#### 向除了自己外的所有人广播
+
+```javascript
+socket.broadcast.emit('message', msg);
+socket.broadcast.emit('message', msg);
+```
+
+### 房间内的广播
+
+#### 向房间内广播（包含自己）
+
+从服务器的角度来提交事件,提交者会包含在内
+
+```js
+//2. 向myroom广播一个事件，在此房间内包括自己在内的所有客户端都会收到消息
+io.in('myroom').emit('message', msg);
+io.of('/news').in('myRoom').emit('message',msg);
+```
+
+#### 向房间内广播（排除自己）
+
+从客户端的角度来提交事件,提交者会排除在外
+
+```js
+//2. 向myroom广播一个事件，在此房间内除了自己外的所有客户端都会收到消息
+socket.broadcast.to('myroom').emit('message', msg);
+socket.broadcast.to('myroom').emit('message', msg);
+```
+
+#### 获取房间列表
+
+```javascript
+io.sockets.adapter.rooms
+```
+
+#### 获取房间内的客户id值
+
+取得进入房间内所对应的所有sockets的hash值，它便是拿到的`socket.id`
+
+```js
+let roomSockets = io.sockets.adapter.rooms[room].sockets;
+```
+
+## 聊天室
+
+- 创建客户端与服务端的websocket通信连接
+- 客户端与服务端相互发送消息
+- 添加用户名
+- 添加私聊
+- 进入/离开房间聊天
+- 历史消息
+
+index.html
+
+```html
+<head>
+    <title>聊天室</title>
+    <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous"
+          />
+    <style>
+        .user {
+            color: green;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" style="margin-top:30px;">
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="text-center">欢迎光临聊天室</h2>
+                    <div class="row">
+                        <div class="col-xs-6 text-center">
+                            <button
+                                    class="btn btn-danger"
+                                    id="joinRed"
+                                    onclick="join('Red')"
+                                    >
+                                进入红房间
+                            </button>
+                            <button
+                                    style="display:none;"
+                                    class="btn btn-danger"
+                                    id="leaveRed"
+                                    onclick="leave('Red')"
+                                    >
+                                离开红房间
+                            </button>
+                        </div>
+                        <div class="col-xs-6 text-center">
+                            <button
+                                    class="btn btn-success"
+                                    id="joinGreen"
+                                    onclick="join('Green')"
+                                    >
+                                进入绿房间
+                            </button>
+                            <button
+                                    style="display:none;"
+                                    class="btn btn-success"
+                                    id="leaveGreen"
+                                    onclick="leave('Green')"
+                                    >
+                                离开绿房间
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <ul
+                        style="height:300px;overflow-y: scroll;"
+                        onclick="clickUser(event)"
+                        class="list-group"
+                        id="messageList"
+                        ></ul>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <input
+                                   id="textMsg"
+                                   onkeyup="handleKeyUp(event)"
+                                   type="text"
+                                   class="form-control"
+                                   />
+                        </div>
+                        <div class="col-md-2">
+                            <button
+                                    onclick="sendMsg()"
+                                    id="sendBtn"
+                                    class="btn btn-primary"
+                                    >
+                                发言
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.bootcss.com/moment.js/2.24.0/moment.js"></script>
+    <script src="https://cdn.bootcss.com/moment.js/2.24.0/locale/zh-cn.js"></script>
+    <script>
+        let textMsg = document.querySelector("#textMsg")
+        let sendBtn = document.querySelector("#sendBtn")
+        let messageList = document.querySelector("#messageList")
+
+        // let socket = io("/"); 这样也可以
+        let socket = io.connect("/")
+        /* 监听服务器connect连接事件 */
+        socket.on("connect", function() {
+            /* 连接成功之后，给服务器发送一个getAllMessages事件，用于获取历史记录 */
+            socket.emit("getAllMessages")
+        })
+
+        socket.on("allMessages", function(messages) {
+            let html = messages
+            .map(
+                msgObj => `<li class="list-group-item">${getMessage(msgObj)}</li>`
+            )
+            .join("")
+            messageList.innerHTML = html
+            messageList.scrollTop =
+                messageList.scrollHeight - messageList.clientHeight // 聊天内容在底端(ul元素的高度-ul可视区域的高就是顶部翻去的高度)
+        })
+        function getMessage(msgObj) {
+            return `<span class="user">${msgObj.username}</span>:${
+            msgObj.content
+        }<span class="pull-right">${moment(msgObj.createAt).fromNow()}</span>`
+        }
+        socket.on("message", function(msgObj) {
+            let li = document.createElement("li")
+            li.innerHTML = getMessage(msgObj)
+            li.className = "list-group-item"
+            messageList.appendChild(li)
+            messageList.scrollTop =
+                messageList.scrollHeight - messageList.clientHeight
+        })
+        /* socket.on("disconnect", function () {
+      console.log('断开连接')
+    }) */
+        function handleKeyUp(event) {
+            if (event.keyCode == 13) {
+                sendMsg()
+            }
+        }
+        // 点击发送或者回车发送消息
+        function sendMsg() {
+            let content = textMsg.value
+            if (content.trim()) {
+                // send也相当于emit('message',content)
+                /* 给服务器监听的message事件发送消息内容 */
+                socket.send(content)
+                textMsg.value = ""
+            } else {
+                alert("消息不能为空")
+            }
+        }
+        // 点击人名可以发起私聊
+        function clickUser(event) {
+            // 事件委托 从外向内
+            if (event.target.className == "user") {
+                // 把@[人名] 写入输入框中，发送消息会带入@[人名]，服务器进行判断解析，进行私聊
+                textMsg.value = `@${event.target.innerText} `
+            }
+        }
+
+        // 加入房间点击事件
+        function join(roomName) {
+            /* 发送给服务器join事件，让我的服务器端的socket进入到某个房间内 */
+            socket.emit("join", roomName)
+        }
+
+        /* 监听服务器joined事件，加入房间，切换按钮变化 */
+        socket.on("joined", function(roomName) {
+            let joinBtn = document.querySelector("#join" + roomName)
+            let leaveBtn = document.querySelector("#leave" + roomName)
+            joinBtn.style.display = "none"
+            leaveBtn.style.display = "inline-block"
+        })
+
+        // 离开房间点击事件
+        function leave(roomName) {
+            /* 发送给服务器leave事件，在服务器中把房间名删除，并且把用户的socket退出某个房间 */
+            socket.emit("leave", roomName)
+        }
+        /* 监听服务器leaved事件，离开房间。要把按钮切换回来 */
+        socket.on('leaved',function(roomName){
+            let joinBtn = document.querySelector("#join" + roomName)
+            let leaveBtn = document.querySelector("#leave" + roomName)
+            joinBtn.style.display = "inline-block"
+            leaveBtn.style.display = "none"
+        })
+    </script>
+</body>
+```
+
+app.js
+
+```js
+let express = require('express');
+let app = express();
+app.use(express.static(__dirname));
+let { Message } = require('./db');
+let server = require('http').createServer(app);
+let io = require('socket.io')(server);
+let SYSTEM = '系统';
+let sockets = {};
+// io.of('/').on() 默认命名空间就是/，不写就是默认
+/* 监听客户端的连接事件，当客户端连接上来后，执行回调函数 */
+io.on('connection', async function (socket) {
+    let username;
+    let rooms = []; // 代表此客户端进入的所有房间
+
+    /* 监听getAllMessages事件，客户端要获得聊天记录 */
+    socket.on('getAllMessages', async function () {
+        // 从MongDB数据库中把数据取出
+        let messages = await Message.find().sort({ createAt: -1 }).limit(10);
+        messages.reverse();
+        /* 给客户端发送allMessages事件，并把之前的聊天记录返回 */
+        socket.emit('allMessages', messages)
+    })
+
+    /* 监听客户端的join事件，触发后将该用户的socket加入到指定的房间名 */
+    socket.on('join', function (roomName) {
+        // 获取房间名在房间数组中的索引，没有返回-1
+        let index = rooms.indexOf(roomName);
+        if (index == -1) {
+            rooms.push(roomName);
+            socket.join(roomName);
+            socket.emit('joined', roomName);
+        }
+    })
+
+    /* 监听客户端离开房间leave事件 */
+    socket.on('leave', function (roomName) {
+        let index = rooms.indexOf(roomName);
+        if (index != -1) {
+            rooms.splice(index, 1) // 在数组中删除这个房间名
+            socket.leave(roomName); // leave是socket提供的方法
+            /* 给客户端发送事件 */
+            socket.emit('leaved', roomName)
+        }
+    })
+
+    /* 监听客户端message事件的消息 */
+    socket.on('message', async function (content) {
+        // 全体广播io.emit
+        if (username) { // 已经在聊天室中
+            let result = content.match(/@([^ ]+) (.+)/);
+            if (result) { // 私聊
+                let toUser = result[1];
+                let toContent = result[2];
+                let toSocket = sockets[toUser];
+                toSocket && toSocket.emit('message', getMsg(toContent, username))
+            } else { // 公聊
+                // 如果在大厅说话，则所有的人都能听到，包括其他大厅的人和所有房间的人
+                let savedMessage = await Message.create(getMsg(content, username));
+                if (rooms.length > 0) {
+                    // 循环所有的房间
+                    rooms.forEach(room => {
+                        io.in(room).emit('message', savedMessage)
+                    })
+                } else {
+                    io.emit('message', savedMessage)
+                }
+            }
+        } else { // 第一次进入聊天 设置名字
+            let hasSocket = sockets[content];
+            if (hasSocket) { // 防止名字冲突
+                socket.emit('message', getMsg(`${content}已经被占用，请换一个用户名吧`))
+            } else { // 设置名字 并保存名字和socket
+                username = content; // 把这个消息的内容设置为当前用户的用户名
+                // 把用户名和对应的socket对象进行关联
+                sockets[username] = socket;
+                // socket.broadcast.emit 除了自己告诉其他人
+                socket.broadcast.emit('message', getMsg(`${username}加入聊天室`))
+            }
+        }
+    })
+})
+
+server.listen(4000);
+function getMsg (content, username = SYSTEM) {
+    return { username, content, createAt: new Date() }
+}
+```
+
+db.js
+
+```js
+let mongoose = require('mongoose');
+let conn = mongoose.createConnection('mongodb://localhost/chat', { useNewUrlParser: true, useUnifiedTopology: true }); // 端口号不写默认27017
+let MessageSchema = new mongoose.Schema({
+    username: String,
+    content: String,
+    createAt: { type: Date, default: Date.now }
+});
+let Message = conn.model('Message', MessageSchema);
+module.exports = { Message }
 ```
 

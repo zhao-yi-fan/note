@@ -1316,8 +1316,6 @@ let dirname = path.resolve();
 })
 ```
 
-
-
 ## API接口的请求处理(获取指定用户信息)
 
 
