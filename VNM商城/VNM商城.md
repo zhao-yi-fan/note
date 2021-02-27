@@ -594,7 +594,7 @@ module.exports = router;
 
 1、建立数据库连接：createConnection(Object)方法
 
-​      该方法接受一个对象作为参数，该对象有四个常用的属性host，user，password，database。与php中链接数据库的参数相同。属性列表如下：
+​该方法接受一个对象作为参数，该对象有四个常用的属性host，user，password，database。与php中链接数据库的参数相同。属性列表如下：
 
 ```javascript
 host: 连接数据库所在的主机名. (默认: localhost)

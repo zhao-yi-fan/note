@@ -899,6 +899,18 @@ new Vue({
 
 防止页面刷新, 便于收藏, 便于后退
 
+```javascript
+/* 
+* 未添加 mode: http://localhost:8080/#/login    默认hash   
+  使用a标签跳转<a href="#/Product">产品</a>  
+* 添加 mode为history: http://localhost:8080/login   
+  使用a标签跳转<a href="/Product">产品</a>  
+* */
+mode: 'history', // 一共两种historyhash  默认是hash 
+```
+
+
+
 - 选中之后会有额外class
 
 `router-link-exact-active`和 `router-link-active`
@@ -1196,6 +1208,66 @@ history是一个栈
 
 ![1551100665817](media/1551100665817.png)
 
+### 路由的钩子
+
+```javascript
+<template>
+  <div class="index">
+    <el-container>
+      <el-aside width="200px">
+        <Aside />
+      </el-aside>
+      <el-container>
+        <el-header>
+          <Header />
+        </el-header>
+        <el-main class="centerMain">
+          <transition name="slide-fade">
+            <router-view></router-view>
+          </transition>
+          <router-view name="footer"></router-view>
+        </el-main>
+      </el-container>
+    </el-container>
+  </div>
+</template>
+<script>
+import Header from './components/header'
+import Aside from './components/aside'
+export default {
+  // 路由进入之前
+  beforeRouteEnter (to, from, next) { // 通常用来做页面的权限
+    console.log(this); // 外面是拿不到this的
+    next(vm => { // 这个next方法会在组件渲染完毕之后调用
+      console.log(vm); // 可以拿到this
+    })
+  },
+  // 路由离开之前
+  beforeRouteLeave (to, from, next) {
+    next()
+  },
+  name: 'App',
+  components: {
+    Header,
+    Aside
+  },
+  mounted () {
+  }
+}
+</script>
+<style scoped>
+.index /deep/ .el-header,
+.el-footer {
+  padding: 0;
+}
+.centerMain {
+  min-height: calc(100vh - 60px);
+}
+</style>
+```
+
+
+
 
 
 ## v1和v2区别
@@ -1270,7 +1342,7 @@ export default {
 
 在子级标签上加ref属性
 
-父级用this.$refs
+父级用`this.$refs`
 
 父组件：
 
@@ -1321,15 +1393,16 @@ export default Vue.component('child', {
 
 - 子级找父级
 
-父级加:parent="this", 
+父级加:`parent="this"`, 
 
-子级注册props:['parent'], 用this.parent.xxx
+子级注册`props:['parent']`, 用`this.parent.xxx`
 
 父组件：
 
 ```js
 // parent.js
 import Vue from 'vue';
+import Child from './child';
 export default Vue.component('parent', {
     data() {
         return { num: 0 }
@@ -1345,7 +1418,7 @@ export default Vue.component('parent', {
             父级: {{num}}
             </div>
 
-            <child :parent="this"/>
+            <Child :parent="this"/>
         </div>
         `
 })
@@ -1633,11 +1706,104 @@ computed不用频繁的更新, 读取服务器上数据的时候, 这个特性�
 
 vue辅助方法:
 
-mapState  把state映射成computed  注意: mapState情况下, 只是简单的想获取数据, 不需要数据之间有运算, 就可以使用mapState.
+`mapState`  把state映射成computed  注意: mapState情况下, 只是简单的想获取数据, 不需要数据之间有运算, 就可以使用mapState.
 
-mapActions  把action映射成methods
+`mapActions`  把actions映射成methods
 
-mapGetters  把getters映射成computed  注意:mapGetters, 数据之间还需要封装一层等等, 就可以使用mapGetters
+`mapMutations`把mutations映射成methods
+
+`mapGetters`  把getters映射成computed  注意:mapGetters, 数据之间还需要封装一层等等, 就可以使用mapGetters
+
+```javascript
+import Vue from 'vue'
+import Vuex from 'vuex'
+Vue.use(Vuex)
+const store = new Vuex.Store({
+  // strict: ProcessingInstruction.env.NODE_ENV != 'production', // 严格模式防止直接改state
+  state: { // 类似data
+    count: 15,
+    b: {
+      a: 1
+    }
+  },
+  mutations: { // 类似 methods
+    add (state, value) {
+      state.count = state.count + value;
+    }
+  },
+  actions: { // 类似 async methods
+    minus (context, value) {
+      // context = {state, commit}
+      setTimeout(() => {
+        context.commit('add', -10)
+      }, 2000);
+
+    }
+  },
+  getters: { // 类似computed
+    countGetters (state) {
+      return state.count % 3 == 0 ? '可被3整除' : '不可被3整除';
+    }
+  },
+  modules: {}
+})
+
+export default store;
+```
+
+
+
+```javascript
+<template>
+  <div>
+    {{c}} {{a}}
+    {{this.$store.getters.countGetters}}
+    {{countGetters}}
+    <br>
+    <button @click="minus">点击两秒之后-10</button>
+  </div>
+</template>
+
+<script>
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+export default {
+  name: 'Home',
+  components: {
+  },
+  props: {},
+  data () {
+    return {
+      
+    }
+  },
+  watch: {},
+  computed: {
+    /* count: function () {
+      return this.$store.state.count;
+    }, */
+    //和在computed中把state的变量改变成计算属性同理，方法中得使用数组，
+    ...mapState(['count']),
+    // 如果需要把state中的变量改名就用对象mapState({'c':'count'})
+    ...mapState({ 'c': 'count' }),
+    // 3.函数形式 用来获取对象中的属性
+    ...mapState({ a: state => state.b.a }),
+    // this.$store.getters 同样有三种方式
+    ...mapGetters(['countGetters'])
+  },
+  methods: {
+    // mapActions和mapMutations都是方法，传参可以使用对象或者数组。
+    ...mapActions(['minusActions']),
+    minus () {
+      this.minusActions();
+    }
+  },
+  created () { },
+  mounted () { }
+}
+</script>
+<style lang="" scoped>
+</style>
+```
 
 ## vue2.0
 
@@ -1655,7 +1821,7 @@ mapGetters  把getters映射成computed  注意:mapGetters, 数据之间还需�
 - `vue-template-compiler`
   - 把vue文件中的template部分交给`vue-html-loader`处理
   - 把vue文件中的style部分交给`vue-style-loader`处理
-  - 文件中的scripte部分不需要处理, 本身就可以处理
+  - 文件中的script部分不需要处理, 本身就可以处理
 
 如果css需要用less,还需要安装`less`和`less-loader`
 
