@@ -91,7 +91,7 @@ app.use(function (req, res) {
 
 ## 设计操作数据的 API 文件模块
 
-```javasc
+```javascript
 /** 
  * student.js
  * 数据操作文件模块

@@ -9,13 +9,13 @@
 > 1. 如果安装不了，我们可以把别人安装完成的内容拷贝过来，通过修改环境变量完成安装
 > 高级系统设置 -> 环境变量 -> 系统变量 -> Path，把原有的变量值备份一份，在原有的基础上增加node的安装目录即可
 
-![Alt text](./media/安装失败配环境变量.png)
+![Alt text](./media/1544240649198.png)
 
 >  2. 验证安装是否成功
 >      WIN + R  => 打开运行窗口 => 输入cmd => 打开DOS窗口
 >      在DOS窗口中，输入 node -v / node --version / npm -v 能出现版本号，则代表安装成功，不能出现版本号，提示node不是内部或者外部命令的，遵循第一步配置环境变量即可
 
-![Alt text](./media/验证安装是否成功.png)
+![Alt text](./media/1544240649199.png)
 
 
 ## NODE基础概念
@@ -59,8 +59,8 @@
 
 - 基于WB(webstrom)这类编辑工具直接执行
 > 在WB中配置node环境
-![Alt text](./media/在WB中配置node环境1.png)
-![Alt text](./media/在WB中配置node环境2.png)
+![Alt text](./media/1544240649196.png)
+![Alt text](./media/1544240649197.png)
 
 ## 扫盲：常用的DOS命令
 
