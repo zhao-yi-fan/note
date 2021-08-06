@@ -328,7 +328,7 @@ base写在`<head></head>`之间
 
 ### 表格属性
 
-<img src="./media/tt.png" />
+<img src="media/tt.png" />
 
 三参为0    border  cellpadding  cellspacing  为  0
 
@@ -336,7 +336,7 @@ base写在`<head></head>`之间
 
 表头单元格一般位于表格的第一行或第一列，其文本加粗居中，如下图所示，即为设置了表头的表格。设置表头非常简单，只需用表头标签&lt;th&gt;</th&gt;替代相应的单元格标签&lt;td&gt;</td&gt;即可。 
 
- <img src="./media/th.png" />
+ <img src="media/th.png" />
 
 ### 表格结构
 
@@ -353,7 +353,7 @@ base写在`<head></head>`之间
 位于<table></table>标签中，一般包含网页中除头部和底部之外的其他内容。
 ```
 
-<img src="./media/thead.png" />
+<img src="media/thead.png" />
 
 例子:
 
@@ -433,7 +433,7 @@ caption 标签必须紧随 table 标签之后。
 
 在HTML中，一个完整的表单通常由表单控件（也称为表单元素）、提示信息和表单域3个部分构成。
 
-<img src="./media/bd.png" />
+<img src="media/bd.png" />
 
   表单控件：
 
@@ -459,7 +459,7 @@ radio  如果是一组，我们必须给他们命名相同的名字 name   这�
 
 
 
-<img src="./media/input.png" />
+<img src="media/input.png" />
 
 ### label标签
 

@@ -56,11 +56,11 @@ Fn.bb = function () {
 console.dir(Number)
 ```
 
-![1545111882050](./media/1545111882050.png)
+![1545111882050](media/1545111882050.png)
 
 - Array的两种角色
 
-![1545112996602](./media/1545112996602.png)
+![1545112996602](media/1545112996602.png)
 
 - JQ类库中对象的键值对和原型写法
 
@@ -148,13 +148,13 @@ new Foo().getName();//=> 3  B:new Foo() => B.getName()
 new new Foo().getName();//=> 3  C:new Foo() => new C[Foo实例].getName() => D:C.getName => new D()(先计算new Foo()创建一个实例f, 然后new f.getName(), 先找到f.getName, 再把这个函数new一下, 最后其实相当于把f.getName当做一个类, 返回这个类的一个实例)
 ```
 
-<img src="./media/阿里巴巴关于函数三种角色的面试题.png">
+<img src="media/阿里巴巴关于函数三种角色的面试题.png">
 
 - 运算符优先级
 
 > 19中的  成员访问(.) 比 18中的  new(无参数列表)  优先级高
 
-<img src="./media/运算符优先级.png">
+<img src="media/运算符优先级.png">
 
 ## 原型深入-原型链机制最终版(Function)
 
@@ -169,7 +169,7 @@ Fn.prototype.getN = function () {
 Fn.AA = 200;
 var f = new Fn();
 ```
-<img src="./media/函数的三种角色运行机制图.png">
+<img src="media/函数的三种角色运行机制图.png">
 
 > Object类中的代码字符串看不到, 一般会写"native code"(原生代码)
 > Object下的属性有`definedProperty`,用来监听一个对象中属性变化的   
@@ -206,7 +206,7 @@ console.dir(Function.prototype);//=> ƒ anonymous()
 
 
 
-![1545207279557](./media/1545207279557.png)
+![1545207279557](media/1545207279557.png)
 
 ## 原型深入-深入理解原型和call
 

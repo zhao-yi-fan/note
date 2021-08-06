@@ -134,7 +134,7 @@ console.log(n);
 
 > 解析:
 
-<img src="./media/5.png">
+<img src="media/5.png">
 
 ## [06~08]js中的严格模式和ARG的映射机制
 
@@ -566,7 +566,7 @@ console.log(a);
 >
 > 2. bbbfff000中和bbbfff111中出现 形参: b, 是不存在的, 为了好理解写上的.堆内存中实际只有代码字符串.
 
-<img src="./media/10.png">
+<img src="media/10.png">
 
 ## [11~13]
 
@@ -721,7 +721,7 @@ console.log(num, obj.num);
 
 > 解析:
 
-<img src="./media/14.png">
+<img src="media/14.png">
 
 - 改题目
 
@@ -858,7 +858,7 @@ Fn.prototype.getY();//=> this:Fn.prototype => console.log(Fn.prototype.y) => und
 
 - 展开理解
 
-<img src="./media/15.png">
+<img src="media/15.png">
 
 > 函数存储在堆内存中, 不仅有代码字符串, 还有prototype, name, length属性
 >
@@ -880,7 +880,7 @@ function Fn() {
 
 
 
-![1544710778450](./media/1544710778450.png)
+![1544710778450](media/1544710778450.png)
 
 ```javascript
 function Fn(a, b, c) {
@@ -892,7 +892,7 @@ function Fn(a, b, c) {
 }
 ```
 
-![1544711015247](./media/1544711015247.png)
+![1544711015247](media/1544711015247.png)
 
 ## [16]基于闭包解决循环绑定
 
@@ -949,7 +949,7 @@ for(var i=0; i < inputs.length; i++){
 }
 ```
 
-<img src="./media/16.png">
+<img src="media/16.png">
 
 - ES6解决
 
@@ -1062,7 +1062,7 @@ my_fun.c();
 
 > 解析
 
-<img src="./media/18.png">
+<img src="media/18.png">
 
 - 在实际项目 基于面向对象开发的时候(构造原型设计模式), 我们根据需要, 很多时候回重定向类的原型(让类的原型指向自己开辟的堆内存)
 > [存在的问题]
@@ -1071,7 +1071,7 @@ my_fun.c();
 >
 > 下图: 如果不手动添加constructor属性, 则输出重定向的prototype中的constructor属性会指向Object基类.
 
-<img src="./media/1544799496124.png">
+<img src="media/1544799496124.png">
 
 
 > 2. 当原型重定向后, 浏览器默认开辟的那个原型堆内存会被释放掉, 如果之前已经存储了一些方法或者属性, 这些东西都会丢失(所以: **内置类的原型不允许重定向到自己开辟的堆内存, 因为内置类原型上自带很多属性方法, 重定向后都没了, 这样是不被允许的,内置类原型保护**)
@@ -1139,7 +1139,7 @@ f2.aa();// 20
 f2.__proto__.aa();//=> undefined+10 => NaN
 ```
 
-<img src="./media/19.png">
+<img src="media/19.png">
 
 ## [20]数组去重引发的基于内置类原型扩展方法, 并且实现链式调用
 
@@ -1210,7 +1210,7 @@ ary.sort(function (a, b) {
 > 2. 指向的匿名函数建议写名字, 要和变量名一样
 >   Array.prototype.myUnique指向匿名函数, 如果写成命名函数也可以, 但没什么用, 就是为了和内置方法显示一样.
 
-![1545017723504](./media/1545017723504.png)
+![1545017723504](media/1545017723504.png)
 
 - this指向问题
 > 下面三个虽然都是ary执行相同的方法, 但是this的指向都变了, 不过后两个种几乎不用
@@ -1309,7 +1309,7 @@ console.log(res);//=> 6
 document.parentNode => null
 document.parentnode => undefined
 ```
-![1545049442187](./media/1545049442187.png)
+![1545049442187](media/1545049442187.png)
 
 - 怎么规避多人开发函数重名的问题？（百度搜索）
 > 答: 

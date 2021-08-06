@@ -117,7 +117,7 @@ obj.fn(3);
 console.log(n, obj.n);
 ```
 
-<img src="./media/高级单例模式理论模型.png">
+<img src="media/高级单例模式理论模型.png">
 
 ## 基于单例模式实现模块化开发
 
@@ -206,7 +206,7 @@ var per2 = createPerson('张三', 18);
 // dir(document.body) //=> body - HTMLBodyElement - HTMLElement - Element - Node - EventTarget - Object
 ```
 
-<img src="./media/js中的类.png">
+<img src="media/js中的类.png">
 
 ## 创建值的两种方式及区别
 
@@ -326,7 +326,7 @@ console.log(f1.n);//=>undefined 只有this.xxx=xxx的才和实例有关系, n是
 
 
 
-<img src="./media/JS中构造函数执行的机制原理.png">
+<img src="media/JS中构造函数执行的机制原理.png">
 
 ## 构造函数中细节问题
 
@@ -437,7 +437,7 @@ hasPubProperty(f, 'toString');//=> true
 >1. 找到了, 则结束查找, 使用自己私有的即可
 >2. 没有找到, 则基于__proto__找所属类的prototype, 如果找到就用这个公有的, 如果没找到, 基于原型上的__proto__继续向上查找, 一直找到Object.prototype的原型为止, 如果再没有, 操作的属性或者方法不存在.
 
-<img src="./media/prototype1.png">
+<img src="media/prototype1.png">
 
 - 例题
 
@@ -460,7 +460,7 @@ Fn.prototype.AA = function () {
 var f1 = new Fn;
 var f2 = new Fn;
 ```
-<img src="./media/prototype2.png">
+<img src="media/prototype2.png">
 
 ```javascript
 //理解

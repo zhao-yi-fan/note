@@ -46,7 +46,7 @@
 >       <link rel="stylesheet" href="css/demo1.min.css">
 >
 
-![1545929449448](./media/1545929449448.png)
+![1545929449448](media/1545929449448.png)
 
 - 目前基于webpack和框架实现工程化开发的时候, 我们都是在webpack配置文件中, 配置出less的编译(需要安装less/less-loader等模块), 这样不管是开发环境下的预览, 还是部署到生产环境下, 都是基于webpack中的less模块编译的.
 

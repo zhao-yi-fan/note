@@ -4,6 +4,9 @@ module.exports = {
   base: '/note/',
   markdown: {
     lineNumbers: true, // 是否在每个代码块的左侧显示行号。
+    extendMarkdown: md => {
+      md.use(require("markdown-it-disable-url-encode"));
+    }
   },
   themeConfig: {
     nav: [
@@ -100,5 +103,6 @@ module.exports = {
       },
     ],
     // displayAllHeaders: true // 默认值：false
-  }
+  },
+
 }

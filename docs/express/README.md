@@ -287,7 +287,7 @@ app.post('/register', (req, res) => {
 
 ## 基于express写API处理
 
-![1567936773613](./media/1567936773613.png)
+![1567936773613](media/1567936773613.png)
 
 ```javascript
 let express = require('express'),

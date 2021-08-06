@@ -276,7 +276,7 @@ cmd->>node --version   可以查看版本号
 
 在终端输入人`node`命令直接敲回车,退出是ctrl+c两次
 
-![](./media/node终端.png)
+![](media/node终端.png)
 
 这个环境的作用只是用来帮助做一些辅助测试,例如在里面可以直接使用node中的核心模块而不需要require 加载.
 
@@ -580,7 +580,7 @@ json数据: 'application/json'
 - 服务器最好把每次相应的数据是什么内容类型都告诉客户端,而且要正确的告诉
 - 不同的资源对应的Content-Type是不一样的,具体参照:https://www.oschina.net/
 
-<img	src="./media/Content-Type.png">
+<img	src="media/Content-Type.png">
 
 - 对于不同的文本类型的数据,最好都加上编码,目的是为了防止中文解析乱码问题
 
@@ -612,11 +612,11 @@ json数据: 'application/json'
 
 服务端渲染:
 
-<img src="./media/服务端渲染.png">
+<img src="media/服务端渲染.png">
 
 客户端渲染:
 
-<img src="./media/客户端渲染.png">
+<img src="media/客户端渲染.png">
 
 ## 如何解析请求路径中的查询字符串
 

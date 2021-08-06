@@ -29,7 +29,7 @@ ary2.push(100)
 console.log(ary1)
 ```
 
-<img src="./media/基本引用数据类型.png">
+<img src="media/基本引用数据类型.png">
 
 
 
@@ -108,7 +108,7 @@ function sum() {
 console.log(sum(12, 23, '34', 'AA'));
 ```
 
-<img src="./media/变量提升机制.png">
+<img src="media/变量提升机制.png">
 
 
 
@@ -152,12 +152,12 @@ console.log(sum(12, 23, '34', 'AA'));
 
 >  声明了属性没有赋值,或者 没有声明属性.
 >  输出这个属性都是 undefined
-<img src="./media/test1.png">
+<img src="media/test1.png">
 
 > 那怎么知道undefined是因为声明了属性没有赋值, 还是因为没有声明这个属性呢?
 >
 > in: 检测某个属性是否隶属于这个对象
-> <img src="./media/test2.png">
+> <img src="media/test2.png">
 
 > 在全局作用域下声明一个变量, 也相当于给window全局对象设置了一个属性, 变量的值就是属性值(私有作用域中声明的私有变量和window没关系)
 ```javascript
@@ -214,7 +214,7 @@ function fn () {
 fn();
 console.log(a, b);//=> 12 13
 ```
-<img src="./media/私有作用域.png">
+<img src="media/私有作用域.png">
 
 ## 作用域链的扩展
 
@@ -688,7 +688,7 @@ console.log(ary);
 //=> 100 23
 ```
 
-<img src="./media/私有变量和作用域练习.png">
+<img src="media/私有变量和作用域练习.png">
 
 ## 上级作用域查找
 
@@ -756,7 +756,7 @@ console.log(n);
 
 //=>21 22 23 10
 ```
-<img src="./media/上级作用域查找.png">
+<img src="media/上级作用域查找.png">
 
 ## js中的堆栈内存释放
 
@@ -808,7 +808,7 @@ f(4);
 //=> 6 12 16 8
 ```
 
-<img src="./media/js中的堆栈内存释放.png">
+<img src="media/js中的堆栈内存释放.png">
 
 ## 闭包作用之保护
 
@@ -896,7 +896,7 @@ Zepto.xxx();
 
 - 例题
 
-![1544362006722](./media/1544362006722.png)
+![1544362006722](media/1544362006722.png)
 
 html:
 

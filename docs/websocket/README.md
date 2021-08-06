@@ -240,7 +240,7 @@ server.on('connection', function (socket) {
 </script>
 ```
 
-![1568446971419](./media/1568446971419.png)
+![1568446971419](media/1568446971419.png)
 
 `http状态码101`：切换协议成功。用websocket向服务器发请求第一次仍然是http协议，但请求到达服务器会切换到websocket协议。目前出现101只有websocket了。
 
