@@ -5,6 +5,7 @@ module.exports = {
   markdown: {
     lineNumbers: true, // 是否在每个代码块的左侧显示行号。
     extendMarkdown: md => {
+      // 该扩展在图片自动加 ./  还有中文图片的查找
       md.use(require("markdown-it-disable-url-encode"));
     }
   },

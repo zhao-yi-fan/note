@@ -409,7 +409,7 @@ server.listen(3000, function(){
 
 
 
-![](media\15.png)
+![](media/15.png)
 
 关闭服务器:ctrl + c
 
@@ -556,7 +556,7 @@ var http = require('http')
 - 可以同时开启多个服务,但一定要确保不同服务占用的端口号不一致
 - 在一台计算机中同一个端口号,同一时间只能被同一个程序占用
 
-![](media\ip地址和端口号.png)
+![](media/ip地址和端口号.png)
 
 查看自己电脑的ip地址:cmd ->>ipconfig-->>以太网适配器 以太网 中的  IPv4 地址:
 
