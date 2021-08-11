@@ -22,5 +22,8 @@
   "homepage": "https://github.com/zhao-yi-fan/note#readme",
   "devDependencies": {
     "vuepress": "^1.8.2"
+  },
+  "dependencies": {
+    "markdown-it-disable-url-encode": "^1.0.1"
   }
 }
