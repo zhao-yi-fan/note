@@ -116,13 +116,13 @@ node.js是技术, 不是后台的语言
 
 fs.readFile(path[, options], callback)
 
-- `path `<string>| <Buffer> | <URL> | <integer> 文件名或文件描述符。
-- `options` <Object> | <string>
-  - `encoding`  <string>| <null> 默认为 `null`。
-  - `flag`  <string>详见[支持的 flag](http://nodejs.cn/s/JjbY8n)。默认为 `'r'`。
-- `callback` <Function>
-  - `err` <Error>
-  - `data`  <string>| <Buffer>
+- `path` string | Buffer | URL | integer 文件名或文件描述符。
+- `options` Object | string
+  - `encoding`  string | null 默认为 `null`。
+  - `flag`  string详见[支持的 flag](http://nodejs.cn/s/JjbY8n)。默认为 `'r'`。
+- `callback` Function
+  - `err` Error
+  - `data`  string | Buffer
 
 异步地读取文件的内容。
 
@@ -177,11 +177,11 @@ Buffer.alloc(size[, fill[, encoding]])
 
 
 
-> `size`  <integer> 新建的 `Buffer` 的长度。
+> `size`  integer 新建的 `Buffer` 的长度。
 >
-> `fill`  <string> | <Buffer> | <integer> 预填充 `Buffer` 的值。默认为 `0`。
+> `fill`  string | Buffer | integer 预填充 `Buffer` 的值。默认为 `0`。
 >
-> `encoding` <string> 如果 `fill` 是字符串，则指定 `fill` 的字符编码。默认为 `'utf8'`。
+> `encoding` string 如果 `fill` 是字符串，则指定 `fill` 的字符编码。默认为 `'utf8'`。
 
 创建一个大小为 size **字节**的 Buffer。 如果 fill 为 undefined，则用 0 填充 Buffer。
 
@@ -197,7 +197,7 @@ console.log(buf1);
 
 Buffer.from(array) 使用字节数组 `array` 创建 `Buffer`。
 
->  `array` <integer>
+>  `array` integer
 
 ```javascript
 // 输入的如果是十进制的话, 会把十进制转成十六进制
@@ -213,9 +213,9 @@ console.log(buf3)
 
 Buffer.from(string[, encoding]) 创建一个包含 `string` 的 `Buffer`。
 
-`string` <string> 要编码的字符串。
+`string` string 要编码的字符串。
 
-`encoding` <string> `string` 的字符编码。默认为 `'utf8'`。
+`encoding` string `string` 的字符编码。默认为 `'utf8'`。
 
 注意: 转二进制的编码格式默认是utf8,如果编码格式为scii, 中文转换为二进制就会编码有错误, 虽然二进制看不出结果.然后输出的时候用toString(),toString()方法有隐式转换编码格式默认使用utf8.可以手动更改.
 
