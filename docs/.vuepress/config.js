@@ -18,20 +18,31 @@ module.exports = {
       {
         text: 'Home',
         children: [
-          '/git/README.md',
-          '/websocket/README.md',
-          '/wechat_mini/README.md',
-          '/network-protocol/README.md',
-          '/webpack/README.md',
-          '/vue/README.md',
-          '/vnm-shop/README.md',
-          '/TypeScript/README.md',
-          '/nginx/README.md',
-          '/mongoDB/README.md',
-          '/Koa/README.md',
-          '/javascript/README.md',
-          '/flutter/README.md',
-          '/express/README.md',
+          {
+            text: 'node相关',
+            children: [
+              '/express/README.md', '/Koa/README.md',
+            ]
+          },
+          {
+            text: '其他',
+            children: [
+              '/git/README.md',
+              '/websocket/README.md',
+              '/wechat_mini/README.md',
+              '/network-protocol/README.md',
+              '/webpack/README.md',
+              '/vue/README.md',
+              '/vnm-shop/README.md',
+              '/TypeScript/README.md',
+              '/nginx/README.md',
+              '/mongoDB/README.md',
+              '/javascript/README.md',
+              '/flutter/README.md',
+            ]
+          },
+
+
         ],
       },
       {
@@ -48,11 +59,22 @@ module.exports = {
       {
         text: 'zhufengweb',
         children: [
-          '/zhufengweb/AJAX/README.md',
-          '/zhufengweb/AXIOS/README.md',
-          '/zhufengweb/DOM_Box_Model-JQ/DOM_Box_Model/README.md',
-          '/zhufengweb/DOM_Box_Model-JQ/jquery/README.md',
-          '/zhufengweb/DOM_Box_Model-JQ/waterfall/README.md',
+          {
+            text: '盒子模型及jquery',
+            children: [
+              '/zhufengweb/DOM_Box_Model-JQ/DOM_Box_Model/README.md',
+              '/zhufengweb/DOM_Box_Model-JQ/jquery/README.md',
+              '/zhufengweb/DOM_Box_Model-JQ/waterfall/README.md',
+            ]
+          },
+          {
+            text: '其他',
+            children: [
+              '/zhufengweb/AJAX/README.md',
+              '/zhufengweb/AXIOS/README.md',
+            ]
+          },
+
         ]
       },
       {
