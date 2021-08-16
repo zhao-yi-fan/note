@@ -540,13 +540,16 @@ ary.sort((a, b) => {
 >    因为a标签可以移入有效果 :hover伪类选择器, a标签: hover伪类兼容所有的浏览器
 >    a标签的href属性存储的是点击需要跳转的页面, 或者是#xxx, 这个是hash定位
 >    如果只想让其作为一个普通的按钮, 我们需要阻止a标签点击跳转的默认行为 
->
->    \<a href="javascript::"></a>
+>    ```html
+>     <a href="javascript::"></a>
+>    ```
+>    
 >
 > 2. 开发环境需要用less.js文件来动态展示css效果
->
+>    ```html
 >    \<link rel="stylesheet/less" href="css/index.less">
 >    \<script src="js/less-2.5.3.min.js">\</script>
+>    ```
 >
 > 3. 生产环境需要用npm装好全局less
 >

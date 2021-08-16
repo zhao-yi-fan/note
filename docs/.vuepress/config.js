@@ -14,197 +14,205 @@ module.exports = {
   },
   themeConfig: {
     lastUpdated: '上次更新', // string | boolean
-    nav: [
+    navbar: [
       { text: 'Home', link: '/' },
+      { text: 'node', link: '/express/' },
+      { text: 'zhufengweb', link: '/zhufengweb/' },
     ],
-    sidebar: [
-      {
-        title: 'express',
-        path: '/express/', // 可选的, 标题的跳转链接，应为绝对路径且必须存在
-        collapsable: false, // 侧边栏的每个子组默认是可折叠的，你可以设置 collapsable: false 来让一个组永远都是展开状态。
-        sidebarDepth: 1, // 可选的, 默认值是 1
-        children: [],
-      },
-      {
-        title: 'flutter',
-        path: '/flutter/',
-        collapsable: false,
-        sidebarDepth: 1,
-        children: []
-      },
-      {
-        title: 'javascript汇总',
-        path: '/javascript/',
-        collapsable: false,
-        sidebarDepth: 1,
-        children: []
-      },
-      {
-        title: 'Koa',
-        path: '/Koa/',
-        collapsable: false,
-        sidebarDepth: 1,
-        children: []
-      },
-      {
-        title: 'mongoDB',
-        path: '/mongoDB/',
-        collapsable: false,
-        sidebarDepth: 1,
-        children: []
-      },
-      {
-        title: 'nginx',
-        path: '/nginx/',
-        collapsable: false,
-        sidebarDepth: 1,
-        children: []
-      },
-      {
-        title: 'TypeScript',
-        path: '/TypeScript/',
-        collapsable: false,
-        sidebarDepth: 1,
-        children: []
-      },
-      {
-        title: 'vnm商城',
-        path: '/vnm-shop/',
-        collapsable: false,
-        sidebarDepth: 1,
-        children: []
-      },
-      {
-        title: 'vue',
-        path: '/vue/',
-        collapsable: false,
-        sidebarDepth: 1,
-        children: []
-      },
-      {
-        title: 'web前端',
-        path: '',
-        collapsable: true,
-        sidebarDepth: 3,
-        children: [
-          {
-            title: 'css',
-            path: '/web/css/',
-            collapsable: true,
-            sidebarDepth: 1,
-            children: []
-          },
-          {
-            title: 'html',
-            path: '/web/html/',
-            collapsable: true,
-            sidebarDepth: 1,
-            children: []
-          },
-          {
-            title: 'javascript',
-            path: '/web/javascript/',
-            collapsable: true,
-            sidebarDepth: 1,
-            children: []
-          },
-          {
-            title: 'jQuery',
-            path: '/web/jQuery/',
-            collapsable: true,
-            sidebarDepth: 1,
-            children: []
-          },
-          {
-            title: 'nodejs',
-            path: '/web/node.js/',
-            collapsable: true,
-            sidebarDepth: 1,
-            children: []
-          },
-          {
-            title: 'php',
-            path: '/web/php/',
-            collapsable: true,
-            sidebarDepth: 1,
-            children: []
-          },
-        ]
-      },
-      {
-        title: '珠峰web前端架构',
-        path: '',
-        collapsable: true,
-        sidebarDepth: 1,
-        children: [
-          {
-            title: 'ajax',
-            path: '/zhufengweb/AJAX/',
-            collapsable: true,
-            sidebarDepth: 1,
-            children: []
-          },
-          {
-            title: 'axios',
-            path: '/zhufengweb/AXIOS/',
-            collapsable: true,
-            sidebarDepth: 1,
-            children: []
-          },
-          {
-            title: 'DOM_Box_Model-JQ',
-            collapsable: true,
-            sidebarDepth: 1,
-            children: [
-              {
-                title: 'DOM_Box_Model',
-                path: '/zhufengweb/DOM_Box_Model',
-                collapsable: true,
-                sidebarDepth: 1,
-                children: [
-                  
-                ]
-              },
-            ]
-          },
-        ]
-      },
-      {
-        title: 'webpack',
-        path: '/webpack/',
-        collapsable: false,
-        sidebarDepth: 1,
-        children: []
-      },
-      {
-        title: '七层网络协议',
-        path: '/network-protocol/',
-        collapsable: false,
-        sidebarDepth: 1,
-        children: []
-      },
-      {
-        title: '微信小程序',
-        path: '/wechat_mini/',
-        collapsable: false,
-        sidebarDepth: 1,
-        children: []
-      },
-      {
-        title: 'websocket',
-        path: '/websocket/',
-        collapsable: false,
-        sidebarDepth: 1,
-        children: []
-      },
-      {
-        title: 'git',
-        path: '/git/',
-        collapsable: false,
-        sidebarDepth: 1,
-        children: []
-      },
-    ],
+    sidebar: {
+      '/express/': [
+        {
+          text: 'express',
+          link: '/express/', // 可选的, 标题的跳转链接，应为绝对路径且必须存在
+          collapsable: false, // 侧边栏的每个子组默认是可折叠的，你可以设置 collapsable: false 来让一个组永远都是展开状态。
+          sidebarDepth: 1, // 可选的, 默认值是 1
+          children: [
+
+          ],
+        },
+      ],
+      '/zhufengweb/': [
+        {
+          text: 'zhufengweb',
+          collapsable: true,
+          sidebarDepth: 1,
+          children: [
+            '/zhufengweb/AJAX/README.md',
+            '/zhufengweb/AXIOS/README.md',
+            '/zhufengweb/DOM_Box_Model-JQ/DOM_Box_Model/README.md',
+            '/zhufengweb/DOM_Box_Model-JQ/jquery/README.md',
+            '/zhufengweb/DOM_Box_Model-JQ/waterfall/README.md',
+          ]
+        },
+      ],
+      '/flutter/': [
+        {
+          text: 'flutter',
+          link: '/flutter/',
+          collapsable: false,
+          sidebarDepth: 1,
+          children: [
+
+          ],
+        },
+      ],
+      '/javascript/': [
+        {
+          text: 'javascript汇总',
+          link: '/javascript/',
+          collapsable: false,
+          sidebarDepth: 1,
+          children: [
+
+          ],
+        },
+      ],
+      '/Koa/': [
+        {
+          text: 'Koa',
+          link: '/Koa/',
+          collapsable: false,
+          sidebarDepth: 1,
+          children: [
+
+          ],
+        },
+      ],
+      '/mongoDB/': [
+        {
+          text: 'mongoDB',
+          link: '/mongoDB/',
+          collapsable: false,
+          sidebarDepth: 1,
+          children: [
+
+          ],
+        },
+      ],
+      '/nginx/': [
+        {
+          text: 'nginx',
+          link: '/nginx/',
+          collapsable: false,
+          sidebarDepth: 1,
+          children: [
+
+          ],
+        },
+      ],
+      '/TypeScript/': [
+        {
+          text: 'TypeScript',
+          link: '/TypeScript/',
+          collapsable: false,
+          sidebarDepth: 1,
+          children: [
+
+          ],
+        },
+      ],
+      '/vnm-shop/': [
+        {
+          text: 'vnm-shop',
+          link: '/vnm-shop/',
+          collapsable: false,
+          sidebarDepth: 1,
+          children: [
+
+          ],
+        },
+      ],
+      '/vue/': [
+        {
+          text: 'vue',
+          link: '/vue/',
+          collapsable: false,
+          sidebarDepth: 1,
+          children: [
+
+          ],
+        },
+      ],
+      '/web/': [
+        {
+          text: 'web',
+          collapsable: true,
+          sidebarDepth: 1,
+          children: [
+            '/web/css/README.md',
+            '/web/html/README.md',
+            '/web/javascript/README.md',
+            '/web/jQuery/README.md',
+            '/web/node.js/README.md',
+            '/web/php/README.md',
+          ]
+        },
+      ],
+      '/webpack/': [
+        {
+          text: 'webpack',
+          link: '/webpack/',
+          collapsable: false,
+          sidebarDepth: 1,
+          children: [
+
+          ],
+        },
+      ],
+      '/network-protocol/': [
+        {
+          text: '七层网络协议',
+          link: '/network-protocol/',
+          collapsable: false,
+          sidebarDepth: 1,
+          children: [
+
+          ],
+        },
+      ],
+      '/wechat_mini/': [
+        {
+          text: '微信小程序',
+          link: '/wechat_mini/',
+          collapsable: false,
+          sidebarDepth: 1,
+          children: [
+
+          ],
+        },
+      ],
+      '/websocket/': [
+        {
+          text: 'websocket',
+          link: '/websocket/',
+          collapsable: false,
+          sidebarDepth: 1,
+          children: [
+
+          ],
+        },
+      ],
+      '/git/': [
+        {
+          text: 'git',
+          link: '/git/',
+          collapsable: false,
+          sidebarDepth: 1,
+          children: [
+
+          ],
+        },
+      ],
+      '': [
+        {
+          text: 'note',
+          path: '',
+          collapsable: false,
+          sidebarDepth: 1,
+          children: [],
+        },
+      ],
+    }
     // displayAllHeaders: true // 默认值：false
   },
 
