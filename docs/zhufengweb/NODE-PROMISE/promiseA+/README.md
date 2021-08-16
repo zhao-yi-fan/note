@@ -36,7 +36,7 @@ Promise.all([promise1,promise2,promise3,promise4]).then();
 
 **没有实现then链**
 
-![1569634071714](media/1569634071714.png)
+![1569634071714](./media/1569634071714.png)
 
 
 
@@ -165,7 +165,7 @@ console.log(3)
 
 ## 实现then方法的链式调用
 
-![1569822146584](media/1569822146584.png)
+![1569822146584](./media/1569822146584.png)
 
 ```javascript
 // promise.js

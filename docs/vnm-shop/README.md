@@ -10,7 +10,7 @@
 
 > 之后可以使用命令`vue init webpack-simple Demo5`初始化一个vue框架的项目
 
-![1550281670922](media/1550281670922.png)
+![1550281670922](./media/1550281670922.png)
 
 
 
@@ -18,17 +18,17 @@
 
 https://blog.csdn.net/weixin_39495540/article/details/79740790
 
-![1550285634376](media/1550285634376.png)
+![1550285634376](./media/1550285634376.png)
 
 > 解决以后
 
-![1550285681660](media/1550285681660.png)
+![1550285681660](./media/1550285681660.png)
 
-![1550285696525](media/1550285696525.png)
+![1550285696525](./media/1550285696525.png)
 
 > 也可以使用命令`vue init webpack Demo6`初始化一个vue框架的项目
 
-![1550289252516](media/1550289252516.png)
+![1550289252516](./media/1550289252516.png)
 
 > 安装完以后也会报错
 >
@@ -118,7 +118,7 @@ style绑定-对象语法:`v-bind:style="{color:activeColor,fontSize:fontSize+'px
 >
 > 
 >
-> ![1550293877133](media/1550293877133.png)
+> ![1550293877133](./media/1550293877133.png)
 >
 > Slot: 插槽
 
@@ -163,7 +163,7 @@ style绑定-对象语法:`v-bind:style="{color:activeColor,fontSize:fontSize+'px
 
 - 动态路由
 
-![1550295195570](media/1550295195570.png)
+![1550295195570](./media/1550295195570.png)
 
 ### 嵌套路由
 
@@ -203,7 +203,7 @@ style绑定-对象语法:`v-bind:style="{color:activeColor,fontSize:fontSize+'px
 >
 > `npm install vue-resource --save`
 
-![1550302879876](media/1550302879876.png)
+![1550302879876](./media/1550302879876.png)
 
 - vue-resource的请求API是按照REST风格设计的, 它提供了7种请求API:
 
@@ -221,7 +221,7 @@ style绑定-对象语法:`v-bind:style="{color:activeColor,fontSize:fontSize+'px
 >
 > `patch(url,[body],[options])`
 
-![1550302182249](media/1550302182249.png)
+![1550302182249](./media/1550302182249.png)
 
 - 全局拦截器interceptors
 
@@ -271,7 +271,7 @@ Vue.http.interceptors.push((request, next)=>{
 >
 > 再把server文件夹下的views文件夹下的.jade文件删除掉
 
-![1550407842483](media/1550407842483.png)
+![1550407842483](./media/1550407842483.png)
 
 
 
@@ -340,7 +340,7 @@ app.set('view engine','html');
 </html>
 ```
 
-![1554272730899](media/1554272730899.png)
+![1554272730899](./media/1554272730899.png)
 
 然后在routes里修改index.js
 
@@ -379,7 +379,7 @@ pm2是进程, 启动了之后还可以继续其他操作
 
 `pm2 log`
 
-![1554363065007](media/1554363065007.png)
+![1554363065007](./media/1554363065007.png)
 
 ## Nodejs+Express+mysql服务端开发
 
@@ -424,7 +424,7 @@ app.listen(3000);
 
 `npm i`安装依赖
 
-![1554365244786](media/1554365244786.png)
+![1554365244786](./media/1554365244786.png)
 
 /bin:用来启动应用(服务器)
 
@@ -446,7 +446,7 @@ app.listen(3000);
 
 在浏览器中访问http://127.0.0.1:3000
 
-![1554365748550](media/1554365748550.png)
+![1554365748550](./media/1554365748550.png)
 
 #### 基本使用
 
@@ -526,7 +526,7 @@ HANDLER是在路由匹配时执行的函数.
 
 以下是目录结构图:
 
-![1554368690414](media/1554368690414.png)
+![1554368690414](./media/1554368690414.png)
 
 例子中没用jade, 改用了html.
 

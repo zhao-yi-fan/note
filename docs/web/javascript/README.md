@@ -14,7 +14,7 @@
 
 Netscape在最初将其脚本语言命名为LiveScript，后来Netscape在与Sun合作之后将其改名为JavaScript。JavaScript最初受Java启发而开始设计的，目的之一就是“看上去像Java”，因此语法上有类似之处，一些名称和命名规范也借自Java。JavaScript与Java名称上的近似，是当时Netscape为了营销考虑与Sun微系统达成协议的结果。
 
-![](media/bulaideng.png)
+![](./media/bulaideng.png)
 
 - JavaScript现在的意义(应用场景)
 
@@ -93,7 +93,7 @@ var age = 10, name = 'zs';
 var age = 18;
 ```
 
-![1496981558575](media/1496981558575.png)
+![1496981558575](./media/1496981558575.png)
 
 - 变量的命名规则和规范
 
@@ -176,7 +176,7 @@ Number、String、Boolean、Undefined、Null
 
 - 转义符
 
-  ![1498289626813](media/1498289626813.png)
+  ![1498289626813](./media/1498289626813.png)
 
 - 字符串长度
 
@@ -239,7 +239,7 @@ console.log(typeof age);  // 'number'
 ## 数据类型转换
 如何使用谷歌浏览器,快速的查看数据类型?
 字符串的颜色是黑色的, 数值类型是蓝色的, 布尔类型也是蓝色的, undefined和 null 是灰色的
-![](media/1498743288622.png)
+![](./media/1498743288622.png)
 
 - 转成字符串类型
 
