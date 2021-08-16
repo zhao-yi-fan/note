@@ -56,13 +56,8 @@ module.exports = {
         ]
       },
       {
-        text: '其他',
-        children: [
-          '/express/README.md',
-          '/Koa/README.md',
-          '/vnm-shop/README.md',
-          '/flutter/README.md',
-        ],
+        text: 'GitHub',
+        link: 'https://github.com/zhao-yi-fan/note/',
       },
     ],
     sidebar: {
@@ -121,5 +116,19 @@ module.exports = {
     }
     // displayAllHeaders: true // 默认值：false
   },
+  plugins: [
+    [
+      '@vuepress/plugin-search', {
+        locales: {
+          '/': {
+            placeholder: 'Search',
+          },
+          '/zh/': {
+            placeholder: '搜索',
+          },
+        },
+      },
+    ],
+  ],
 
 }
