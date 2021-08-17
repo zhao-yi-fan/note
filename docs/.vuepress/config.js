@@ -1,6 +1,6 @@
 module.exports = {
   title: "zhaoyifan Docs",
-  description: 'zhaoyifan|前端文档|zhaoyifan Docs',
+  description: 'zhaoyifan zhaoyifan Docs',
   base: '/note/',
   markdown: {
     // lineNumbers: true, // 是否在每个代码块的左侧显示行号。
