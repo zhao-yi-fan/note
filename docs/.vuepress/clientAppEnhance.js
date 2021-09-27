@@ -3,6 +3,7 @@ import aaa from './aaa.vue'
 // import Element from 'element-ui';
 // import 'element-ui/lib/theme-chalk/index.css'
 // import ElementPlus from 'element-plus'
+// import { ElButton } from 'element-plus'
 // import 'element-plus/dist/index.css'
 
 // import hljs from 'highlight.js'
@@ -15,7 +16,7 @@ import aaa from './aaa.vue'
 //   let blocks = el.querySelectorAll('pre code')
 //   blocks.forEach(block => {
 //     hljs.highlightBlock(block)
-    
+
 //   });
 // })
 
@@ -33,4 +34,13 @@ export default defineClientAppEnhance(({ app, router, siteData }) => {
   // app.use(ElementPlus)
   // app.use(Element)
   app.component('aaa', aaa)
+  // app.component(ElButton.name, ElButton)
+
+  router.beforeEach((to) => {
+    console.log('before navigation')
+  })
+
+  router.afterEach((to) => {
+    console.log('after navigation')
+  })
 })
