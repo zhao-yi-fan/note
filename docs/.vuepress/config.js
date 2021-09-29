@@ -9,7 +9,7 @@ module.exports = {
       md.use(require("markdown-it-disable-url-encode"));
     },
     anchor: {
-      permalink: false,
+      permalink: true,
     }
   },
   themeConfig: {
