@@ -56,7 +56,7 @@ Fn.bb = function () {
 console.dir(Number)
 ```
 
-![1545111882050](./media/1545111882050.png)
+![1545111882050](media/1545111882050.png)
 
 - Array的两种角色
 
