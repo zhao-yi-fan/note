@@ -28,9 +28,6 @@ import 'element-plus/dist/index.css'
 
 export default defineClientAppEnhance(({ app, router, siteData }) => {
   // app.use(ElementPlus)
-  // app.use(Element)
-  app.component('aaa', aaa)
-  // app.component(ElButton.name, ElButton)
 
   router.beforeEach((to) => {
     console.log('before navigation')
