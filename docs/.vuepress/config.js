@@ -1,3 +1,6 @@
+
+const { path } = require('@vuepress/utils')
+
 module.exports = {
   title: "zhaoyifan Docs",
   description: 'zhaoyifan zhaoyifan Docs',
@@ -123,7 +126,7 @@ module.exports = {
           {
             text: '按钮',
             children: [
-              
+
             ]
           },
         ]
@@ -216,6 +219,12 @@ module.exports = {
         },
       },
     ],
+    [
+      '@vuepress/plugin-register-components',
+      {
+        componentsDir: path.resolve(__dirname, './components')
+      }
+    ]
   ],
 
 }

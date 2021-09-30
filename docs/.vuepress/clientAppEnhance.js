@@ -1,10 +1,6 @@
 import { defineClientAppEnhance } from '@vuepress/client'
-import aaa from './aaa.vue'
-// import Element from 'element-ui';
-// import 'element-ui/lib/theme-chalk/index.css'
-// import ElementPlus from 'element-plus'
-// import { ElButton } from 'element-plus'
-// import 'element-plus/dist/index.css'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
 
 // import hljs from 'highlight.js'
 // import 'highlight.js/styles/googlecode.css'
