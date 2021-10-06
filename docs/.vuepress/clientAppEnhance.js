@@ -1,6 +1,6 @@
 import { defineClientAppEnhance } from '@vuepress/client'
-import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
+// import ElementPlus from 'element-plus'
+// import 'element-plus/dist/index.css'
 
 // import hljs from 'highlight.js'
 // import 'highlight.js/styles/googlecode.css'
