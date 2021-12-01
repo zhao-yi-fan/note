@@ -122,14 +122,7 @@ module.exports = {
       },
       {
         text: 'bunny-ui',
-        children: [
-          {
-            text: '按钮',
-            children: [
-
-            ]
-          },
-        ]
+        link: '/bunny-ui-docs/',
       },
     ],
     sidebar: {
@@ -162,6 +155,16 @@ module.exports = {
             '/zhufengweb/NODE-PROMISE/NODE-promise/README.md',
             '/zhufengweb/NODE-PROMISE/promiseA+/README.md',
             '/zhufengweb/NODE-PROMISE/storage/README.md',
+          ]
+        },
+      ],
+      '/bunny-ui-docs/': [
+        {
+          text: 'bunny-ui-组件文档',
+          collapsable: true,
+          sidebarDepth: 1,
+          children: [
+            '/bunny-ui-docs/button/README.md',
           ]
         },
       ],
