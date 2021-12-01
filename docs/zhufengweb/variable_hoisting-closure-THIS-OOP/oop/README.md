@@ -205,7 +205,7 @@ var per2 = createPerson('张三', 18);
 // js中的内置类
 // dir(document.body) //=> body - HTMLBodyElement - HTMLElement - Element - Node - EventTarget - Object
 ```
-![js中的类](./media/js中的类.png)
+`![js中的类](./media/js中的类.png)`
 
 ## 创建值的两种方式及区别
 
