@@ -1516,7 +1516,7 @@ export default Vue.component('child', {
 
 ### 2.vuex
 
-<img src="media/vuex.png">
+<img src="./media/vuex.png">
 
 - state--存储,数据
 - mutation--修改数据, 追踪: 同步

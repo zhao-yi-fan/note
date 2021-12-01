@@ -292,7 +292,7 @@ console.log(str - 0);
 
 `Boolean()`
 0 ''(空字符串) null undefined NaN 会转换成false 其他都会转换成true
-<img src="media/其他类型转布尔类型.png">
+<img src="./media/其他类型转布尔类型.png">
 
 ## 操作符
 运算符 operator

@@ -37,7 +37,7 @@
 
 > 1. Node.js command prompt窗口打开只输入一个node,回车, 就和浏览器F12的console一样.(不常用)
 
-<img src="media/nodejs窗口.png">
+<img src="./media/nodejs窗口.png">
 
 > 2. 在运行cmd中窗口输入node, 和Node.js command prompt窗口输入node效果一样.(不常用)
 
@@ -52,10 +52,10 @@
 > 2. 在当前目录地址栏中输入cmd，快速在当前目录打开
 >
 
-<img src="media/地址栏中输入cmd.png">
+<img src="./media/地址栏中输入cmd.png">
 
 > 3. shift+鼠标右键，在此处打开命令窗口
-<img src="media/shift鼠标右键.png">
+<img src="./media/shift鼠标右键.png">
 
 - 基于WB(webstrom)这类编辑工具直接执行
 > 在WB中配置node环境

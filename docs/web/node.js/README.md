@@ -581,7 +581,7 @@ json数据: 'application/json'
 - 服务器最好把每次相应的数据是什么内容类型都告诉客户端,而且要正确的告诉
 - 不同的资源对应的Content-Type是不一样的,具体参照:https://www.oschina.net/
 
-<img	src="media/Content-Type.png">
+<img src="./media/Content-Type.png">
 
 - 对于不同的文本类型的数据,最好都加上编码,目的是为了防止中文解析乱码问题
 
@@ -613,11 +613,11 @@ json数据: 'application/json'
 
 服务端渲染:
 
-<img src="media/服务端渲染.png">
+<img src="./media/服务端渲染.png">
 
 客户端渲染:
 
-<img src="media/客户端渲染.png">
+<img src="./media/客户端渲染.png">
 
 ## 如何解析请求路径中的查询字符串
 

@@ -89,7 +89,7 @@ rel：定义当前文档与被链接文档之间的关系，在这里需要指�
 
 使用HTML时，需要遵从一定的规范。CSS亦如此，要想熟练地使用CSS对网页进行修饰，首先需要了解CSS样式规则，具体格式如下：                                          
 
-<img src="media/gz.png" />
+<img src="./media/gz.png" />
 
 在上面的样式规则中:
 
@@ -143,7 +143,7 @@ rel：定义当前文档与被链接文档之间的关系，在这里需要指�
 
 我们可以给标签指定多个类名，从而达到更多的选择目的。
 
-<img src="media/lei.png" />
+<img src="./media/lei.png" />
 
 > 注意：
 >
@@ -206,7 +206,7 @@ id选择器     好比人的身份证号码，  全中国是唯一的， 不得�
 
 font-size属性用于设置字号，该属性的值可以使用相对长度单位，也可以使用绝对长度单位。其中，相对长度单位比较常用，推荐使用像素单位px，绝对长度单位使用较少。具体如下：
 
-<img src="media/dd.png" />
+<img src="./media/dd.png" />
 
 ### font-family:字体名称
 
@@ -236,7 +236,7 @@ p{ font-family:"微软雅黑";}
 方案二： 在 CSS 直接使用 Unicode 编码来写字体名称可以避免这些错误。使用 Unicode 写中文字体名称，浏览器是可以正确的解析的。
 font-family: "\5FAE\8F6F\96C5\9ED1"，表示设置字体为“微软雅黑”。
 
-<img src="media/shs.png" />
+<img src="./media/shs.png" />
 
 可以通过escape()  来测试属于什么字体。
 
@@ -373,7 +373,7 @@ text-decoration   通常我们用于给链接修改装饰效果
 
 交集选择器由两个选择器构成，其中第一个为标签选择器，第二个为class选择器，两个选择器之间不能有空格，如h3.special。
 
-<img src="media/jiao.png" />
+<img src="./media/jiao.png" />
 
 **记忆技巧：**
 
@@ -389,7 +389,7 @@ text-decoration   通常我们用于给链接修改装饰效果
 
 并集选择器（CSS选择器分组）是各个选择器通过<strong style="color:#f00">逗号</strong>连接而成的，任何形式的选择器（包括标签选择器、class类选择器id选择器等），都可以作为并集选择器的一部分。如果某些选择器定义的样式完全相同，或部分相同，就可以利用并集选择器为它们定义相同的CSS样式。
 
-<img src="media/bing.png" />
+<img src="./media/bing.png" />
 
 记忆技巧：
 
@@ -403,7 +403,7 @@ text-decoration   通常我们用于给链接修改装饰效果
 
 后代选择器又称为包含选择器，用来选择元素或元素组的后代，其写法就是把外层标签写在前面，内层标签写在后面，中间用空格分隔。当标签发生嵌套时，内层标签就成为外层标签的后代。
 
-<img src="media/hou.png" />
+<img src="./media/hou.png" />
 
 子孙后代都可以这么选择。 或者说，它能选择任何包含在内 的标签。 
 
@@ -411,7 +411,7 @@ text-decoration   通常我们用于给链接修改装饰效果
 
 子元素选择器只能选择作为某元素子元素的元素。其写法就是把父级标签写在前面，子级标签写在后面，中间跟一个 &gt; 进行连接，注意，符号左右两侧各保留一个空格。
 
-<img src="media/zi1.png" />
+<img src="./media/zi1.png" />
 
 白话：  这里的子 指的是 亲儿子  不包含孙子 重孙子之类。
 
@@ -636,9 +636,9 @@ font-size: 12px;
 
 ## 行高的测量
 
-<img src="media/line1.png"  />
+<img src="./media/line1.png"  />
 
-<img src="media/line2.png"  />
+<img src="./media/line2.png"  />
 
 行高我们利用最多的一个地方是： 可以让一行文本在盒子中垂直居中对齐。
 
@@ -648,7 +648,7 @@ font-size: 12px;
 
 
 
-<img src="media/1.png"  />
+<img src="./media/1.png"  />
 
 上距离和下距离总是相等的，因此文字看上去是垂直居中的。
 
@@ -850,11 +850,11 @@ repeat-x : 　背景图像在横向上平铺
 
 repeat-y : 　背景图像在纵向平铺 
 
-<img src="media/y.png" width="600"/>
+<img src="./media/y.png" width="600"/>
 
 设置背景图片时，默认把图片在水平和垂直方向平铺以铺满整个元素。
 
-<img src="media/q.png" width="600"/>
+<img src="./media/q.png" width="600"/>
 
 ### background-position
 
@@ -934,7 +934,7 @@ CSS三大模块：  盒子模型 、 浮动 、 定位，其余的都是细节�
 
 
 
-<img src="media/t1.png" />
+<img src="./media/t1.png" />
 
 
 
@@ -944,11 +944,11 @@ CSS 其实没有太多逻辑可言 ， 类似我们小时候玩的积木,我们�
 
 这里略过 老旧的ie盒子模型（IE6以下）
 
-<img src="media/box.png"  width="700" />
+<img src="./media/box.png"  width="700" />
 
 所有的文档元素（标签）都会生成一个矩形框，我们成为元素框（element box），它描述了一个文档元素再网页布局汇总所占的位置大小。因此，<strong style="color: #f00;">每个盒子除了有自己大小和位置外，还影响着其他盒子的大小和位置。</strong>
 
-<img src="media/boxs.png"  width="700" />
+<img src="./media/boxs.png"  width="700" />
 
 ### 盒子边框（border）
 
@@ -1115,7 +1115,7 @@ aside {
 
 当上下相邻的两个块元素相遇时，如果上面的元素有下外边距margin-bottom，下面的元素有上外边距margin-top，则他们之间的垂直间距不是margin-bottom与margin-top之和，而是两者中的较大者。这种现象被称为相邻块元素垂直外边距的合并（也称外边距塌陷）。
 
-<img src="media/www.png" />
+<img src="./media/www.png" />
 
 解决方案：  避免就好了。
 
@@ -1123,7 +1123,7 @@ aside {
 
 对于两个嵌套关系的块元素，如果父元素没有上内边距及边框，则父元素的上外边距会与子元素的上外边距发生合并，合并后的外边距为两者中的较大者，即使父元素的上外边距为0，也会发生合并。
 
-<img src="media/n.png" />
+<img src="./media/n.png" />
 
 解决方案：
 
@@ -1224,11 +1224,11 @@ html语言当中另外一个相当重要的概念----------标准流！或者普
 
 浮动最早是用来控制图片，以便达到其他元素（特别是文字）实现“环绕”图片的效果。
 
-<img src="media/l.png"/>
+<img src="./media/l.png"/>
 
 后来，我们发现浮动有个很有意思的事情：就是让任何盒子可以一行排列,因此我们就慢慢的偏离主题，用浮动的特性来布局了。（CSS3已经我们真正意义上的网页布局，具体CSS3我们会详细解释）
 
-<img src="media/d.png" />
+<img src="./media/d.png" />
 
 ### 什么是浮动
 
@@ -1250,7 +1250,7 @@ html语言当中另外一个相当重要的概念----------标准流！或者普
 
 1. 浮动首先创建包含块的概念（包裹）。就是说， 浮动的元素总是找理它最近的父级元素对齐。但是不会超出内边距的范围。 
 
-   <img src="media/one.jpg" width="500" /> 
+   <img src="./media/one.jpg" width="500" /> 
 
 
 
@@ -1290,17 +1290,17 @@ float      浮 漏 特
 
 一列固定宽度且居中
 
-<img src="media/yl.jpg"/>
+<img src="./media/yl.jpg"/>
 
 ### 两列左窄右宽型
 
-<img src="media/ll.jpg"/>
+<img src="./media/ll.jpg"/>
 
 比如小米    <a href="http://www.mi.com" target="_blank"> 小米官网 </a>
 
 ### 通栏平均分布型
 
-<img src="media/tl.jpg" width="600" />
+<img src="./media/tl.jpg" width="600" />
 
 比如锤子    <a href="http://www.smartisan.com/" target="_blank"> 锤子官网 </a>
 
@@ -1318,9 +1318,9 @@ float      浮 漏 特
 
 清除浮动主要为了解决父级元素因为子级浮动引起内部高度为0 的问题。
 
-<img src="media/n.jpg" />
+<img src="./media/n.jpg" />
 
-<img src="media/no.jpg" />
+<img src="./media/no.jpg" />
 
 ### 清除浮动的方法
 
@@ -1376,7 +1376,7 @@ float      浮 漏 特
 
 代表网站： 百度、淘宝网、网易等
 
-<img src="media/163.png"/>
+<img src="./media/163.png"/>
 
 注意： content:""   尽量不带点
 
@@ -1449,7 +1449,7 @@ position属性的常用值
 
 对元素设置相对定位后，可以通过边偏移属性改变元素的位置，但是它在文档流中的位置仍然保留。如下图所示，即是一个相对定位的效果展示：
 
-<img src="media/r.png"  />
+<img src="./media/r.png"  />
 
 注意：   
 
@@ -1474,13 +1474,13 @@ position属性的常用值
 
 若所有父元素都没有定位，以浏览器当前屏幕为准对齐(document文档)。
 
-<img src="media/ab.png" />
+<img src="./media/ab.png" />
 
 #### 父级有定位
 
 绝对定位是将元素依据最近的已经定位（绝对、固定或相对定位）的父元素（祖先）进行定位。 
 
-<img src="media/ab1.png" />
+<img src="./media/ab1.png" />
 
 
 
@@ -1494,7 +1494,7 @@ position属性的常用值
 
 但是，在我们网页布局的时候， 最常说的 子绝父相是怎么来的呢？ 请看如下图：
 
-<img src="media/zi.png"/>
+<img src="./media/zi.png"/>
 
 
 
@@ -1521,7 +1521,7 @@ ie6等低版本浏览器不支持固定定位。
 
 当对多个元素同时设置定位时，定位元素之间有可能会发生重叠。
 
-<img src="media/zzz.png" />
+<img src="./media/zzz.png" />
 
 在CSS中，要想调整重叠定位元素的堆叠顺序，可以对定位元素应用z-index层叠等级属性，其取值可为正整数、负整数和0。
 
@@ -1649,7 +1649,7 @@ outline : outline-color ||outline-style || outline-width
 
 vertical-align 垂直对齐， 这个看上去很美好的一个属性， 实际有着不可捉摸的脾气。
 
-<img src="media/xian.jpg" />
+<img src="./media/xian.jpg" />
 
 ```css
 vertical-align : baseline |top |middle |bottom 
@@ -1672,7 +1672,7 @@ vertical-align 不影响块级元素中的内容对齐，它只针对于 行内�
 解决的方法就是：  
 
 1. 给img vertical-align:middle | top等等。  让图片不要和基线对齐。
-2. <img src="media/1633.png"/>
+2. <img src="./media/1633.png"/>
 3. 给img 添加 display：block; 转换为块级元素就不会存在问题了。
 
 ## 溢出的文字隐藏
@@ -1702,7 +1702,7 @@ ellipsis :当对象内文本溢出时显示省略标记（...）
 
 ### 精灵技术产生的背景
 
-<img src="media/sss.png" />
+<img src="./media/sss.png" />
 
 图所示为网页的请求原理图，当用户访问一个网站时，需要向服务器发送请求，网页上的每张图像都要经过一次请求才能展现给用户。
 
@@ -1712,7 +1712,7 @@ ellipsis :当对象内文本溢出时显示省略标记（...）
 
 简单地说，CSS精灵是一种处理网页背景图像的方式。它将一个页面涉及到的所有零星背景图像都集中到一张大图中去，然后将大图应用于网页，这样，当用户访问该页面时，只需向服务发送一次请求，网页中的背景图像即可全部展示出来。通常情况下，这个由很多小的背景图像合成的大图被称为精灵图（雪碧图），如下图所示为京东网站中的一个精灵图。
 
-<img src="media/jds.png"/>
+<img src="./media/jds.png"/>
 
 #### 精灵技术的使用
 
@@ -1735,13 +1735,13 @@ CSS 精灵其实是将网页中的一些背景图像整合到一张大图中（�
 
 先来体会下现实中的滑动门,或者你可以叫做推拉门：
 
-<img src="media/h.gif" />
+<img src="./media/h.gif" />
 
 ### 滑动门出现的背景
 
 制作网页时，为了美观，常常需要为网页元素设置特殊形状的背景，比如微信导航栏，有凸起和凹下去的感觉，最大的问题是里面的字数不一样多
 
-<img src="media/wxx.jpg" />
+<img src="./media/wxx.jpg" />
 
 为了使各种特殊形状的背景能够自适应元素中文本内容的多少，出现了CSS滑动门技术。它从新的角度构建页面，使各种特殊形状的背景能够自由拉伸滑动，以适应元素内部的文本内容，可用性更强。 最常见于各种导航栏的滑动门。
 
@@ -1809,13 +1809,13 @@ woff字体是Web字体中最佳格式，他是一个开放的TrueType/OpenType�
 
 总体来说，字体图标按照如下流程：
 
-<img src="media/fontt.png" />
+<img src="./media/fontt.png" />
 
 #### 设计字体图标
 
 假如图标是我们公司单独设计，那就需要第一步了，这个属于UI设计人员的工作， 他们在 illustrator 或 Sketch 这类矢量图形软件里创建 icon图标， 比如下图：
 
-<img src="media/03.jpg" />
+<img src="./media/03.jpg" />
 
 之后保存为svg格式，然后给我们前端人员就好了。 
 
@@ -1873,9 +1873,9 @@ http://www.iconfont.cn/
 
 
 
-<img src="media/fontt1.png" />
+<img src="./media/fontt1.png" />
 
-<img src="media/fontt2.png" />
+<img src="./media/fontt2.png" />
 
 #### 字体引入到HTML
 
@@ -1924,7 +1924,7 @@ http://www.iconfont.cn/
 
    把压缩包里面的selection.json 从新上传，然后，选中自己想要新的图标，从新下载压缩包，替换原来文件即可。
 
-   <img src="media/fontt5.png" />
+   <img src="./media/fontt5.png" />
 
 ## BFC(块级格式化上下文)
 
@@ -1938,7 +1938,7 @@ BFC(Block formatting context)
 
 分为 块级元素   行内元素  行内块元素 ，其实，它还有很多其他显示模式。
 
-<img src="media/dis.png"/>
+<img src="./media/dis.png"/>
 
 ### 那些元素会具有BFC的条件
 
@@ -1952,7 +1952,7 @@ display 属性为 block, list-item, table 的元素，会产生BFC.
 
 这个BFC 有着具体的布局特性： 
 
-<img src="media/box.gif" />
+<img src="./media/box.gif" />
 
 有宽度和高度 ， 有 外边距margin  有内边距padding 有边框 border。
 
@@ -2007,7 +2007,7 @@ BFC能用来做什么？
 
 ```
 
-<img src="media/fu.jpg" />
+<img src="./media/fu.jpg" />
 (2) 解决外边距合并问题
 
 外边距合并的问题。
@@ -2021,7 +2021,7 @@ BFC能用来做什么？
 
 属于同一个BFC的两个相邻盒子的margin会发生重叠，那么我们创建不属于同一个BFC，就不会发生margin重叠了。
 
-<img src="media/ma.png" />
+<img src="./media/ma.png" />
 
 (3) 制作右侧自适应的盒子问题
 
@@ -2029,7 +2029,7 @@ BFC能用来做什么？
 
 普通流体元素BFC后，为了和浮动元素不产生任何交集，顺着浮动边缘形成自己的封闭上下文
 
-<img src="media/you.png" />
+<img src="./media/you.png" />
 
 ### BFC 总结
 
@@ -2045,7 +2045,7 @@ BFC就是页面上的一个隔离的独立容器，容器里面的子元素不�
 
  类似 爬山，由低出往高处爬
 
-  <img src="media/pa.png" width="400" />
+  <img src="./media/pa.png" width="400" />
 
   <b>优雅降级 graceful degradation：</b>
 
@@ -2053,7 +2053,7 @@ BFC就是页面上的一个隔离的独立容器，容器里面的子元素不�
 
 类似蹦极，由高处往低处下落
 
-<img src="media/xia.jpg" />
+<img src="./media/xia.jpg" />
 
 区别：渐进增强是向上兼容，优雅降级是向下兼容。
 
