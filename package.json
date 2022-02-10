@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@vuepress/plugin-register-components": "^2.0.0-beta.26",
-    "bunny-ui": "^0.1.6",
+    "bunny-ui": "^0.1.7",
     "element-plus": "^1.1.0-beta.16",
     "element-ui": "^2.15.6",
     "highlight.js": "^11.2.0",
