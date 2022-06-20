@@ -34,7 +34,7 @@
     "element-plus": "^2.2.6",
     "highlight.js": "^11.2.0",
     "markdown-it-disable-url-encode": "^1.0.1",
-    "node-sass": "^6.0.1",
+    "node-sass": "^7.0.0",
     "sass-loader": "^12.1.0"
   }
 }
