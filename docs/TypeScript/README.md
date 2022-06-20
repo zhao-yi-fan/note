@@ -28,3 +28,27 @@ let zhufeng:IZhufeng = {
 
 
 ```
+
+- 函数
+
+```javascript
+// 函数主要关系返回值 和 参数
+function sum1(a: string, b: string): string {
+  return a + b
+}
+sum1("a", "b")
+
+// 声明一个类型 可以做或操作
+type Sum = ((aa: number, bb: number) => number) | string
+
+// 这种声明方式不可以或操作 但是可以继承
+interface Sum1 {
+  (a: number, b: number): number
+}
+
+// type仅仅是一个别名 一般在定义联合类型，定义临时变量时可以用
+let sum2: Sum = (a: number, b: number): number => a + b
+
+
+
+```
