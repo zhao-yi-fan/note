@@ -1,16 +1,17 @@
 
 const { path } = require('@vuepress/utils')
-const { defaultTheme } = require('vuepress')
-
-module.exports = {
+const { defineUserConfig, defaultTheme } = require('vuepress')
+const { registerComponentsPlugin } = require('@vuepress/plugin-register-components')
+const { searchPlugin } = require('@vuepress/plugin-search')
+module.exports = defineUserConfig({
   title: "zhaoyifan Docs",
   description: 'zhaoyifan zhaoyifan Docs',
   base: '/note/',
   markdown: {
-    extendMarkdown: md => {
-      // 该扩展在图片自动加 ./  还有中文图片的查找
-      md.use(require("markdown-it-disable-url-encode"));
-    },
+    // extendsMarkdown: md => {
+    //   // 该扩展在图片自动加 ./  还有中文图片的查找
+    //   md.use(require("markdown-it-disable-url-encode"));
+    // },
     anchor: {
       permalink: true,
     }
@@ -24,30 +25,24 @@ module.exports = {
     // displayAllHeaders: true // 默认值：false
   }),
   plugins: [
-    [
-      '@vuepress/plugin-search', {
-        locales: {
-          '/': {
-            placeholder: 'Search',
-          },
-          '/zh/': {
-            placeholder: '搜索',
-          },
+    searchPlugin({
+      locales: {
+        '/': {
+          placeholder: 'Search',
+        },
+        '/zh/': {
+          placeholder: '搜索',
         },
       },
-    ],
-    [
-      '@vuepress/plugin-register-components',
-      {
-        componentsDir: path.resolve(__dirname, './components')
-      }
-    ]
+    }),
+    registerComponentsPlugin({
+      componentsDir: path.resolve(__dirname, './components')
+    })
   ],
   // 在使用 vuepress-vite 包的时候，你可以忽略这个字段，因为 Vite 是默认打包工具
-  // bundler: '@vuepress/vite',
   // Vite 打包工具的配置项
   bundlerConfig: {
     // 查看下方
   },
 
-}
+})
