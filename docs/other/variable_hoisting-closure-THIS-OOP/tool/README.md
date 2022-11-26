@@ -2,7 +2,7 @@
 
 # 工欲善其事必先利其器
 
-## NODE安装
+## node安装
 官网:https://nodejs.org/zh-cn/ 
 - 推荐使用LTS稳定版本，把安装包下载下来后，直接一路下一步安装即可（最好把它安装到C盘 [默认盘符] ，记好安装目录）
 
@@ -18,7 +18,7 @@
 ![Alt text](./media/1544240649199.png)
 
 
-## NODE基础概念
+## node基础概念
 - node并不是一门语言，它是一个工具或者环境
 
 - 特点: 
@@ -330,7 +330,7 @@ yarn-error.log*
 .idea
 ```
 
-## GIT工作原理及操作
+## git工作原理及操作
 
 当我们在本地创建一个git仓库后，我们可以基于这个仓库管理我们的代码
 
@@ -474,7 +474,7 @@ yarn-error.log*
 
 > 原始做法：
 > git init 
-> git remote add origin [GIT仓库地址]
+> git remote add origin [git仓库地址]
 
 > 简单做法：
 > git clone [远程仓库地址]   \[克隆后的名字：可以不设置，默认是仓库名]

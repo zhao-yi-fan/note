@@ -824,7 +824,7 @@ Is this OK? (yes) yes
   - 加载 require
   - 导出 
 
-### CommonJS模块规范
+### commonjs模块规范
 
 在 Node 中的 JavaScript还有一个很重要的概念: 模块系统.
 

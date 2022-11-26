@@ -1,40 +1,39 @@
 module.exports = {
-  '/zhufengweb/': [
+  '/other/': [
     {
-      text: 'zhufengweb',
-      collapsable: true,
+      text: 'other',
+      collapsible: true,
       sidebarDepth: 1,
       children: [
-        '/zhufengweb/AJAX/README.md',
-        '/zhufengweb/AXIOS/README.md',
-        '/zhufengweb/DOM_Box_Model-JQ/DOM_Box_Model/README.md',
-        '/zhufengweb/DOM_Box_Model-JQ/jquery/README.md',
-        '/zhufengweb/DOM_Box_Model-JQ/waterfall/README.md',
+        '/other/AJAX/README.md',
+        '/other/AXIOS/README.md',
+        '/other/DOM_Box_Model-JQ/DOM_Box_Model/README.md',
+        '/other/DOM_Box_Model-JQ/jquery/README.md',
+        '/other/DOM_Box_Model-JQ/waterfall/README.md',
 
-        '/zhufengweb/event_binding-publish_subscribe-event-event_delegation/event_binding-publish_subscribe/README.md',
-        '/zhufengweb/event_binding-publish_subscribe-event-event_delegation/event-event_delegation/README.md',
+        '/other/event_binding-publish_subscribe-event-event_delegation/event_binding-publish_subscribe/README.md',
+        '/other/event_binding-publish_subscribe-event-event_delegation/event-event_delegation/README.md',
 
-        '/zhufengweb/prototype-THIS-shop_sort-regex/less/README.md',
-        '/zhufengweb/prototype-THIS-shop_sort-regex/prototype-THIS/README.md',
-        '/zhufengweb/prototype-THIS-shop_sort-regex/shop_sort/README.md',
+        '/other/prototype-THIS-shop_sort-regex/less/README.md',
+        '/other/prototype-THIS-shop_sort-regex/prototype-THIS/README.md',
+        '/other/prototype-THIS-shop_sort-regex/shop_sort/README.md',
 
-        '/zhufengweb/variable_hoisting-closure-THIS-OOP/variable_hoisting-closure/README.md',
-        '/zhufengweb/variable_hoisting-closure-THIS-OOP/oop/README.md',
-        '/zhufengweb/variable_hoisting-closure-THIS-OOP/tool/README.md',
-        '/zhufengweb/variable_hoisting-closure-THIS-OOP/summary/README.md',
+        '/other/variable_hoisting-closure-THIS-OOP/variable_hoisting-closure/README.md',
+        '/other/variable_hoisting-closure-THIS-OOP/oop/README.md',
+        '/other/variable_hoisting-closure-THIS-OOP/tool/README.md',
+        '/other/variable_hoisting-closure-THIS-OOP/summary/README.md',
 
-        '/zhufengweb/webapp/README.md',
+        '/other/webapp/README.md',
 
-        '/zhufengweb/NODE-PROMISE/NODE-promise/README.md',
-        '/zhufengweb/NODE-PROMISE/promiseA+/README.md',
-        '/zhufengweb/NODE-PROMISE/storage/README.md',
+        
+        '/other/NODE-PROMISE/storage/README.md',
       ]
     },
   ],
   '/bunny-ui-docs/': [
     {
       text: 'bunny-ui-组件文档',
-      collapsable: true,
+      collapsible: true,
       sidebarDepth: 1,
       children: [
         '/bunny-ui-docs/button/README.md',
@@ -44,22 +43,35 @@ module.exports = {
   '/web/': [
     {
       text: 'web',
-      collapsable: true,
+      collapsible: true,
       sidebarDepth: 1,
       children: [
         '/web/css/README.md',
         '/web/html/README.md',
         '/web/javascript/README.md',
         '/web/jQuery/README.md',
-        '/web/node.js/README.md',
-        '/web/php/README.md',
+      ]
+    },
+  ],
+  '/nodejs/': [
+    {
+      text: 'nodejs',
+      collapsible: true,
+      sidebarDepth: 1,
+      children: [
+        '/nodejs/php/README.md',
+        '/nodejs/node.js/README.md',
+        '/nodejs/NODE-promise/README.md',
+        '/nodejs/promiseA+/README.md',
+        '/nodejs/express/README.md',
+        '/nodejs/Koa/README.md',
       ]
     },
   ],
   '/': [
     {
       text: 'note',
-      collapsable: false,
+      collapsible: false,
       sidebarDepth: 1,
       children: [
         '/git/README.md',
@@ -72,10 +84,8 @@ module.exports = {
         '/TypeScript/README.md',
         '/nginx/README.md',
         '/mongoDB/README.md',
-        '/Koa/README.md',
         '/javascript/README.md',
         '/flutter/README.md',
-        '/express/README.md',
       ],
     },
   ],

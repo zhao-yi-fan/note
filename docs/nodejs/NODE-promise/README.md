@@ -1,38 +1,38 @@
-# NODE
+# node
 
-## NODE基础概念
+## node基础概念
 
-- 什么是NODE?
+- 什么是node?
 > 基于V8引擎(谷歌浏览器的引擎)渲染JS的工具或者环境
->   	安装NODE
->   	把JS代码放到NODE环境中执行
+>   	安装node
+>   	把JS代码放到node环境中执行
 
-- 安装NODE
+- 安装node
 > https://nodejs.org/en/
 > node安装完成后
 >   	当前电脑上自动安装了npm(Node Package Manager): 一个JS模块(所有封装好可以供他人调取使用的都可以称之为模块或者包)管理的工具, 基于npm可以安装下载JS模块
 >   	它会生成一个node执行的命令(可以在DOS窗口或者终端命令中执行): node xxx.js
-> 如果不成功, 可以找相同电脑配置的人员, 把安装成功的NODE文件夹拷贝到自己的电脑上, 通过配置环境变量, 来实现NODE安装
+> 如果不成功, 可以找相同电脑配置的人员, 把安装成功的node文件夹拷贝到自己的电脑上, 通过配置环境变量, 来实现node安装
 
-- 如何在NODE中渲染和解析JS
+- 如何在node中渲染和解析JS
 
 > REPL模式(Read-Evaluate-Print-Loop, 输入-求值-输出-循环)
 >
 > ![1548135322595](./media/1548135322595.png)
 >
-> 直接基于NODE来执行JS文件
+> 直接基于node来执行JS文件
 > ​	1.在命令窗口中执行(DOS窗口 & 终端窗口)
 > ​	2.WebStorm中的Terminal中也可以执行node命令
 > ​	3.直接在WebStorm中执行(右键=> Run xxx.js), 这种方式可能会产生缓存(尤其是文件的目录改动后)
 
-## NODE的一些特点
+## node的一些特点
 
-- 之所以把NODE作为后台编程语言, 是因为:
+- 之所以把node作为后台编程语言, 是因为:
 
-> 1. 我们可以把NODE安装在服务器上
-> 2. 我们可以把编写的JS代码放到服务器上, 通过NODE来执行它(我们可以使用JS来操作服务器, 换句话说, 使用JS来实现服务器端的一些功能操作 => 其实说NODE是后台语言, 想要表达的是JS是后台语言"JS是一门全栈编程语言")
+> 1. 我们可以把node安装在服务器上
+> 2. 我们可以把编写的JS代码放到服务器上, 通过node来执行它(我们可以使用JS来操作服务器, 换句话说, 使用JS来实现服务器端的一些功能操作 => 其实说node是后台语言, 想要表达的是JS是后台语言"JS是一门全栈编程语言")
 
-- NODE做后台的优势和特点
+- node做后台的优势和特点
 
 > 传统的后台语言: JAVA/Python/PHP/C#(.NET)...
 > 1. 单线程的
@@ -40,27 +40,27 @@
 > 3. 异步无阻塞的I/O操作: I/O(INPUT/OUTPUT) 对文件的读写
 > 4. event-driven事件驱动, 类似于发布订阅或者回调函数
 
-- 在WebStorm中开启NODE内置方法的代码提示
+- 在WebStorm中开启node内置方法的代码提示
 
 > File-> settings -> languages & frameworks -> node.js and npm -> 开启代码提示只要点击"Enable"按钮即可(Disable是取消代码提示)
 
 ```javascript
 JS运行在客户端浏览器中=>"前端"
     浏览器给JS提供了很多全局的属性和方法, 例如: window.xxx(setInterval, setTimeout, eval, alert, JSON...)
-JS运行在服务器端的NODE中=>"后台"
-    NODE也给JS提供很多的内置属性和方法, 例如: http, fs, url, path...等对象中都提供很多API供JS操作
+JS运行在服务器端的node中=>"后台"
+    node也给JS提供很多的内置属性和方法, 例如: http, fs, url, path...等对象中都提供很多API供JS操作
 ```
 - JS在前后端I/O操作的情况
 
 > 前端(浏览器运行JS)是限制I/O操作的
 >   	input type='file' 这种算是I/O操作, 但是需要用户手动选择(而且还仅仅是一个读取不是写入)
-> NODE中运行JS时不需要限制I/O操作的
+> node中运行JS时不需要限制I/O操作的
 
 ## npm的常规应用
 
 - npm的应用
 
-> 目前"工程化/自动化"开发(不一定是写后台), 都是基于NODE环境, 基于npm管理模块, 基于WEBPACK实现模块之间的依赖打包, 部署上线等
+> 目前"工程化/自动化"开发(不一定是写后台), 都是基于node环境, 基于npm管理模块, 基于WEBPACK实现模块之间的依赖打包, 部署上线等
 > 
 - npm常规操作
 ```
@@ -137,7 +137,7 @@ bower install xxx
 > 版本号前面的^是以什么开头, 就是正则表达式
 ```
 {
-    "name": "10.NODEPROMISE",   // 模块名称
+    "name": "10.nodePROMISE",   // 模块名称
     "version": "1.0.0",         // 版本号
     "description": "",          // 模块的描述
     "main": "index.js",         // 当前模块的主入口文件
@@ -168,7 +168,7 @@ bower install xxx
 > [安装在全局的特点]
 > 1. 所有的项目都可以使用这个模块
 >    	容易导致版本冲突
->       	安装在全局的模块, 不能基于CommonJS模块规范调取使用(也就是不能在JS中通过require调取使用)
+>       	安装在全局的模块, 不能基于commonjs模块规范调取使用(也就是不能在JS中通过require调取使用)
 >
 > [安装在本地的特点]
 >
@@ -203,30 +203,30 @@ bower install xxx
 
 ![1548484575018](./media/1548484575018.png)
 
-## CommonJS规范
-- NODE入门
+## commonjs规范
+- node入门
 
-> NODE本身是基于CommonJS模块规范设计的, 所以模块是NODE的组成
->   	内置模块: NODE天生提供给JS调取使用的
+> node本身是基于commonjs模块规范设计的, 所以模块是node的组成
+>   	内置模块: node天生提供给JS调取使用的
 >   	第三方模块: 别人写好的, 我们可以基于npm安装使用
 >   	自定义模块: 自己创建一些模块
 
-- CommonJS模块化设计的思想(AMD/CMD/ES6 MODULE都是模块设计思想)
+- commonjs模块化设计的思想(AMD/CMD/ES6 MODULE都是模块设计思想)
 
-> 1. CommonJS规定, 每一个JS都是一个单独的模块(模块是私有的: 里面设计的值和变量以及函数等都是私有的, 和其它的JS文件中的内容是不冲突的)
+> 1. commonjs规定, 每一个JS都是一个单独的模块(模块是私有的: 里面设计的值和变量以及函数等都是私有的, 和其它的JS文件中的内容是不冲突的)
 >
-> 2. CommonJS中可以允许模块中的方法互相的调用
+> 2. commonjs中可以允许模块中的方法互相的调用
 >
 > B模块中想要调取A模块中的方法
 > A导出 B导入
 >
 > **导出**
-> CommonJS给每一个模块(每个JS)中都设置了内置的变量/属性/方法
+> commonjs给每一个模块(每个JS)中都设置了内置的变量/属性/方法
 > ​	module: 代表当前这个模块[object]
 > ​	module.exports: 模块的这个"属性"是用来导出当前模块的属性和方法的 [object]
 > ​	exports: 是内置的一个"变量", 也是用来导出当前模块属性方法的, 虽然和module.exports不是一个东西, 但是对应的值是同一个(module.exports=exports 值都是对象)
 > **导入**
-> require: CommonJS提供的内置变量, 用来导入模块的(其实导入的就是module.exports暴露出来的东西) 导入的值也是[object]类型的
+> require: commonjs提供的内置变量, 用来导入模块的(其实导入的就是module.exports暴露出来的东西) 导入的值也是[object]类型的
 
 - module.exports和exports重定向的一些问题
 
@@ -316,7 +316,7 @@ console.log(temp1.fn2(10))
 
 ![1548564043920](./media/1548564043920.png)
 
-- CommonJS特点
+- commonjs特点
 
 > 1. 所有代码都运行在模块作用域, 不会污染全局作用域(每一个模块都是私有的, 包括里面所有的东西也都是私有的, 不会和其他模块产生干扰)
 
@@ -345,7 +345,7 @@ console.log(temp1.fn(10));
 
 ![1548563414734](./media/1548563414734.png)
 
-> 3. 模块加载的顺序, 按照其在代码汇总出现的顺序. CommonJS规范加载模块是同步的, 也就是说, 只有加载完成, 才能执行后面的操作.
+> 3. 模块加载的顺序, 按照其在代码汇总出现的顺序. commonjs规范加载模块是同步的, 也就是说, 只有加载完成, 才能执行后面的操作.
 
 ```javascript
 // temp1.js文件
@@ -375,7 +375,7 @@ console.log(3);
 
 ![1548563357165](./media/1548563357165.png)
 
-- CommonJS规范和单例模式差不多
+- commonjs规范和单例模式差不多
 
 ```javascript
 var A = (function () {
@@ -399,7 +399,7 @@ var B = (function () {
 B.init();
 ```
 
-## CommonJS练习
+## commonjs练习
 - 案例: A/B/C三个模块
 
 > A中有sum方法: 实现任意数求和 
@@ -482,7 +482,7 @@ console.log(B.avg(12,23,34,45,56,67,78,89))
 > `_filename`: 相对于 _dirname来讲, 多了模块名称, 例如: E:\201802LESSON\WEEK9\0609DAY1\C.js
 
 ## FS内置模块以及PROMISE文件操作库的封装
-- NODE中的内置模块
+- node中的内置模块
 > http://nodejs.cn/api/
 ### fs内置模块: 实现I/O操作
 
@@ -1001,7 +1001,7 @@ let server = http.creatServer();//=>创建WEB服务
 server.listen();//=>监听端口
 ```
 
-> 注意: 基于NODE创建后台程序, 我们一般都创建一个server模块, 在模块中实现创建WEB服务, 和对于请求的处理(并且我们一般都会把server模块放到当前项目的根目录下)
+> 注意: 基于node创建后台程序, 我们一般都创建一个server模块, 在模块中实现创建WEB服务, 和对于请求的处理(并且我们一般都会把server模块放到当前项目的根目录下)
 >
 > 初始化之后需要改package.json文件
 >
@@ -1209,7 +1209,7 @@ res.end(JSON.stringify({ name: '哈哈' }));
 > static
 >  都是服务器端需要返回给客户端, 由客户端浏览器渲染和解析的(前端项目:包括页面,css,js,图片等)
 > server.js
->  都是需要在服务器端基于NODE执行的(后端项目: 一般只有JS)
+>  都是需要在服务器端基于node执行的(后端项目: 一般只有JS)
 >
 >  我们创建的WEB服务需要处理两类请求:
 >            1. 静态资源文件的请求处理: 想要文件
@@ -1331,7 +1331,7 @@ let dirname = path.resolve();
 ## process的一点知识
 
 ```javascript
-// NODE中独有的异步操作API
+// node中独有的异步操作API
 // 它也是定时器，但是它不设置时间，但是它也是异步编程（宏任务），它会在所有其他定时器之前执行
 // 可以理解setImmediate相当于0毫秒
 setTimeout(() => {

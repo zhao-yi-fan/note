@@ -1316,7 +1316,7 @@ document.parentnode => undefined
   三大种: 
   单例: 把实现当前模块的方法和属性放在同一个命名空间下
   模块化思想  
-  (AMD  CMD  CommonJS)
+  (AMD  CMD  commonjs)
 
 - JavaScript如何实现面向对象中的继承？ （百度移动）
 > 答: 原型继承  call继承  混合继承 冒充对象继承  寄生组合式继承  class基于extends继承(ES6)  周氏继承法
