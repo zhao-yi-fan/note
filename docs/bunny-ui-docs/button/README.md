@@ -14,7 +14,8 @@
 
 
 <script>
-import {Message} from 'bunny-ui'
+import pkg from 'bunny-ui'
+const {Message} = pkg
 export default {
   methods: {
     addMessage(){

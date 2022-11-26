@@ -1,9 +1,11 @@
 
-const { path } = require('@vuepress/utils')
-const { defineUserConfig, defaultTheme } = require('vuepress')
-const { registerComponentsPlugin } = require('@vuepress/plugin-register-components')
-const { searchPlugin } = require('@vuepress/plugin-search')
-module.exports = defineUserConfig({
+import { getDirname, path } from '@vuepress/utils'
+import { defaultTheme } from '@vuepress/theme-default'
+import { registerComponentsPlugin } from '@vuepress/plugin-register-components'
+import { searchPlugin } from '@vuepress/plugin-search'
+
+const __dirname = getDirname(import.meta.url)
+export default {
   title: "zhaoyifan Docs",
   description: 'zhaoyifan zhaoyifan Docs',
   base: '/note/',
@@ -45,4 +47,4 @@ module.exports = defineUserConfig({
     // 查看下方
   },
 
-})
+}
