@@ -6,8 +6,8 @@ import { searchPlugin } from '@vuepress/plugin-search'
 
 const __dirname = getDirname(import.meta.url)
 export default {
-  title: "zhaoyifan Docs",
-  description: 'zhaoyifan zhaoyifan Docs',
+  title: "zhaoyifan Note",
+  description: 'zhaoyifan zhaoyifan Note',
   base: '/note/',
   markdown: {
     // extendsMarkdown: md => {

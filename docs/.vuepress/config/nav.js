@@ -2,14 +2,21 @@ module.exports = [
   {
     text: 'Node.js',
     children: [
-
+      '/web/php/README.md',
+      '/web/node.js/README.md',
+      '/zhufengweb/NODE-PROMISE/NODE-promise/README.md',
+      '/express/README.md',
+      '/Koa/README.md',
 
     ],
   },
   {
     text: '前端工程化',
     children: [
-
+      '/webpack/README.md',
+      '/network-protocol/README.md',
+      '/TypeScript/README.md',
+      '/zhufengweb/NODE-PROMISE/storage/README.md',
 
     ],
   },
@@ -19,13 +26,13 @@ module.exports = [
       {
         text: 'react',
         children: [
-          
+
         ]
       },
       {
         text: 'redux',
         children: [
-          
+
         ]
       },
 
@@ -38,45 +45,29 @@ module.exports = [
       {
         text: 'vue2',
         children: [
-          
+          '/vue/README.md',
+          '/vnm-shop/README.md',
         ]
       },
       {
         text: 'vue3',
         children: [
-          
+
         ]
       },
     ],
   },
   {
-    text: 'Home',
+    text: '其他',
     children: [
-      {
-        text: 'node相关',
-        children: [
-          '/express/README.md', '/Koa/README.md',
-        ]
-      },
-      {
-        text: '其他',
-        children: [
-          '/git/README.md',
-          '/websocket/README.md',
-          '/wechat_mini/README.md',
-          '/network-protocol/README.md',
-          '/webpack/README.md',
-          '/vue/README.md',
-          '/vnm-shop/README.md',
-          '/TypeScript/README.md',
-          '/nginx/README.md',
-          '/mongoDB/README.md',
-          '/javascript/README.md',
-          '/flutter/README.md',
-        ]
-      },
-
-
+      '/git/README.md',
+      '/websocket/README.md',
+      '/wechat_mini/README.md',
+      '/nginx/README.md',
+      '/mongoDB/README.md',
+      '/javascript/README.md',
+      '/flutter/README.md',
+      '/zhufengweb/NODE-PROMISE/promiseA+/README.md',
     ],
   },
   {
@@ -86,8 +77,6 @@ module.exports = [
       '/web/html/README.md',
       '/web/javascript/README.md',
       '/web/jQuery/README.md',
-      '/web/node.js/README.md',
-      '/web/php/README.md',
     ],
   },
   {
@@ -126,17 +115,9 @@ module.exports = [
         ]
       },
       {
-        text: 'webapp',
+        text: '移动端开发',
         children: [
           '/zhufengweb/webapp/README.md',
-        ]
-      },
-      {
-        text: 'node和promise',
-        children: [
-          '/zhufengweb/NODE-PROMISE/NODE-promise/README.md',
-          '/zhufengweb/NODE-PROMISE/promiseA+/README.md',
-          '/zhufengweb/NODE-PROMISE/storage/README.md',
         ]
       },
       {
