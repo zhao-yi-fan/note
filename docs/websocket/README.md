@@ -1,4 +1,4 @@
-# 传输的方式
+# websocket http
 
 ## 应用场景： 
 

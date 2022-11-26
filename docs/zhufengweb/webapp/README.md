@@ -1,12 +1,7 @@
-# H5的知识点梳理
+# H5
+## H5的知识点梳理
 
-T1.1~1.3  P1~P3  初级
-
-T2.1~2.3  P4~P6  中高级
-
-T3.1~3.3  P7~P9  架构师
-
-## H5的知识点梳理-常用标签和表单
+### H5的知识点梳理-常用标签和表单
 
 1. 新增加(删除/修改)的语义化标签
 
@@ -177,9 +172,9 @@ input:search搜索框/email邮箱框/tel/number/range滑动杆/color/date/time/u
 </datalist>
 ```
 
-## H5和CSS3知识点梳理-CSS3常用的基本属性
+### H5和CSS3知识点梳理-CSS3常用的基本属性
 
-### HTML5
+#### HTML5
 
 3. 音视频标签
    - audio
@@ -195,9 +190,9 @@ input:search搜索框/email邮箱框/tel/number/range滑动杆/color/date/time/u
 
 6. webSocket: socket.io 客户端和服务器新的传输方式（即时通讯IM系统基本上很多是基于它完成的）
 
-### CSS3
+#### CSS3
 
-#### 选择器
+##### 选择器
 
 - \#ID
 - .CLASS
@@ -243,7 +238,7 @@ input:search搜索框/email邮箱框/tel/number/range滑动杆/color/date/time/u
 - A:last-child
 - ...
 
-#### 样式属性
+##### 样式属性
 
 1. 基本常用
 
@@ -334,7 +329,7 @@ input:search搜索框/email邮箱框/tel/number/range滑动杆/color/date/time/u
    - @font-face:导入字体图标
    - ...
 
-# 简述REM响应式布局原理
+## 简述REM响应式布局原理
 
 响应式布局：在不同尺寸的设备上都能良好的展示，这就是响应式布局设计(Responsive Layout)
 公司中的产品形态：
@@ -408,9 +403,9 @@ input:search搜索框/email邮箱框/tel/number/range滑动杆/color/date/time/u
 <div class="box3"></div>
 ```
 
-# 交互简历
+## 交互简历
 
-## LOADING区域的结构样式（搭建REM结构）
+### LOADING区域的结构样式（搭建REM结构）
 
 index.less文件
 
@@ -520,43 +515,8 @@ index.html
 </html>
 ```
 
-## LOADING区域的进度条动画
 
-
-
-## LOADING区域的业务逻辑
-
-
-
-## PHONE区域的结构样式（HASH路由处理模型）
-
-
-
-## PHONE区域的功能
-
-
-
-## 移动端事件的一点知识
-
-
-
-## MESSAGE区域的结构
-
-
-
-## MESSAGE区域的样式
-
-
-
-## MESSAGE区域的功能
-
-
-
-## 完成第一阶段开发模块之间的关联
-
-
-
-# VIEWPORT的理论基础
+## VIEWPORT的理论基础
 
 响应式布局：
 一、viewport 视口
@@ -617,7 +577,7 @@ document.head.appendChild(metaV);
 
 
 
-# MEDIA媒体查询
+## MEDIA媒体查询
 
 二、平时处理的移动端项目
 
@@ -739,7 +699,7 @@ pad: 768*1024(ipad)、1024*1366（ipad pro）...
 </html>
 ```
 
-# DPR屏幕像素密度比
+## DPR屏幕像素密度比
 
 - 设计稿的尺寸和手机屏幕尺寸的关系
 
@@ -765,7 +725,7 @@ DPR：屏幕像素密度比是2.0（2倍屏幕或者高清屏幕）
 如果1*1展示的是图片，手机是按照2*2大小的图片展示的（但是看到的大小还是1*1），如果真实素材图片就是1*1的大小，图片在渲染的时候就会被拉伸，从而变得模糊，所以我们准备的图片都需要比实际看到的宽高大一倍（3倍屏幕需要大两倍）
 ```
 
-# 响应式布局解决方案
+## 响应式布局解决方案
 
 **A、D、E是目前最常用的响应式布局方案**
 
@@ -916,35 +876,11 @@ B:切换到手机端，使用@media(媒体查询)把不同设备上不合适的�
 </html>
 ```
 
-# 交互简历
 
 
 
-## 实现3D魔方
 
-
-
-## 基于JS实现3D魔方的旋转
-
-
-
-## SWIPER的基础用法
-
-
-
-## 详情区域PAGE1页面的开发
-
-
-
-## 详情区域PAGE2页面的开发
-
-
-
-## 最后流程梳理和产品发布
-
-
-
-# Hybrid混合APP开发
+## Hybrid混合APP开发
 
 1. 前端做的都是H5页面 WebApp
    - 运行在浏览器中
@@ -981,11 +917,11 @@ B:切换到手机端，使用@media(媒体查询)把不同设备上不合适的�
    webView有一个全局对象wx={xxx:...}
    H5运行在webView中，所以在JS中可以使用wx.xxx()完成方法的调用
 
-# WEBAPP
+## WEBAPP
 
-## 搭建基础结构（SEO的一点小知识）
+### 搭建基础结构（SEO的一点小知识）
 
-### SEO
+#### SEO
 
 1. SEO 网络运营推广（搜索引擎优化推广）
    目标：尽可能在搜索引擎中提升产品的权重（ALEX排名）
@@ -1014,98 +950,3 @@ B:切换到手机端，使用@media(媒体查询)把不同设备上不合适的�
 
    - 使用JS做数据绑定的，页面的源代码中是没有动态绑定的数据的（但是用户在页面中可以看见内容），而搜索引擎的爬虫就是从源代码进行抓取收录的（vue/react都是js做数据绑定）
    - 目前市场上大部分都是前后端分离项目，也就是JS做数据绑定，由客户端渲染，但是还有一部分项目依然是传统的服务端数据处理（非完全前后端分离项目）
-   - ...
-2. SEM 百度竞价推广（千万不能信）
-
-### 搭建基础结构
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Document</title>
-  </head>
-  <body>
-    <main class="mainBox">
-      <!-- Header -->
-      <header class="headerBox">
-        <h1>新浪网</h1>
-
-        <a href="javascript:;" class="weather"></a>
-        <a href="javascript:;" class="person"></a>
-        <a href="javascript:;" class="navMenu"></a>
-      </header>
-      <!-- Nav -->
-      <nav class="navBox">
-        <!-- a标签或者ul>li都可以 -->
-        <a href="#">新闻</a>
-        <a href="#">财经</a>
-        <a href="#">体育</a>
-        <a href="#">娱乐</a>
-        <a href="#">军事</a>
-        <a href="#">汽车</a>
-        <a href="#">科技</a>
-        <a href="#">视频</a>
-        <a href="#">美图</a>
-        <a href="#">NBA</a>
-        <a href="#">博客</a>
-      </nav>
-      <!-- Banner -->
-      <section class="swiper-container bannerBox">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <img src="" alt="" />
-            <p>
-              xxxxx
-            </p>
-          </div>
-        </div>
-        <!-- 分页器 -->
-        <div class="swiper-pagination"></div>
-      </section>
-
-      <!-- Message -->
-      <section class="messageBox">
-        <div class="liveFlag">直播</div>
-        <div class="swiper-container">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide">xxxxx</div>
-          </div>
-        </div>
-      </section>
-      <!-- News -->
-      <section class="newsBox">
-        <ul class="container">
-          <li class="newsItem">
-            <img src="images/news.jpg" alt="" />
-            <h3>xxx</h3>
-            <span>20万</span>
-          </li>
-          <li class="newsItem imgBox">
-            <h3>xxx</h3>
-            <div>
-              <img src="images/news.jpg" alt="" />
-              <img src="images/news.jpg" alt="" />
-              <img src="images/news.jpg" alt="" />
-            </div>
-            <span>20万</span>
-          </li>
-        </ul>
-      </section>
-    </main>
-  </body>
-</html>
-```
-
-
-
-## REM框架搭建
-
-
-
-## HEADER和NAV区域的处理
-
-
-
-## 轮播图和消息区域处理

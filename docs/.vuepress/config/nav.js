@@ -1,5 +1,55 @@
 module.exports = [
   {
+    text: 'Node.js',
+    children: [
+
+
+    ],
+  },
+  {
+    text: '前端工程化',
+    children: [
+
+
+    ],
+  },
+  {
+    text: 'React',
+    children: [
+      {
+        text: 'react',
+        children: [
+          
+        ]
+      },
+      {
+        text: 'redux',
+        children: [
+          
+        ]
+      },
+
+
+    ],
+  },
+  {
+    text: 'Vue',
+    children: [
+      {
+        text: 'vue2',
+        children: [
+          
+        ]
+      },
+      {
+        text: 'vue3',
+        children: [
+          
+        ]
+      },
+    ],
+  },
+  {
     text: 'Home',
     children: [
       {
@@ -41,7 +91,7 @@ module.exports = [
     ],
   },
   {
-    text: 'zhufengweb',
+    text: '其他知识点',
     children: [
       {
         text: '盒子模型及jquery',
