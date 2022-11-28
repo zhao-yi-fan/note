@@ -34,8 +34,6 @@
     "@vuepress/plugin-register-components": "^2.0.0-beta.53",
     "bunny-ui": "^0.1.7",
     "element-plus": "^2.2.6",
-    "highlight.js": "^11.2.0",
-    "markdown-it-disable-url-encode": "^1.0.1",
-    "sass-loader": "^12.1.0"
+    "highlight.js": "^11.2.0"
   }
 }
