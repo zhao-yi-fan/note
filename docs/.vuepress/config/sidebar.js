@@ -33,10 +33,11 @@ module.exports = {
   '/bunny-ui-docs/': [
     {
       text: 'bunny-ui-组件文档',
-      collapsible: true,
+      collapsible: false,
       sidebarDepth: 1,
       children: [
         '/bunny-ui-docs/button/README.md',
+        '/bunny-ui-docs/message/README.md',
       ]
     },
   ],

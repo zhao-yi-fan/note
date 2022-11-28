@@ -25,6 +25,8 @@
     "@vuepress/bundler-vite": "^2.0.0-beta.53",
     "@vuepress/plugin-search": "^2.0.0-beta.53",
     "@vuepress/shared-utils": "^1.8.2",
+    "@vuepress/theme-default": "^2.0.0-beta.53",
+    "@yanyu-fe/vuepress-plugin-code-block": "^0.2.2",
     "vuepress": "^2.0.0-beta.53",
     "vuepress-vite": "^2.0.0-beta.53"
   },

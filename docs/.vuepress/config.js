@@ -3,6 +3,7 @@ import { getDirname, path } from '@vuepress/utils'
 import { defaultTheme } from '@vuepress/theme-default'
 import { registerComponentsPlugin } from '@vuepress/plugin-register-components'
 import { searchPlugin } from '@vuepress/plugin-search'
+import { codeBlockPlugin } from "@yanyu-fe/vuepress-plugin-code-block";
 
 const __dirname = getDirname(import.meta.url)
 export default {
@@ -27,6 +28,7 @@ export default {
     // displayAllHeaders: true // 默认值：false
   }),
   plugins: [
+    codeBlockPlugin(),
     searchPlugin({
       locales: {
         '/': {
