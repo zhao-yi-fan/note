@@ -66,6 +66,8 @@ module.exports = {
         '/nodejs/promiseA+/README.md',
         '/nodejs/express/README.md',
         '/nodejs/Koa/README.md',
+        '/nodejs/npm.md',
+        '/nodejs/style.md',
       ]
     },
   ],

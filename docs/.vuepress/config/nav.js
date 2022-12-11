@@ -8,6 +8,8 @@ module.exports = [
       '/nodejs/promiseA+/README.md',
       '/nodejs/express/README.md',
       '/nodejs/Koa/README.md',
+      '/nodejs/style.md',
+      '/nodejs/npm.md',
       {
         text: '数据库',
         children: [
