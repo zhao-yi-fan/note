@@ -14,30 +14,10 @@ module.exports = {
         '/other/event_binding-publish_subscribe-event-event_delegation/event_binding-publish_subscribe/README.md',
         '/other/event_binding-publish_subscribe-event-event_delegation/event-event_delegation/README.md',
 
-        '/other/prototype-THIS-shop_sort-regex/less/README.md',
-        '/other/prototype-THIS-shop_sort-regex/prototype-THIS/README.md',
-        '/other/prototype-THIS-shop_sort-regex/shop_sort/README.md',
+        '/other/less/README.md',
 
-        '/other/variable_hoisting-closure-THIS-OOP/variable_hoisting-closure/README.md',
-        '/other/variable_hoisting-closure-THIS-OOP/oop/README.md',
-        '/other/variable_hoisting-closure-THIS-OOP/tool/README.md',
-        '/other/variable_hoisting-closure-THIS-OOP/summary/README.md',
-
-        '/other/webapp/README.md',
-
-        
         '/other/NODE-PROMISE/storage/README.md',
-      ]
-    },
-  ],
-  '/bunny-ui-docs/': [
-    {
-      text: 'bunny-ui-组件文档',
-      collapsible: false,
-      sidebarDepth: 1,
-      children: [
-        '/bunny-ui-docs/button/README.md',
-        '/bunny-ui-docs/message/README.md',
+        '/other/version/README.md',
       ]
     },
   ],
@@ -49,7 +29,6 @@ module.exports = {
       children: [
         '/web/css/README.md',
         '/web/html/README.md',
-        '/web/javascript/README.md',
         '/web/jQuery/README.md',
       ]
     },
@@ -63,11 +42,39 @@ module.exports = {
         '/nodejs/php/README.md',
         '/nodejs/node.js/README.md',
         '/nodejs/NODE-promise/README.md',
-        '/nodejs/promiseA+/README.md',
+        
         '/nodejs/express/README.md',
         '/nodejs/Koa/README.md',
         '/nodejs/npm.md',
         '/nodejs/style.md',
+      ]
+    },
+  ],
+  '/mobile/': [
+    {
+      text: '移动端及跨端容器',
+      collapsible: true,
+      sidebarDepth: 1,
+      children: [
+        '/mobile/webapp/README.md',
+        '/mobile/hybrid/README.md',
+      ]
+    },
+  ],
+  '/jsbasic/': [
+    {
+      text: 'js基础',
+      collapsible: true,
+      sidebarDepth: 1,
+      children: [
+        '/jsbasic/javascript/README.md',
+        '/jsbasic/prototype-THIS/README.md',
+        '/jsbasic/shop_sort/README.md',
+        '/jsbasic/variable_hoisting-closure/README.md',
+        '/jsbasic/oop/README.md',
+        '/jsbasic/tool/README.md',
+        '/jsbasic/summary/README.md',
+        '/jsbasic/promiseA+/README.md',
       ]
     },
   ],

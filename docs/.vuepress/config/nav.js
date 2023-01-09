@@ -5,7 +5,7 @@ module.exports = [
       '/nodejs/php/README.md',
       '/nodejs/node.js/README.md',
       '/nodejs/NODE-promise/README.md',
-      '/nodejs/promiseA+/README.md',
+      
       '/nodejs/express/README.md',
       '/nodejs/Koa/README.md',
       '/nodejs/style.md',
@@ -63,7 +63,7 @@ module.exports = [
       {
         text: 'css 预处理',
         children: [
-          '/other/prototype-THIS-shop_sort-regex/less/README.md',
+          '/other/less/README.md',
         ]
       },
 
@@ -113,8 +113,8 @@ module.exports = [
       '/javascript/README.md',
       '/web/css/README.md',
       '/web/html/README.md',
-      '/web/javascript/README.md',
       '/web/jQuery/README.md',
+      '/other/version/README.md',
       {
         text: '盒子模型及jquery',
         children: [
@@ -131,28 +131,6 @@ module.exports = [
         ]
       },
       {
-        text: 'this指向、原型链、less、商品排序',
-        children: [
-          '/other/prototype-THIS-shop_sort-regex/prototype-THIS/README.md',
-          '/other/prototype-THIS-shop_sort-regex/shop_sort/README.md',
-        ]
-      },
-      {
-        text: '变量提升、闭包、面向对象模型、this指向',
-        children: [
-          '/other/variable_hoisting-closure-THIS-OOP/variable_hoisting-closure/README.md',
-          '/other/variable_hoisting-closure-THIS-OOP/oop/README.md',
-          '/other/variable_hoisting-closure-THIS-OOP/tool/README.md',
-          '/other/variable_hoisting-closure-THIS-OOP/summary/README.md',
-        ]
-      },
-      {
-        text: '移动端开发',
-        children: [
-          '/other/webapp/README.md',
-        ]
-      },
-      {
         text: '其他',
         children: [
           '/other/AJAX/README.md',
@@ -163,7 +141,28 @@ module.exports = [
     ]
   },
   {
-    text: 'bunny-ui',
-    link: '/bunny-ui-docs/',
+    text: '移动端跨端容器',
+    children: [
+      '/mobile/webapp/README.md',
+      '/mobile/hybrid/README.md',
+    ]
+  },
+  {
+    text: 'js基础',
+    children: [
+      '/jsbasic/javascript/README.md',
+      '/jsbasic/prototype-THIS/README.md',
+      '/jsbasic/shop_sort/README.md',
+      '/jsbasic/variable_hoisting-closure/README.md',
+      '/jsbasic/oop/README.md',
+      '/jsbasic/tool/README.md',
+      '/jsbasic/summary/README.md',
+      '/jsbasic/promiseA+/README.md',
+    ]
+
+  },
+  {
+    text: '个人项目汇总',
+    link: 'https://zhao-yi-fan.github.io/',
   },
 ]

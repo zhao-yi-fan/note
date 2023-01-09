@@ -1,6 +1,6 @@
-# PROMISE A+
+# promise A+
 
-## 复习PROMISE的使用
+## 复习promise的使用
 
 有三种状态，`pending（进行中）`、`fulfilled（已成功）`、`rejected（已失败）`
 
@@ -32,7 +32,7 @@ console.log(3)
 Promise.all([promise1,promise2,promise3,promise4]).then();
 ```
 
-## 封装基础版的PROMISE库
+## 封装基础版的promise库
 
 **没有实现then链**
 
