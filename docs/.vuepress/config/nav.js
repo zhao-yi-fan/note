@@ -21,6 +21,7 @@ module.exports = [
   {
     text: '前端工程化',
     children: [
+      '/CDN/README.md',
       {
         text: '构建工具',
         children: [
@@ -115,6 +116,7 @@ module.exports = [
       '/web/html/README.md',
       '/web/jQuery/README.md',
       '/other/version/README.md',
+      '/other/keyword/README.md',
       {
         text: '盒子模型及jquery',
         children: [

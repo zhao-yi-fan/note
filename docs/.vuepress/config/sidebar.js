@@ -18,6 +18,7 @@ module.exports = {
 
         '/other/NODE-PROMISE/storage/README.md',
         '/other/version/README.md',
+        '/other/keyword/README.md',
       ]
     },
   ],
@@ -84,6 +85,7 @@ module.exports = {
       collapsible: false,
       sidebarDepth: 1,
       children: [
+        '/CDN/README.md',
         '/git/README.md',
         '/websocket/README.md',
         '/wechat_mini/README.md',
