@@ -5,6 +5,5 @@ import themeConfig from './config/themeConfig'
 export default defineUserConfig({
   title: "zhaoyifan Note",
   description: 'zhaoyifan zhaoyifan Note',
-  base: '/note/',
   theme: recoTheme(themeConfig),
 })
