@@ -34,6 +34,18 @@ module.exports = {
       ]
     },
   ],
+  '/react/': [
+    {
+      text: 'react',
+      collapsible: true,
+      sidebarDepth: 1,
+      children: [
+        '/react/README.md',
+        '/react/example/diff/README.md',
+        '/react/example/useEffect卸载旧值问题/README.md',
+      ]
+    },
+  ],
   '/nodejs/': [
     {
       text: 'nodejs',
@@ -43,7 +55,7 @@ module.exports = {
         '/nodejs/php/README.md',
         '/nodejs/node.js/README.md',
         '/nodejs/NODE-promise/README.md',
-        
+
         '/nodejs/express/README.md',
         '/nodejs/Koa/README.md',
         '/nodejs/npm.md',

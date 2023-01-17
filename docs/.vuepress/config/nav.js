@@ -73,10 +73,12 @@ module.exports = [
   {
     text: 'React',
     children: [
+      '/react/README.md',
       {
-        text: 'react',
+        text: '问题示例',
         children: [
-
+          '/react/example/diff/README.md',
+          '/react/example/useEffect卸载旧值问题/README.md',
         ]
       },
       {
