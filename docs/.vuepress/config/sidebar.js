@@ -60,6 +60,7 @@ module.exports = {
         '/nodejs/Koa/README.md',
         '/nodejs/npm.md',
         '/nodejs/style.md',
+        '/nodejs/open.md',
       ]
     },
   ],
