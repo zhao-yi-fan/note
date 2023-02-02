@@ -68,7 +68,6 @@ function createArray<T>(len:number, value:T) {
 let arr = createArray(3, "hello")
 ```
 
-
 ## as const
 
 :::info
@@ -91,4 +90,32 @@ const b: readonly ["jack", 123, {
 }]
  */
 const b = ["jack", 123, { gender: "male" }] as const;
+```
+
+## 定义一个固定格式的数组
+
+一个方法传入一个字符串数组，返回一个对象，对象的key是数组的每一项，value是数组的每一项
+
+初始值使用 `as { [key in K]: string }` 来定义
+```typescript
+const getArray = <K extends string>(keys: K[]) => {
+  return keys.reduce((pre, cur) => {
+    return { ...pre, [cur]: cur };
+  }, {} as { [key in K]: string });
+};
+/* 
+getArray的类型提示:
+const getArray: <"name" | "age">(keys: ("name" | "age")[]) => {
+    name: string;
+    age: string;
+}
+
+newArr的类型提示:
+const newArr: {
+    name: string;
+    age: string;
+}
+ */
+const newArr = getArray(["name", "age"]);
+
 ```
