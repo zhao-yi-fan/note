@@ -67,3 +67,28 @@ function createArray<T>(len:number, value:T) {
 
 let arr = createArray(3, "hello")
 ```
+
+
+## as const
+
+:::info
+对于数组和对象，可以使用 as const 来将其转换为只读类型
+:::
+
+```typescript
+/* 
+类型提示
+const a: (string | number | {
+  gender: string;
+})[] 
+ */
+const a = ["jack", 123, { gender: "male" }];
+
+/* 
+类型提示
+const b: readonly ["jack", 123, {
+    readonly gender: "male";
+}]
+ */
+const b = ["jack", 123, { gender: "male" }] as const;
+```
