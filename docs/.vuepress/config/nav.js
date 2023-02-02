@@ -74,14 +74,9 @@ module.exports = [
   {
     text: 'React',
     children: [
-      '/react/README.md',
-      {
-        text: '问题示例',
-        children: [
-          '/react/example/diff/README.md',
-          '/react/example/useEffect卸载旧值问题/README.md',
-        ]
-      },
+      '/react/basic.md',
+      '/react/example/diff.md',
+      '/react/example/useEffect卸载旧值问题.md',
       {
         text: 'redux',
         children: [

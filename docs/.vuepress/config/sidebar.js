@@ -40,9 +40,9 @@ module.exports = {
       collapsible: true,
       sidebarDepth: 1,
       children: [
-        '/react/README.md',
-        '/react/example/diff/README.md',
-        '/react/example/useEffect卸载旧值问题/README.md',
+        '/react/basic.md',
+        '/react/example/diff.md',
+        '/react/example/useEffect卸载旧值问题.md',
       ]
     },
   ],
