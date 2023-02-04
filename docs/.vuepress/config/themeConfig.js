@@ -4,6 +4,7 @@ export default {
   style: '@vuepress-reco/style-default',
   logo: '/logo.png',
   author: 'zhaoyifan',
+  authorAvatar: '/logo.png',
   docsRepo: 'https://github.com/vuepress-reco/vuepress-theme-reco-next',
   docsBranch: 'main',
   docsDir: 'example',

@@ -14,7 +14,7 @@ module.exports = [
       {
         text: '数据库',
         children: [
-          '/mongoDB/README.md',
+          '/docs/mongoDB/README.md',
         ]
       },
     ],
@@ -22,25 +22,25 @@ module.exports = [
   {
     text: '前端工程化',
     children: [
-      '/CDN/README.md',
+      '/docs/CDN/README.md',
       {
         text: '构建工具',
         children: [
 
-          '/webpack/README.md',
+          '/docs/webpack/README.md',
         ]
       },
       {
         text: 'typescript',
         children: [
-          '/TypeScript/README.md',
+          '/docs/TypeScript/README.md',
         ]
       },
       {
         text: '网络知识',
         children: [
-          '/network-protocol/README.md',
-          '/websocket/README.md',
+          '/docs/network-protocol/README.md',
+          '/docs/websocket/README.md',
         ]
       },
       {
@@ -52,14 +52,14 @@ module.exports = [
       {
         text: 'nginx',
         children: [
-          '/nginx/README.md',
+          '/docs/nginx/README.md',
         ]
       },
       {
         text: '跨平台',
         children: [
-          '/flutter/README.md',
-          '/wechat_mini/README.md',
+          '/docs/flutter/README.md',
+          '/docs/wechat_mini/README.md',
         ]
       },
       {
@@ -93,8 +93,8 @@ module.exports = [
       {
         text: 'vue2',
         children: [
-          '/vue/README.md',
-          '/vnm-shop/README.md',
+          '/docs/vue/README.md',
+          '/docs/vnm-shop/README.md',
         ]
       },
       {
@@ -108,8 +108,8 @@ module.exports = [
   {
     text: '其他',
     children: [
-      '/git/README.md',
-      '/javascript/README.md',
+      '/docs/git/README.md',
+      '/docs/javascript/README.md',
       '/web/css/README.md',
       '/web/html/README.md',
       '/web/jQuery/README.md',
