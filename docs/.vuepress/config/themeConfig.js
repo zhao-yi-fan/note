@@ -23,5 +23,6 @@ export default {
       recordIP: true,
       // hideComments: true
     },
+    autoAddCategoryToNavbar: true
   },
 }
