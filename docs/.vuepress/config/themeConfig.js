@@ -12,14 +12,16 @@ export default {
   // series 为原 sidebar
   series: sideBar,
   navbar: navBar,
-  // valineConfig 配置与 1.x 一致
-  // valineConfig: {
-  //   appId: 'xxx',
-  //   appKey: 'xxx',
-  //   placeholder: '填写邮箱可以收到回复提醒哦！',
-  //   verify: true, // 验证码服务
-  //   // notify: true,
-  //   recordIP: true,
-  //   // hideComments: true // 隐藏评论
-  // },
+  commentConfig: {
+    type: 'valine',
+    options: {
+      appId: 'XlDa3SMzVdHX86i7xQxEyIDs-gzGzoHsz',
+      appKey: 'gtXb5b8EgNs7X6yOnnXSf9gC',
+      placeholder: '填写邮箱可以收到回复提醒哦！',
+      verify: true, // 验证码服务
+      // notify: true, //
+      recordIP: true,
+      // hideComments: true
+    },
+  },
 }
