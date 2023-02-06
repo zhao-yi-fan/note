@@ -11,4 +11,5 @@ export default defineUserConfig({
     ['meta', { name: 'baidu-site-verification', content: 'codeva-35wm7P5Tff' }],
   ],
   theme: recoTheme(themeConfig),
+  lang: 'zh-CN',
 })
