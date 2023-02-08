@@ -1,4 +1,122 @@
-# react实现原理
+# react原理及难点
+
+## 合成事件
+
+### 事件合成的好处?
+
+1. 批量异步更新
+
+在事件、生命周期开始的时候 `updateQueue.isBatchingUpdate = true` `setState`执行时只追加更新内容，但不进行更新
+在事件、生命周期结束的时候 `updateQueue.isBatchingUpdate = false` 结束时将更新器全部进行批量更新
+
+:::info
+在`React17`之`前`，所有的事件都委托到`document`上
+
+在`React17`之`后`，所有的事件都委托到`容器`上  这是因为之前如果页面中有多个React应用，事件绑定容易冲突；
+```javascript
+<div id="container"></div>
+
+<div id="container1"></div> // ReactDOM.render(<h1>, container1)
+<div id="container2"></div> // ReactDOM.render(<h2>, container2)
+```
+:::
+
+2. 对浏览器进行兼容性处理
+
+把不同浏览器的API不一致的，把不同的事件对象做成一个标准化的事件对象，提供标准的API供用户使用
+
+例如
+```javascript
+function stopPropagation(event){
+  if(!event){ // IE下
+    window.event.cancelBubble = true;
+  }
+  if(event.stopPropagation){ // w3c标准
+    event.stopPropagation()
+  }
+}
+```
+
+### 原理
+`event.js`
+```javascript
+import { updateQueue } from './Component'
+
+export function addEvent (dom, eventType, eventHandler) {
+  let store;
+  if (dom._store) {
+    store = dom._store;
+  } else {
+    dom._store = store = {};
+  }
+  // store.onclick = handleClick;
+  store[eventType] = eventHandler;
+  // document.onclick = dispatchEvent;
+  if (!document[eventType]) {
+    document[eventType] = dispatchEvent
+  }
+}
+
+/**
+ * 不管点什么按钮，触发什么事件，最终都会执行dispatchEvent方法
+ * 在合成事件的处理函数中，状态的更新是批量的
+ * @param {*} event 原生的事件对象，不同的浏览器可能不一样
+ */
+function dispatchEvent (event) {
+  // type: 'click' type: 'click'
+  const { target, type } = event;
+  const eventType = `on${type}`;
+  // 先把批量更新的标识改为true
+  updateQueue.isBatchingUpdate = true;
+  let syntheticEvent = createSyntheticEvent(event);
+  // 获取事件源DOM对象上的store属性
+  let { _store } = target;
+  let eventHandler = _store && _store[eventType];
+  if (eventHandler) {
+    eventHandler.call(target, syntheticEvent);
+  }
+  updateQueue.isBatchingUpdate = false;
+  updateQueue.batchUpdate(); // 真正的更新
+
+}
+
+function createSyntheticEvent (nativeEvent) {
+  const syntheticEvent = { nativeEvent };
+  for (const key in nativeEvent) {
+    syntheticEvent[key] = nativeEvent[key];
+  }
+  // 此处会有一些兼容性处理
+  return syntheticEvent;
+}
+```
+
+```javascript
+import { addEvent } from './event'
+/**
+ * 把新的属性更新到真实DOM上
+ * @param {*} dom 真实DOM
+ * @param {*} oldProps 旧的属性对象
+ * @param {*} newProps 新的属性对象
+ */
+function updateProps (dom, oldProps, newProps) {
+  for (let key in newProps) {
+    if (key === 'children') {
+      continue; // 此处忽略子节点的处理
+    } else if (key === 'style') {
+      let styleObj = newProps[key];
+      for (let attr in styleObj) {
+        dom.style[attr] = styleObj[attr];
+      }
+    } else if (key.startsWith('on')) {
+      addEvent(dom, key.toLocaleLowerCase(), newProps[key]); // => 合成事件
+    } else {
+      dom[key] = newProps[key]; // className
+    }
+
+  }
+}
+
+```
 
 ## setState实现原理
 
