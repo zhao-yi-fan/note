@@ -69,15 +69,21 @@ function dispatchEvent (event) {
   // 先把批量更新的标识改为true
   updateQueue.isBatchingUpdate = true;
   let syntheticEvent = createSyntheticEvent(event);
-  // 获取事件源DOM对象上的store属性
-  let { _store } = target;
-  let eventHandler = _store && _store[eventType];
-  if (eventHandler) {
-    eventHandler.call(target, syntheticEvent);
+  let currentTarget = target;
+  // 模拟冒泡
+  while (currentTarget) {
+    // 获取事件源DOM对象上的store属性
+    const { _store } = currentTarget;
+    const eventHandler = _store && _store[eventType];
+    if (eventHandler) {
+      syntheticEvent.target = target;
+      syntheticEvent.currentTarget = currentTarget;
+      eventHandler.call(currentTarget, syntheticEvent);
+    }
+    currentTarget = currentTarget.parentNode;
   }
   updateQueue.isBatchingUpdate = false;
   updateQueue.batchUpdate(); // 真正的更新
-
 }
 
 function createSyntheticEvent (nativeEvent) {
