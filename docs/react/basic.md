@@ -1,5 +1,10 @@
 # react原理及难点
 
+## 函数组件比类组件的优势
+
+1. 不需要维护实例，函数组件执行完就销毁，内存占用小，性能会更好
+2. 速度快
+
 ## 合成事件
 
 ### 事件合成的好处?
@@ -321,4 +326,200 @@ ProjectListScreen.whyDidYouRender = true;
 class ProjectListScreen extends React.Component {
   static whyDidYouRender = true;
 }
+```
+
+## ref实现原理
+
+ref分有`原生标签`、`类组件`、`函数组件`
+
+原生标签的ref：如果给一个原生组件添加了一个ref属性，那么原生组件虚拟DOM变成真实DOM之后，会把真实DOM元素赋值给ref.current
+
+### 原理
+`./constants`
+```javascript
+export const REACT_FORWARD_REF = Symbol('react.forward_ref');
+```
+
+`./react`
+```javascript
++ import { REACT_ELEMENT, REACT_FORWARD_REF } from './constants'
++ function createRef () {
++   return { current: null }
++ }
+
++ function forwardRef (render) {
++   return {
++     $$typeof: REACT_FORWARD_REF,
++     render, // 渲染函数
++   }
++ }
+
+const React = {
+  createElement,
+  Component,
++   createRef,
++   forwardRef
+}
+export default React;
+```
+
+`./react-dom`
+```javascript
+export function createDOM (vdom) {
+  if (!vdom) return null;
+  let { type, props, ref } = vdom;
+  let dom; // 真实DOM
+  + if (ref && type.$$typeof === REACT_FORWARD_REF) { // 函数组件
+  +   return mountForwardComponent(vdom);
+  + } else if (type === REACT_TEXT) {
+    dom = document.createTextNode(props.content)
+  } else if (typeof type === 'function') {
+    if (type.isReactComponent) {
+      return mountClassComponent(vdom);
+    }
+    return mountFunctionComponent(vdom);
+
+  } else {
+    dom = document.createElement(type);
+  }
+  // 处理属性
+  if (props) {
+    updateProps(dom, {}, props);
+    if (props.children) {
+      let children = props.children;
+      if (typeof children === 'object' && children.type) {
+        mount(children, dom)
+      } else if (Array.isArray(children)) {
+        reconcileChildren(props.children, dom)
+
+      }
+    }
+  }
+  vdom.dom = dom;
+  + if (ref) ref.current = dom; // 类组件 把真实DOM赋值给ref.current
+  return dom;
+}
+
++ function mountForwardComponent (vdom) {
++   let { type, props, ref } = vdom;
++   let renderVdom = type.render(props, ref)
++   vdom.oldRenderVdom = renderVdom;
++   return createDOM(renderVdom);
++ }
+
+function mountClassComponent (vdom) {
+  let { type: ClassComponent, props, ref } = vdom;
+  let classInstance = new ClassComponent(props);
++   if (ref) ref.current = classInstance;
+  let renderVdom = classInstance.render(props);
+  classInstance.oldRenderVdom = vdom.oldRenderVdom = renderVdom;
+  return createDOM(renderVdom);
+}
+```
+
+
+### 原生标签使用
+```javascript
+import React from '../react'
+import ReactDOM from '../react-dom'
+
+class Calculate extends React.Component {
+  constructor(props) {
+    super(props)
+    this.aRef = React.createRef()
+    this.bRef = React.createRef()
+    this.resuleRef = React.createRef()
+  }
+  handleClick = () => {
+    const a = this.aRef.current.value
+    const b = this.bRef.current.value
+    this.resuleRef.current.value = parseInt(a) + parseInt(b)
+  }
+  render () {
+    return (
+      <div>
+        <input ref={this.aRef} type="text" />+
+        <input ref={this.bRef} type="text" />
+        <button onClick={this.handleClick}>=</button>
+        <input ref={this.resuleRef} type="text" />
+      </div>
+    )
+  }
+}
+ReactDOM.render(<Calculate />, document.getElementById('root'))
+```
+
+### 类组件使用
+```javascript
+import React from '../react'
+import ReactDOM from '../react-dom'
+
+class TextInput extends React.Component {
+  constructor(props) {
+    super(props)
+    this.textInput = React.createRef()
+  }
+  getFocus = () => {
+    this.textInput.current.focus()
+  }
+
+  render () {
+    return (
+      <div>
+        <input type="text" ref={this.textInput} />
+      </div>
+    )
+  }
+}
+
+class App extends React.Component {
+  constructor(props) {
+    super(props)
+    this.textInput = React.createRef()
+  }
+
+  handleClick = () => {
+    this.textInput.current.getFocus()
+  }
+
+  render () {
+    return (
+      <div>
+        <TextInput ref={this.textInput} />
+        <button onClick={this.handleClick}>聚焦</button>
+      </div>
+    )
+  }
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+### 函数组件使用
+```javascript
+import React from '../react'
+import ReactDOM from '../react-dom'
+
+function InputText (props, forwardRef) {
+  return <input type="text" ref={forwardRef} />
+}
+const ForwardInputText = React.forwardRef(InputText)
+
+class App extends React.Component {
+  constructor(props) {
+    super(props)
+    this.textInput = React.createRef()
+  }
+  getFocus = () => {
+    this.textInput.current.focus()
+  }
+  /* Warning: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()? */
+  render () {
+    return <div>
+      <ForwardInputText ref={this.textInput} />
+      <button onClick={this.getFocus}>聚焦</button>
+    </div>
+  }
+}
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
