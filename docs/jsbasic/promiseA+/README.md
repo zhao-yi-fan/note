@@ -1,5 +1,52 @@
 # promise A+
 
+## promise A+规范
+
+Promise/A+规范一共有10条规范，具体如下：
+
+
+1. Promise 状态
+
+Promise 有三种状态：pending（进行中）、fulfilled（已成功）和rejected（已失败）。
+
+2. then 方法
+
+Promise 必须提供 then 方法，用于注册在 Promise 状态确定后的回调函数。
+
+3. then 方法的参数
+
+then 方法必须接收两个函数作为参数，分别为 Promise 状态被 fulfilled 时的回调函数 onFulfilled 和 Promise 状态被 rejected 时的回调函数 onRejected。
+
+4. then 方法的返回值
+
+then 方法必须返回一个新的 Promise 对象，用于链式调用。
+
+5. then 方法的调用时机
+
+onFulfilled 和 onRejected 只有在 Promise 状态确定后才会被调用，且调用次数不超过一次。
+
+6. then 方法的调用顺序
+
+then 方法可以被同一个 Promise 对象多次调用，并且必须按照其注册顺序依次执行。
+
+7. then 方法的异常处理
+
+如果 onFulfilled 或 onRejected 抛出异常，则新的 Promise 对象必须被 rejected。
+
+8. then 方法的参数可选
+
+then 方法的参数 onFulfilled 和 onRejected 是可选的。
+
+9. Promise 解决过程
+
+Promise 解决过程是指 Promise 从初始状态开始，最终转换为 fulfilled 或 rejected 的过程。
+
+10. Promise 解决过程的处理
+
+Promise 解决过程中需要进行一系列的处理，包括状态转换、回调函数的调用、异常处理等。其中，then 方法的返回值需要根据 Promise 的状态和回调函数的返回值进行判断。
+
+
+
 ## 复习promise的使用
 
 有三种状态，`pending（进行中）`、`fulfilled（已成功）`、`rejected（已失败）`
