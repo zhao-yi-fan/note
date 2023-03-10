@@ -8,3 +8,7 @@
 
 `SCF` Serverless Cloud Function 无服务器云函数
 
+`gc`: generate component
+
+`sfc`: single file component
+

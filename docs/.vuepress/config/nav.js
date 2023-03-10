@@ -23,11 +23,13 @@ module.exports = [
     text: '前端工程化',
     children: [
       '/docs/CDN/README.md',
+      '/docs/workspace/README.md',
       {
         text: '构建工具',
         children: [
 
           '/docs/webpack/README.md',
+          '/docs/rollup/README.md',
         ]
       },
       {
@@ -109,6 +111,7 @@ module.exports = [
     text: '其他',
     children: [
       '/docs/git/README.md',
+      '/docs/document/README.md',
       '/docs/javascript/README.md',
       '/web/css/README.md',
       '/web/html/README.md',
