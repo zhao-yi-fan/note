@@ -502,7 +502,6 @@ aside {
 
 当上下相邻的两个块元素相遇时，如果上面的元素有下外边距margin-bottom，下面的元素有上外边距margin-top，则他们之间的垂直间距不是margin-bottom与margin-top之和，而是两者中的较大者。这种现象被称为相邻块元素垂直外边距的合并（也称外边距塌陷）。
 
-<img src="./media/www.png" />
 
 解决方案：  避免就好了。
 
