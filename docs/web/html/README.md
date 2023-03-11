@@ -21,7 +21,7 @@ window10发布后,加了新浏览器Edge,Edge有新内核EdgeHTML.
 
 - Gecko(firefox)
 
-Moailla FireFox使用.  该浏览器内核代码公开,可开发程度高,全时间程序员都可以为其编写代码.近年来没落,更新频繁,打开速度慢.猪一样的队友flash,神一样的对手chrome.
+Moailla FireFox使用.  该浏览器内核代码公开,可开发程度高,全时间程序员都可以为其编写代码.近年来没落,更新频繁,打开速度慢.
 
 - webkit(Safari)
 
@@ -104,19 +104,6 @@ utf-8则包含全世界所有国家需要用到的字符
 
 ## html常用标签
 
-#### 标题标签:
-
-注意:h1标签因为重要,尽量少用,一般h1是给logo使用或者页面中最重要的标题信息.
-
-#### 水平线标签:
-
-```
-<hr />是单标签
-```
-
-#### div span标签:
-
-div span是没有语义的,是网页布局主要的两个盒子.
 
 #### 文格式化标签:
 
@@ -137,46 +124,6 @@ b i s u没有强调的意思   strong  em  del  ins 语义更强烈
 
 采取 键值对 的格式 key="value"的格式
 
-#### 图像标签img:
-
-```
-src          图像的路径
-alt          图像不能显示时的替换文本
-title        鼠标悬停时显示的内容
-width        设置图像的宽度
-height		设置图像的高度
-border		设置图像边框的宽度
-```
-
-#### 链接标签:
-
-anchor的缩写  `<a>文本或图像</a>`
-
-```
-href=""   跳转目标
-target=""   目标窗口的弹出方式 self默认 blank在新窗口打开
-```
-
-注意:
-
-(1).外部链接:加http://
-
-(2).内部链接:直接链接内部名称 
-
-```
-<a href="index.html">首页</a>
-```
-
-(3).没有确定链接目标   href="#"
-
-(4).文本,图像,表格,音频,视频都可以链接
-
-##### 锚点定位:
-
-```
-<a href="#two">
-<h3 id="two">第2集</h3>
-```
 
 ##### base标签:
 
@@ -201,10 +148,6 @@ base写在`<head></head>`之间
 &copy;  版权
 &reg;   注册商标
 ```
-
-####  注释标签:
-
-`<!-- 注释语句 -->` 
 
 ## 定位
 
@@ -233,20 +176,6 @@ base写在`<head></head>`之间
 子元素先定位,没有设置left的时候,父元素的padding-left还会有效果,(因为此时的left有一个默认值,默认值不是0,其实默认值就是padding-left的值).如果加了left:10,那么padding-left会失效,因为定位开始了,以left优先.top同理.
 
 因为子元素绝对定位如果加了left或top  是以最近的定位了的外层元素的border内边界为基准来偏移的.(偏移的区域包含了padding和文字区)
-
-## 路径
-
-### 相对路径
-
-以引用文件之网页所在位置为参考基础，而建立出的目录路径。因此，当保存于不同目录的网页引用同一个文件时，所使用的路径将不相同，故称之为相对路径。
-
-1. 图像文件和HTML文件位于同一文件夹：只需输入图像文件的名称即可，如&lt;img src="logo.gif" /&gt;。
-2. 图像文件位于HTML文件的下一级文件夹：输入文件夹名和文件名，之间用“/”隔开，如&lt;img src="img/img01/logo.gif" /&gt;。
-3. 图像文件位于HTML文件的上一级文件夹：在文件名之前加入“../” ，如果是上两级，则需要使用 “../ ../”，以此类推，如&lt;img src="../logo.gif" /&gt;。
-
-### 绝对路径
-
-“D:\web\img\logo.gif”，或完整的网络地址，例如“<http://www.itcast.cn/images/logo.gif>”。
 
 ## 列表标签
 
@@ -434,7 +363,6 @@ caption 标签必须紧随 table 标签之后。
 
 在HTML中，一个完整的表单通常由表单控件（也称为表单元素）、提示信息和表单域3个部分构成。
 
-<img src="./media/bd.png" />
 
   表单控件：
 
@@ -448,63 +376,6 @@ caption 标签必须紧随 table 标签之后。
 
 ​      他相当于一个容器，用来容纳所有的表单控件和提示信息，可以通过他定义处理表单数据所用程序的url地址，以及数据提交到服务器的方法。如果不定义表单域，表单中的数据就无法传送到后台服务器。
 
-### input 控件
-
-input 输入的意思 
-
-在上面的语法中，&lt;input /&gt;标签为单标签，type属性为其最基本的属性  类型 ，其取值有多种，用于指定不同的控件类型。除了type属性之外，&lt;input /&gt;标签还可以定义很多其他的属性，其常用属性如下表所示。
-
-type  说明了属于那种表单
-
-radio  如果是一组，我们必须给他们命名相同的名字 name   这样就可以多个选其中的一个
-
-
-
-<img src="./media/input.png" />
-
-### label标签
-
-label 标签为 input 元素定义标注（标签）。
-
-作用：  用于绑定一个表单元素, 当点击label标签的时候, 被绑定的表单元素就会获得输入焦点
-
-for 属性规定 label 与哪个表单元素绑定。
-
-```html
-<label for="male">Male</label>
-<input type="radio" name="sex" id="male" value="male">
-```
-
-### textarea控件(文本域)
-
-textarea 文本域
-
-如果需要输入大量的信息，就需要用到&lt;textarea&gt;&lt;/textarea&gt;标签。通过textarea控件可以轻松地创建多行文本输入框，其基本语法格式如下：
-
-```html
-<textarea cols="每行中的字符数" rows="显示的行数">
-  文本内容
-</textarea>
-```
-
-### 下拉菜单
-
-使用select控件定义下拉菜单的基本语法格式如下     select 选择
-
-```html
-<select>
-  <option>选项1</option>
-  <option>选项2</option>
-  <option>选项3</option>
-  ...
-</select>
-```
-
-注意：
-
-1.&lt;select&gt;</select&gt;中至少应包含一对&lt;option></option&gt;。
-
-2.在option 中定义selected =" selected "时，当前项即为默认选中项。
 
 ### 表单域
 
