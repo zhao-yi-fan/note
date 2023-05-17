@@ -1,5 +1,8 @@
 # OSI七层模型（理想化模型）
 
+![七层网络](./media/七层网络.jpg)
+![http请求报文格式](./media/http请求报文格式.jpg)
+
 `Open System Interconnection`适用于所有网络
 
 ![1562979023227](./media/1562979023227.png)
