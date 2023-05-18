@@ -15,14 +15,6 @@
 - 适用于移动端项目
 - 渐进式框架
 
-## 渐进式的理解
-
-- 声明式渲染（无需关心如何实现）
-- 组件系统
-- 客户端路由（vue-router）
-- 大规模状态管理（vuex）
-- 构建工具（vue-cli）
-
 ## vue的两个核心
 
 响应的数据变化
@@ -54,7 +46,7 @@
 
 ## 兼容性
 
-​	因为vue中用了es5的Object.defineProperty语法，这个方法没有低版本的替代方法，所以vue不支持IE8及以下版本。
+​ 因为vue中用了es5的Object.defineProperty语法，这个方法没有低版本的替代方法，所以vue不支持IE8及以下版本。
 
 ## 声明式和命令式
 
@@ -195,8 +187,6 @@ let vm = new Vue({
 
 ```
 
-
-
 ## 指令（14个）
 
 指令(directive)--补充了html的属性
@@ -254,8 +244,6 @@ class,style属性有另外的写法
 </script>
 ```
 
-
-
 ![1550971562964](./media/1550971562964.png)
 
 `style_str: 'width:200px;height:200px;background:yellow'`
@@ -278,8 +266,6 @@ class,style属性有另外的写法
 ```
 
 ![1550972514648](./media/1550972514648.png)
-
-
 
 - v-model
 
@@ -592,7 +578,7 @@ v-model进来的数据, 都是字符串
     ```
 
     ![1551059988199](./media/1551059988199.png)
-    
+
   - 数字循环 `v-for="i in num"`
 
     ```html
@@ -909,8 +895,6 @@ new Vue({
 mode: 'history', // 一共两种historyhash  默认是hash 
 ```
 
-
-
 - 选中之后会有额外class
 
 `router-link-exact-active`和 `router-link-active`
@@ -1078,6 +1062,7 @@ mode: 'history', // 一共两种historyhash  默认是hash
      component: aa,
      },
      ```
+
      地址：`http://localhost:8080/#/aa`
      路由参数
      ![1564308791383](./media/1564308791383.png)
@@ -1130,7 +1115,6 @@ mode: 'history', // 一共两种historyhash  默认是hash
 
    ![1564314808999](./media/1564314808999.png)
 
-
 ### 命名路由
 
 一般带`name`属性的都是大型路由
@@ -1143,7 +1127,6 @@ new VueRouter({
  ]
 })
 ```
-
 
 获取路由信息:`$route`
 
@@ -1266,10 +1249,6 @@ export default {
 </style>
 ```
 
-
-
-
-
 ## v1和v2区别
 
 V1.0组件
@@ -1332,7 +1311,7 @@ export default {
 
 ```vue
 <template>
-	<zyf-button color='green' textColor='white'>你好</zyf-button> 
+ <zyf-button color='green' textColor='white'>你好</zyf-button> 
 </template>
 ```
 
@@ -1361,8 +1340,8 @@ export default Vue.component('parent', {
     template: `
         <div>
             <div>
-            	父级
-            	<input type="button" value="+1" @click="fn()" />
+             父级
+             <input type="button" value="+1" @click="fn()" />
             </div>
             <child ref="c1"/>
         </div>
@@ -1393,7 +1372,7 @@ export default Vue.component('child', {
 
 - 子级找父级
 
-父级加:`parent="this"`, 
+父级加:`parent="this"`,
 
 子级注册`props:['parent']`, 用`this.parent.xxx`
 
@@ -1676,7 +1655,7 @@ mutation(state,arg){
 
 ```javascript
 action(context,arg){
-	context.commit('mutation',arg);
+ context.commit('mutation',arg);
 }
 ```
 
@@ -1750,8 +1729,6 @@ const store = new Vuex.Store({
 
 export default store;
 ```
-
-
 
 ```javascript
 <template>
@@ -2879,5 +2856,3 @@ vuex
 - `vue-style-loader` `css-loader`处理样式
 - `html-webpack-plugin`处理html
 - `webpack-merge` 合并webpack配置 configuerWebpack
-
-## 插件的编写message
