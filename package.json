@@ -20,15 +20,12 @@
     "url": "https://github.com/zhao-yi-fan/note/issues"
   },
   "homepage": "https://github.com/zhao-yi-fan/note#readme",
-  "devDependencies": {
-    "@vue/component-compiler-utils": "^3.3.0",
-    "@vuepress/shared-utils": "^1.8.2",
-    "vuepress": "2.0.0-beta.61"
-  },
+  "devDependencies": {},
   "dependencies": {
     "bunny-ui": "^0.1.7",
     "element-plus": "^2.2.6",
     "highlight.js": "^11.2.0",
+    "vuepress": "2.0.0-beta.61",
     "vuepress-theme-reco": "2.0.0-beta.62"
   }
 }
