@@ -2,8 +2,6 @@ module.exports = {
   '/other/': [
     {
       text: 'other',
-      collapsible: true,
-      sidebarDepth: 1,
       children: [
         '/other/AJAX/README.md',
         '/other/AXIOS/README.md',
@@ -25,8 +23,6 @@ module.exports = {
   '/web/': [
     {
       text: 'web',
-      collapsible: true,
-      sidebarDepth: 1,
       children: [
         '/web/css/README.md',
         '/web/html/README.md',
@@ -37,8 +33,6 @@ module.exports = {
   '/react/': [
     {
       text: 'react',
-      collapsible: true,
-      sidebarDepth: 1,
       children: [
         '/react/basic.md',
         '/react/example/diff.md',
@@ -49,8 +43,6 @@ module.exports = {
   '/nodejs/': [
     {
       text: 'nodejs',
-      collapsible: true,
-      sidebarDepth: 1,
       children: [
         '/nodejs/php/README.md',
         '/nodejs/node.js/README.md',
@@ -67,8 +59,6 @@ module.exports = {
   '/mobile/': [
     {
       text: '移动端及跨端容器',
-      collapsible: true,
-      sidebarDepth: 1,
       children: [
         '/mobile/webapp/README.md',
         '/mobile/hybrid/README.md',
@@ -78,8 +68,6 @@ module.exports = {
   '/jsbasic/': [
     {
       text: 'js基础',
-      collapsible: true,
-      sidebarDepth: 1,
       children: [
         '/jsbasic/javascript/README.md',
         '/jsbasic/prototype-THIS/README.md',
@@ -95,8 +83,6 @@ module.exports = {
   '/docs/': [
     {
       text: 'note',
-      collapsible: false,
-      sidebarDepth: 1,
       children: [
         '/docs/CDN/README.md',
         '/docs/workspace/README.md',
