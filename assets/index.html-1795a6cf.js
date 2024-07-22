@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-39e83ebe","path":"/other/keyword/","title":"常用词汇","lang":"zh-CN","frontmatter":{},"headers":[],"git":{"createdTime":1673339437000,"updatedTime":1678467415000,"contributors":[{"name":"赵一凡","email":"993445491@qq.com","commits":2}]},"filePathRelative":"other/keyword/README.md"}');export{e as data};

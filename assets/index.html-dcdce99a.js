@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-b72fc4a2","path":"/other/version/","title":"版本的概念","lang":"zh-CN","frontmatter":{},"headers":[],"git":{"createdTime":1673281554000,"updatedTime":1673281554000,"contributors":[{"name":"赵一凡","email":"993445491@qq.com","commits":1}]},"filePathRelative":"other/version/README.md"}');export{e as data};
