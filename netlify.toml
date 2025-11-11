@@ -1,0 +1,10 @@
+[build]
+  # 构建命令
+  command = "npm run docs:build"
+  # 发布目录
+  publish = "docs/.vuepress/dist"
+
+[build.environment]
+  # 指定 Node.js 版本
+  NODE_VERSION = "18"
+
