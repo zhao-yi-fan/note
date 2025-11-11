@@ -1,8 +1,9 @@
 {
   "name": "note",
   "version": "1.0.0",
-  "description": "You can use the [editor on GitHub](https://github.com/zhao-yi-fan/note/edit/master/README.md) to maintain and preview the content for your website in Markdown files.",
+  "description": "个人技术博客 - 基于 VuePress 2.x 和 vuepress-theme-reco",
   "main": "index.js",
+  "private": true,
   "directories": {
     "doc": "docs"
   },
@@ -10,16 +11,27 @@
     "docs:dev": "vuepress dev docs --temp .temp",
     "docs:build": "vuepress build docs"
   },
+  "keywords": [
+    "blog",
+    "vuepress",
+    "技术博客",
+    "前端",
+    "笔记"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zhao-yi-fan/note.git"
   },
-  "author": "",
+  "author": "zhao-yi-fan@qq.com",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/zhao-yi-fan/note/issues"
   },
   "homepage": "https://github.com/zhao-yi-fan/note#readme",
+  "engines": {
+    "node": ">=14.18.0",
+    "npm": ">=6.14.0"
+  },
   "devDependencies": {},
   "dependencies": {
     "bunny-ui": "^0.1.7",
