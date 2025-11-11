@@ -5,16 +5,25 @@ on:
     branches: [master, gh-pages]
 
 jobs:
-  build:
+  repo-sync:
+    env:
+      # 在 Settings->Secrets 配置 GITEE_RSA_PRIVATE_KEY
+      SSH_PRIVATE_KEY: ${{ secrets.GITEE_RSA_PRIVATE_KEY }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Configure Git
+        run: |
+          git config --global --add safe.directory /github/workspace
+
       - name: Sync to Gitee
         uses: wearerequired/git-mirror-action@master
-        env:
-          # 在 Settings->Secrets 配置 GITEE_RSA_PRIVATE_KEY
-          SSH_PRIVATE_KEY: ${{ secrets.GITEE_RSA_PRIVATE_KEY }}
+        if: env.SSH_PRIVATE_KEY
         with:
-          # GitHub 源仓库地址
-          source-repo: git@github.com:zhao-yi-fan/note.git
+          # GitHub 源仓库地址（使用动态变量）
+          source-repo: git@github.com:${{ github.repository }}.git
           # Gitee 目标仓库地址
           destination-repo: git@gitee.com:iiicici/note.git
