@@ -1,3 +1,12 @@
+---
+title: workspace工作空间
+date: 2023/01/15
+tags:
+  - 其他
+categories:
+  - 其他
+---
+
 # workspace工作空间
 Yarn Workspaces（工作空间/工作区，本文使用工作空间这一名称），用于在代码仓库的根目录下管理多个project的依赖。
 

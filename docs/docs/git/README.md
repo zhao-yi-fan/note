@@ -1,3 +1,12 @@
+---
+title: git
+date: 2022/10/05
+tags:
+  - 其他
+categories:
+  - 其他
+---
+
 # git
 
 ## 集中式对比分布式
@@ -429,4 +438,3 @@ index-swiper分支存放具体功能开发完成时的代码
 - `git checkout master`切换到主分支master
 - `git merge origin/index-swiper`把线上index-swiper分支上新增的内容合并到本地的master分支
 - `git push`把master新增的内容也提交到线上
-

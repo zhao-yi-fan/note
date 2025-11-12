@@ -1,3 +1,13 @@
+---
+title: 软件版本号详解：从语义化版本到预发布标识
+date: 2023/06/08
+tags:
+  - 其他
+  - Axios
+categories:
+  - 其他
+---
+
 # 软件版本号详解：从语义化版本到预发布标识
 
 ## 语义化版本（Semantic Versioning）

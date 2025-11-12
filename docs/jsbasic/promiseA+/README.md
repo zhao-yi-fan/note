@@ -1,3 +1,13 @@
+---
+title: promise A+
+date: 2021/10/05
+tags:
+  - JavaScript
+  - Promise
+categories:
+  - JavaScript基础
+---
+
 # promise A+
 
 ## promise A+规范
@@ -624,4 +634,3 @@ Promise.all([p1, p2, p3]).then(result => {
   console.log(reason)
 })
 ```
-

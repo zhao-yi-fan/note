@@ -1,3 +1,13 @@
+---
+title: Koa
+date: 2023/01/20
+tags:
+  - Node.js
+  - Promise
+categories:
+  - 后端开发
+---
+
 # Koa
 
 ## koa访问mysql数据库操作
@@ -424,4 +434,3 @@ node 06.js
 ### 静态资源
 
 如果网站提供静态资源(图片, 字体, 样式表, 脚本...), 为它们一个个写路由就很麻烦, 也没必要.`koa-static`模块封装了这部分的请求.
-

@@ -1,3 +1,15 @@
+---
+title: AJAX
+date: 2020/10/05
+tags:
+  - 其他
+  - Promise
+  - 异步编程
+  - Axios
+categories:
+  - 其他
+---
+
 # AJAX
 
 ## AJAX

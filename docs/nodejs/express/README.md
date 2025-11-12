@@ -1,3 +1,14 @@
+---
+title: Express
+date: 2022/11/15
+tags:
+  - Node.js
+  - Promise
+  - 异步编程
+categories:
+  - 后端开发
+---
+
 # Express
 
 ## 静态服务
@@ -394,4 +405,3 @@ app.use((req, res, next) => {
   res.redirect('http://www.qq.com/babygohome/')
 })
 ```
-

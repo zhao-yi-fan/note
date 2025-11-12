@@ -1,3 +1,12 @@
+---
+title: nginx
+date: 2022/01/15
+tags:
+  - 其他
+categories:
+  - 其他
+---
+
 # nginx
 
 ## 配置文件

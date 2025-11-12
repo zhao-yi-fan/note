@@ -1,3 +1,14 @@
+---
+title: axios
+date: 2022/01/20
+tags:
+  - 其他
+  - Promise
+  - Axios
+categories:
+  - 其他
+---
+
 # axios
 
 ## axios的基础语法

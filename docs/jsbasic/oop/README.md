@@ -1,3 +1,12 @@
+---
+title: 面向对象
+date: 2020/04/10
+tags:
+  - JavaScript
+categories:
+  - JavaScript基础
+---
+
 # 面向对象
 
 面向对象编程(Object Oriented Programming)
@@ -473,4 +482,3 @@ f1.name === 'xxx';//=> 给自己设置私有属性
 f1.__proto__.name = 'xxx';//=> 给原型上设置公有属性(每个实例都可以用这个公有属性)
 <=>Fn.prototype.name = 'xxx';
 ```
-

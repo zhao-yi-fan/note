@@ -1,3 +1,12 @@
+---
+title: rollup
+date: 2024/01/15
+tags:
+  - 构建工具
+categories:
+  - 工程化
+---
+
 # rollup
 
 ## 封装时的注意项

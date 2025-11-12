@@ -1,3 +1,12 @@
+---
+title: typescript
+date: 2023/10/20
+tags:
+  - TypeScript
+categories:
+  - 编程语言
+---
+
 # typescript
 
 ## 对象

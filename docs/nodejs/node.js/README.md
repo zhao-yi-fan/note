@@ -1,3 +1,15 @@
+---
+title: node.js
+date: 2023/01/20
+tags:
+  - Node.js
+  - Promise
+  - 异步编程
+  - Webpack
+categories:
+  - 后端开发
+---
+
 # node.js
 ## node.js介绍
 
@@ -44,7 +56,7 @@ node.js是技术, 不是后台的语言
 
 - 代码只是具有特定个数的字符串而已
 - 引擎可以认识它,引擎可以帮你去解析和执行
-- Google Chrome的V8引擎室目前公认的解析执行Javascrtpt代码最快的
+- Google Chrome的V8引擎室目前公认的解析执行Javascript代码最快的
 - Node.js的作者把Google Chrome中的V8引擎移植了出来,开发了一个独立的JavaScript运行时环境.
 
 2.Node.js uses an event-driven,non-blacking I/O model that makes It lightweight and efficient.
@@ -55,7 +67,7 @@ node.js是技术, 不是后台的语言
 - non-blocking I/O model非阻塞IO模型(异步)
 - lightweight and efficient轻量和高效
 
-3.Node.js'package ecosytem, npm, is the largest ecosystem of open source libraries in the world.
+3.Node.js'package ecosystem, npm, is the largest ecosystem of open source libraries in the world.
 
 翻译:
 
@@ -218,7 +230,7 @@ Buffer.from(string[, encoding]) 创建一个包含 `string` 的 `Buffer`。
 
 `encoding` string `string` 的字符编码。默认为 `'utf8'`。
 
-注意: 转二进制的编码格式默认是utf8,如果编码格式为scii, 中文转换为二进制就会编码有错误, 虽然二进制看不出结果.然后输出的时候用toString(),toString()方法有隐式转换编码格式默认使用utf8.可以手动更改.
+注意: 转二进制的编码格式默认是utf8,如果编码格式为ASCII, 中文转换为二进制就会编码有错误, 虽然二进制看不出结果.然后输出的时候用toString(),toString()方法有隐式转换编码格式默认使用utf8.可以手动更改.
 
 ```javascript
 const buf4 = Buffer.from('hello node.js中文')
@@ -233,13 +245,13 @@ const buf4 = Buffer.from('hello node.js中文', 'ascii')
 console.log(buf4.toString())
 // hello node.js-�       
 
-const buf5 = Buffer.from('this is a tést');
+const buf5 = Buffer.from('this is a test');
 const buf6 = Buffer.from('7468697320697320612074c3a97374', 'hex');
 
 console.log(buf5.toString());
-// 输出: this is a tést
+// 输出: this is a test
 console.log(buf6.toString());
-// 输出: this is a tést
+// 输出: this is a test
 console.log(buf5.toString('ascii'));
 // 输出: this is a tC)st
 ```
@@ -426,7 +438,7 @@ const server = http.createServer((req, res) => {
     // 该回调函数在每次收到请求时调用
     // req指请求对象
     // res 指响应对象
-    //使用 res.wirteHead() 设置响应头    
+    //使用 res.writeHead() 设置响应头    
     const url = req.url;
     const method = req.method;
     if (url === '/' && method === 'GET') {
@@ -717,7 +729,7 @@ module.exports = function(){
 module.exports = 'hello'
 
 //以这个为准, 后者会覆盖前者
-module.exports = fuction () {
+module.exports = function () {
     return x + y
 }
 ```
@@ -835,25 +847,11 @@ require('a')
 //          node_modules/art-template/package.json/main
 //          index.js 备选项
 //          进入上一级目录找 node_modules
-//          按照这个规则一次往上找, 知道磁盘根目录还找不到, 最后报错: Can not find moudle xxx
+//          按照这个规则一次往上找, 知道磁盘根目录还找不到, 最后报错: Can not find module xxx
 //      一个项目有且仅有一个 node_modules 而且是存放到目录的根目录
 ```
 
 ## 其他
-
-### 软件开发版本
-
-设计到软件工程学:
-
-- x.x.x
-  - 0.0.1
-  - 0.0.2
-  - 1.1.5
-  - 1.9.2
-  - 2( 新增功能比较多,甚至可能去除了某些功能).5(加入了新功能).0(修复bug, 提升性能)
-  - 大版本
-  - 一般是这些客户端软件,技术框架开发者比较理解的多
-  - 做网站很少涉及到版本的概念,网站的目的就是快
 
 ### 文件操作路径和模块路径
 

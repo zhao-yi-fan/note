@@ -1,3 +1,12 @@
+---
+title: 原型和this深入
+date: 2020/01/15
+tags:
+  - JavaScript
+categories:
+  - JavaScript基础
+---
+
 # 原型和this深入
 
 ## 原型深入-函数的三种角色
@@ -1053,4 +1062,3 @@ let obj = {
 };
 obj.fn();//=> this:window 箭头函数执行和是否有点, 点前面是谁都没有关系了, 因为它没有自己的执行主体(this), 在箭头函数中使用到的this都是直接找上下文中的this来使用
 ```
-

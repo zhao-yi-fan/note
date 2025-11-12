@@ -1,3 +1,12 @@
+---
+title: dumi vuepress
+date: 2023/10/20
+tags:
+  - 其他
+categories:
+  - 其他
+---
+
 # dumi vuepress
 ## VuePress
 :::info

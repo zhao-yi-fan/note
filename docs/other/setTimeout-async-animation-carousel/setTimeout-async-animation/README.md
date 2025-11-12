@@ -1,3 +1,13 @@
+---
+title: setTimeout-async-animation
+date: 2022/10/05
+tags:
+  - 其他
+  - Promise
+categories:
+  - 其他
+---
+
 ## 定时器基础知识
 
 
@@ -27,4 +37,3 @@
 
 
 ## jquery中的动画方法
-

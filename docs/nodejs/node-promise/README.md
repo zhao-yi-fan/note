@@ -1,3 +1,15 @@
+---
+title: node
+date: 2021/08/22
+tags:
+  - Node.js
+  - Promise
+  - 异步编程
+  - Webpack
+categories:
+  - 后端开发
+---
+
 # node
 
 ## node基础概念
@@ -1450,4 +1462,3 @@ if (ENV === 'test') {
 GitHub Token: 8b043912fe107452ceafce920c4298dfedaf4093
 GitHub Gist: 1fa641053091a9778ba857e4bfb8709d
 ```
-

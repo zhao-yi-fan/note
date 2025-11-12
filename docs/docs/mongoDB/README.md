@@ -1,3 +1,12 @@
+---
+title: MongoDB
+date: 2021/11/20
+tags:
+  - 其他
+categories:
+  - 其他
+---
+
 # MongoDB
 
 ## 1.MongoDB介绍
@@ -1128,5 +1137,3 @@ backup、restore；
 ### 20.7内部角色
 
 __system
-
-

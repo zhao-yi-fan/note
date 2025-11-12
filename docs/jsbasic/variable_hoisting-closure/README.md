@@ -1,3 +1,12 @@
+---
+title: 变量提升、闭包
+date: 2020/04/10
+tags:
+  - JavaScript
+categories:
+  - JavaScript基础
+---
+
 # 变量提升、闭包
 
 ## JS数据渲染机制及内存堆栈
@@ -1096,4 +1105,3 @@ var obj = {};
 File-> Languages & Frameworks-> 点击JavaScript-> 下拉框 选ECMAScript 6 -> ok
 
 或者选React JSX 语法, 它是支持ES6规范的
-

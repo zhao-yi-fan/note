@@ -1,3 +1,16 @@
+---
+title: Vue介绍
+date: 2020/07/15
+tags:
+  - Vue
+  - Promise
+  - 异步编程
+  - Webpack
+  - Axios
+categories:
+  - 前端框架
+---
+
 # Vue介绍
 
 - vue是一个渐进式框架

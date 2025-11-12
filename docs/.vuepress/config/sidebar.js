@@ -62,6 +62,7 @@ module.exports = {
       children: [
         '/mobile/webapp/README.md',
         '/mobile/hybrid/README.md',
+        '/mobile/rem/README.md',
       ]
     },
   ],

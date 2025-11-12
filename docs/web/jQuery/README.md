@@ -1,3 +1,12 @@
+---
+title: jQuery
+date: 2020/09/10
+tags:
+  - 前端
+categories:
+  - Web开发
+---
+
 # jQuery
 ## html与text方法
 
@@ -351,6 +360,3 @@ console.log($);//未改名之前$是jq的
 var $$ = $.noConflict();//把jq的$改名为$$
 console.log($);//输出此时的$,现在是itcast库的$
 ```
-
-
-

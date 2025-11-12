@@ -1,4 +1,11 @@
-
+---
+title: git和node的安装和使用
+date: 2020/01/15
+tags:
+  - JavaScript
+categories:
+  - JavaScript基础
+---
 
 # git和node的安装和使用
 
@@ -429,4 +436,3 @@ yarn-error.log*
 > 这样就是加入成功了
 
 ![Alt text](./media/1523420338083.png)
-

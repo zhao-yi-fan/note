@@ -1,3 +1,14 @@
+---
+title: websocket http
+date: 2020/03/12
+tags:
+  - 前端
+  - 异步编程
+  - Webpack
+categories:
+  - Web开发
+---
+
 # websocket http
 
 ## 应用场景： 
@@ -958,4 +969,3 @@ let MessageSchema = new mongoose.Schema({
 let Message = conn.model('Message', MessageSchema);
 module.exports = { Message }
 ```
-
