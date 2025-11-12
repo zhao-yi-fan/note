@@ -5,19 +5,13 @@ modules:
   - Blog
   - Footer
 bannerBrand:
-  title: '前端开发'
-  description: 博客 & 文档
-  # heroImageStyle:
-  #   maxWidth: '200px'
-  #   width: '100%'
-  #   display: block
-  #   margin: '0 auto 2rem'
-  #   borderRadius: '1rem'
+  title: 'Web前端开发'
+  description: 前端技术博客与学习笔记
   bgImage: 'bg.svg'
-  tagline: React、Vue、node.js
+  tagline: React、Vue、Node.js、TypeScript、Webpack 等前端技术栈
   buttons:
-    - { text: home, link: 'https://www.zhaoyifan.top', type: 'text', icon: 'ColorPalette' }
-    - { text: blog, link: 'https://github.com/zhao-yi-fan/note', type: 'text', icon: 'ColorPalette' }
+    - { text: 首页, link: 'https://www.zhaoyifan.top', type: 'primary', icon: 'Home' }
+    - { text: GitHub, link: 'https://github.com/zhao-yi-fan/note', type: 'default', icon: 'LogoGithub' }
   socialLinks:
     - { icon: 'LogoGithub', link: 'https://github.com/zhao-yi-fan' }
 blog: # blog 模块的配置
