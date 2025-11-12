@@ -1,3 +1,128 @@
 :root {
   // text colors
 }
+
+// 让导航栏下拉菜单更紧凑
+.navbar-dropdown {
+  .navbar-dropdown-item {
+    padding: 0.4rem 1rem !important;  // 原默认约 0.7rem 1.5rem
+    line-height: 1.4 !important;      // 减少行高
+  }
+  
+  .navbar-dropdown-subtitle {
+    padding: 0.4rem 1rem 0.2rem !important;  // 分组标题的间距
+    margin-top: 0.3rem !important;
+    font-size: 0.9rem !important;
+  }
+  
+  // 子菜单项
+  .navbar-dropdown-item-child {
+    padding: 0.3rem 1rem 0.3rem 2rem !important;  // 子项左侧缩进
+    line-height: 1.3 !important;
+  }
+}
+
+// 让侧边栏更紧凑
+.sidebar {
+  .sidebar-heading {
+    padding: 0.3rem 1rem !important;    // 分组标题
+    margin-top: 0.5rem !important;
+    font-size: 0.95rem !important;
+  }
+  
+  .sidebar-link {
+    padding: 0.3rem 1rem !important;    // 侧边栏链接
+    line-height: 1.4 !important;
+    font-size: 0.9rem !important;
+  }
+  
+  // 嵌套层级的链接
+  .sidebar-sub-headers {
+    .sidebar-link {
+      padding: 0.25rem 1rem 0.25rem 2rem !important;
+    }
+  }
+}
+
+// vuepress-reco 主题专用样式（如果上面不生效，使用这个）
+.page-nav-dropdown {
+  .dropdown-item {
+    padding: 0.3rem 1rem !important;
+    line-height: 1.4 !important;
+  }
+}
+
+// 分组标题样式优化
+.sidebar-group {
+  .sidebar-group-title {
+    padding: 0.35rem 1rem !important;
+    line-height: 1.3 !important;
+    margin: 0.3rem 0 !important;
+  }
+  
+  .sidebar-group-items {
+    .sidebar-item {
+      padding: 0.3rem 1rem !important;
+      line-height: 1.3 !important;
+    }
+  }
+}
+
+// vuepress-theme-reco 专用样式
+.navbar-items {
+  .navbar-item {
+    .navbar-dropdown-wrapper {
+      .navbar-dropdown {
+        .dropdown-item {
+          padding: 0.35rem 1.2rem !important;
+          line-height: 1.4 !important;
+          
+          &.dropdown-subtitle {
+            padding: 0.4rem 1.2rem 0.25rem !important;
+            margin-top: 0.3rem !important;
+            font-weight: 600;
+            font-size: 0.9rem !important;
+          }
+          
+          h4 {
+            margin: 0.3rem 0 0.2rem !important;
+            padding: 0.3rem 0 !important;
+            font-size: 0.9rem !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+// 侧边栏系列导航样式（vuepress-reco）
+.sidebar-items {
+  .sidebar-item {
+    padding: 0.3rem 0 !important;
+    
+    .sidebar-heading {
+      padding: 0.35rem 1.5rem !important;
+      line-height: 1.4 !important;
+      font-size: 0.95rem !important;
+    }
+    
+    .sidebar-links {
+      .sidebar-link {
+        padding: 0.3rem 1.5rem !important;
+        line-height: 1.4 !important;
+        font-size: 0.9rem !important;
+      }
+    }
+  }
+}
+
+// 通用紧凑样式
+* {
+  &[class*="dropdown"] {
+    a, span {
+      padding-top: 0.35rem !important;
+      padding-bottom: 0.35rem !important;
+      line-height: 1.4 !important;
+    }
+  }
+}
