@@ -1,4 +1,5 @@
-import { defineClientConfig } from '@vuepress/client'
+import { defineClientConfig } from "@vuepress/client";
+import { onMounted } from "vue";
 // import ElementPlus from 'element-plus'
 // import 'element-plus/dist/index.css'
 
@@ -27,19 +28,34 @@ import { defineClientConfig } from '@vuepress/client'
 // }
 
 export default defineClientConfig({
-  enhance ({ app, router, siteData }) {
+  enhance({ app, router, siteData }) {
     console.log(app, router, siteData);
     // app.use(ElementPlus);
     // app.use(BunnyUi)
 
     router.beforeEach((to) => {
-      console.log('before navigation')
-    })
+      console.log("before navigation");
+    });
 
     router.afterEach((to) => {
-      console.log('after navigation')
-    })
+      console.log("after navigation");
+    });
   },
-  setup () { },
+  setup() {
+    // 添加导航栏下拉菜单滚动功能
+    onMounted(() => {
+      if (typeof window !== "undefined") {
+        // 只添加最大高度和滚动功能
+        const style = document.createElement("style");
+        style.textContent = `
+          .dropdown-link__container {
+            max-height: 80vh !important;
+            overflow-y: auto !important;
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    });
+  },
   rootComponents: [],
-})
+});
