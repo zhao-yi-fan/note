@@ -257,7 +257,7 @@ module.exports = {
 
     ![1551321055652](./media/1551321055652.png)
 
-## html插件
+## html插件 (HtmlWebpackPlugin)
 
 每次打包完需要在手动打包后的文件夹中点击index.html在浏览器中打开，地址是`file:\\`，我们需要地址是`localhost:`，官方有`webpack-dev-server`，开发时直接打包进内存中，浏览器输入直接可以打开
 
@@ -389,7 +389,7 @@ module.exports = {
 
 ![1563113728014](./media/1563113728014.png)
 
-## 样式处理（1）
+## css-loader 和 style-loader 的使用
 
 在index.html模板中是不允许引入css文件的，因为模板打包完会原封不动的到打包文件夹中，如果引入了css文件，此时会找不到打包文件夹外面的css文件，所以需要把css文件引入js文件中，一起打包，此时就需要css-loader，如果直接打包，js文件中是不会处理引入的 css文件的。
 
@@ -558,7 +558,7 @@ module: {
 
 `stylus`需要安装`stylus`和`stylus-loader`
 
-## 样式处理（2）
+## mini-css-extract-plugin 抽离 CSS
 
 抽离模板中的style标签中css样式为link，抽离css插件`mini-css-extract-plugin`
 
@@ -853,7 +853,7 @@ module.exports = {
 }
 ```
 
-## 转化es6语法
+## 转化es6语法 (babel-loader)
 
 在js文件中如果用到了箭头函数，没有引入babel，打包之后没有变成普通函数，仍然是箭头函数。
 
@@ -963,7 +963,7 @@ module.exports = {
 
 ## 处理js语法及校验
 
-### 代码转换babel
+### 代码转换 (babel)
 
 如果写了generator语法会报错
 
@@ -1082,7 +1082,7 @@ module.exports = {
 }
 ```
 
-### 校验规范eslint
+### 校验规范 (eslint-loader)
 
 可以到eslint官网自定义eslint配置后下载`eslintrc.json`文件，之后在文件前面加`.`使用
 
@@ -1188,7 +1188,7 @@ module.exports = {
 
 `postloader`：后置loader
 
-### 全局暴露变量
+### 全局暴露变量 (expose-loader)
 
 引入jquery被webpack打包之后是在闭包中，没有挂到window对象上，别的js文件并不能使用jquery。此时需要引入`expose-loader`。
 
@@ -1301,7 +1301,7 @@ module.exports = {
 }
 ```
 
-- providePlugin 给每个模块中都注入$，但是没有在window上
+- ProvidePlugin 给每个模块中都注入$，但是没有在window上
 
 ```javascript
 let webpack = require('webpack');// webpack.ProvidePlugin
@@ -1461,7 +1461,7 @@ module.exports = {
 }
 ```
 
-## 图片处理
+## 图片处理 (file-loader、url-loader、html-withimg-loader)
 
 1. 在js中创建图片来引入
 
@@ -1781,158 +1781,908 @@ module.exports = {
 
 ## 打包文件分类
 
+可以通过配置 `output.publicPath` 和 loader 的 `outputPath` 来对打包文件进行分类管理。
 
+```javascript
+module.exports = {
+  output: {
+    filename: 'js/bundle.[hash:8].js',
+    path: path.resolve(__dirname, 'build')
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 1024,
+            outputPath: 'img/' // 图片输出到img目录
+          }
+        }
+      }
+    ]
+  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: 'css/main.css' // css输出到css目录
+    })
+  ]
+}
+```
 
 ## 打包多页应用
 
+多页应用需要配置多个入口和多个 `HtmlWebpackPlugin` 实例。
 
+```javascript
+module.exports = {
+  entry: {
+    home: './src/home.js',
+    other: './src/other.js'
+  },
+  output: {
+    filename: '[name].[hash:8].js',
+    path: path.resolve(__dirname, 'build')
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/home.html',
+      filename: 'home.html',
+      chunks: ['home'] // 只引入home.js
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/other.html',
+      filename: 'other.html',
+      chunks: ['other'] // 只引入other.js
+    })
+  ]
+}
+```
 
 ## 配置source-map
 
+`devtool` 用于配置源码映射,方便调试代码。
 
+```javascript
+module.exports = {
+  mode: 'development',
+  devtool: 'source-map', // 会生成.map文件,显示行和列
+  // devtool: 'eval-source-map', // 不会生成单独文件,但会显示行和列
+  // devtool: 'cheap-module-source-map', // 不会产生列,但是是一个单独的映射文件
+  // devtool: 'cheap-module-eval-source-map', // 不会产生文件也不会产生列
+}
+```
 
 ## watch的用法
 
+监听文件变化,自动重新打包。
 
+```javascript
+module.exports = {
+  watch: true,
+  watchOptions: {
+    poll: 1000, // 每秒问我1000次
+    aggregateTimeout: 500, // 防抖,停止输入500ms后再打包
+    ignored: /node_modules/ // 不需要监控的文件
+  }
+}
+```
 
-## webpack小插件应用
+## webpack小插件应用 (CleanWebpackPlugin、CopyWebpackPlugin、BannerPlugin)
 
+- `CleanWebpackPlugin`: 每次打包前清空输出目录
+- `CopyWebpackPlugin`: 拷贝静态文件到输出目录
+- `BannerPlugin`: webpack内置插件,给打包文件添加版权注释
 
+```javascript
+let { CleanWebpackPlugin } = require('clean-webpack-plugin');
+let CopyWebpackPlugin = require('copy-webpack-plugin');
+let webpack = require('webpack');
+
+module.exports = {
+  plugins: [
+    new CleanWebpackPlugin(),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'doc', to: './' }
+      ]
+    }),
+    new webpack.BannerPlugin('版权所有 2023')
+  ]
+}
+```
 
 ## webpack跨域问题
 
+使用 `devServer.proxy` 配置代理解决开发环境跨域问题。
 
+```javascript
+module.exports = {
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        pathRewrite: {'/api': ''}, // 重写路径
+        changeOrigin: true // 改变源
+      }
+    }
+  }
+}
+```
 
 ## resolve属性的配置
 
+配置模块如何解析。
 
+```javascript
+module.exports = {
+  resolve: {
+    modules: [path.resolve('node_modules')], // 指定解析模块的目录
+    extensions: ['.js', '.jsx', '.json', '.css'], // 自动解析扩展名
+    alias: { // 别名
+      '@': path.resolve(__dirname, 'src')
+    }
+  }
+}
+```
 
-## 定义环境变量
+## 定义环境变量 (DefinePlugin)
 
+使用 webpack 内置的 `DefinePlugin` 定义全局变量。
 
+```javascript
+let webpack = require('webpack');
+
+module.exports = {
+  plugins: [
+    new webpack.DefinePlugin({
+      DEV: JSON.stringify('development'),
+      FLAG: 'true',
+      EXPRESSION: '1+1'
+    })
+  ]
+}
+// 使用: console.log(DEV) // 'development'
+```
 
 ## 区分不同环境
 
+通过不同的配置文件区分开发和生产环境。
 
+```javascript
+// webpack.base.js 公共配置
+// webpack.dev.js 开发配置
+// webpack.prod.js 生产配置
+
+// 使用webpack-merge合并配置
+let { merge } = require('webpack-merge');
+let base = require('./webpack.base.js');
+
+module.exports = merge(base, {
+  mode: 'development',
+  devServer: {}
+})
+```
 
 ## noParse
 
+不解析某个库的依赖,提高构建速度。
 
+```javascript
+module.exports = {
+  module: {
+    noParse: /jquery/, // 不去解析jquery中的依赖关系
+    rules: []
+  }
+}
+```
 
 ## IgnorePlugin
 
+忽略某些模块,常用于忽略 moment 的语言包。
 
+```javascript
+let webpack = require('webpack');
+
+module.exports = {
+  plugins: [
+    new webpack.IgnorePlugin({
+      resourceRegExp: /^\.\/locale$/,
+      contextRegExp: /moment$/
+    })
+  ]
+}
+// 手动引入需要的语言包: import 'moment/locale/zh-cn'
+```
 
 ## dllPlugin
 
+动态链接库,预先打包不常变化的第三方库,提高构建速度。
 
+```javascript
+// webpack.dll.js
+let webpack = require('webpack');
+module.exports = {
+  mode: 'development',
+  entry: {
+    react: ['react', 'react-dom']
+  },
+  output: {
+    filename: '_dll_[name].js',
+    path: path.resolve(__dirname, 'dist'),
+    library: '_dll_[name]'
+  },
+  plugins: [
+    new webpack.DllPlugin({
+      name: '_dll_[name]',
+      path: path.resolve(__dirname, 'dist', 'manifest.json')
+    })
+  ]
+}
+// 在webpack.config.js中引用
+new webpack.DllReferencePlugin({
+  manifest: path.resolve(__dirname, 'dist', 'manifest.json')
+})
+```
 
 ## happypack
 
+多线程打包,提高构建速度。
 
+```javascript
+let Happypack = require('happypack');
+
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: 'happypack/loader?id=js'
+      }
+    ]
+  },
+  plugins: [
+    new Happypack({
+      id: 'js',
+      use: [{
+        loader: 'babel-loader',
+        options: {
+          presets: ['@babel/preset-env']
+        }
+      }]
+    })
+  ]
+}
+```
 
 ## webpack自带优化
 
+- `tree-shaking`: 生产模式自动开启,去除未引用代码
+- `scope hoisting`: 作用域提升,减少函数声明
 
+```javascript
+module.exports = {
+  mode: 'production', // 自动开启tree-shaking和scope hoisting
+  optimization: {
+    usedExports: true // 标记未使用的导出
+  }
+}
+```
 
-## 抽离公共代码
+## 抽离公共代码 (splitChunks)
 
+使用 `splitChunks` 抽离公共模块。
 
+```javascript
+module.exports = {
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: { // 第三方模块
+          test: /node_modules/,
+          chunks: 'initial',
+          minSize: 0,
+          minChunks: 2,
+          priority: 1
+        },
+        common: { // 公共模块
+          chunks: 'initial',
+          minSize: 0,
+          minChunks: 2
+        }
+      }
+    }
+  }
+}
+```
 
 ## 懒加载
 
+使用 ES6 的 `import()` 语法实现懒加载。
 
+```javascript
+// 点击按钮后才加载source.js
+button.addEventListener('click', () => {
+  import('./source.js').then(data => {
+    console.log(data.default);
+  })
+})
 
-## 热更新
+// 使用vue-router懒加载
+const Home = () => import('./views/Home.vue')
+```
 
+## 热更新 (HotModuleReplacementPlugin)
 
+启用热模块替换,无需刷新页面即可更新模块。
+
+```javascript
+let webpack = require('webpack');
+
+module.exports = {
+  devServer: {
+    hot: true
+  },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin()
+  ]
+}
+```
 
 ## tapable介绍
 
+`tapable` 是 webpack 的核心库,提供了插件系统的基础。webpack 中的钩子都是基于 tapable 实现的。
 
+主要钩子类型:
+- `SyncHook`: 同步钩子
+- `SyncBailHook`: 同步熔断钩子
+- `AsyncParallelHook`: 异步并行钩子
+- `AsyncSeriesHook`: 异步串行钩子
 
-## tapable
+## tapable 基础使用 (SyncHook)
 
+同步钩子的基本使用。
 
+```javascript
+let { SyncHook } = require('tapable');
 
-## AsyncParralleHook
+class Lesson {
+  constructor() {
+    this.hooks = {
+      arch: new SyncHook(['name'])
+    }
+  }
+  tap() {
+    this.hooks.arch.tap('node', (name) => {
+      console.log('node', name);
+    })
+    this.hooks.arch.tap('react', (name) => {
+      console.log('react', name);
+    })
+  }
+  start() {
+    this.hooks.arch.call('jw');
+  }
+}
+```
 
+## AsyncParallelHook
 
+异步并行钩子,注册的事件并行执行。
+
+```javascript
+let { AsyncParallelHook } = require('tapable');
+
+class Lesson {
+  constructor() {
+    this.hooks = {
+      arch: new AsyncParallelHook(['name'])
+    }
+  }
+  tap() {
+    this.hooks.arch.tapAsync('node', (name, cb) => {
+      setTimeout(() => {
+        console.log('node', name);
+        cb();
+      }, 1000)
+    })
+  }
+  start() {
+    this.hooks.arch.callAsync('jw', () => {
+      console.log('end');
+    })
+  }
+}
+```
 
 ## AsyncSeriesHook
 
+异步串行钩子,注册的事件依次执行。
 
+```javascript
+let { AsyncSeriesHook } = require('tapable');
 
-## AsyncSeriesWaterfall
+class Lesson {
+  constructor() {
+    this.hooks = {
+      arch: new AsyncSeriesHook(['name'])
+    }
+  }
+  tap() {
+    this.hooks.arch.tapAsync('node', (name, cb) => {
+      setTimeout(() => {
+        console.log('node', name);
+        cb();
+      }, 1000)
+    })
+  }
+  start() {
+    this.hooks.arch.callAsync('jw', () => {
+      console.log('end');
+    })
+  }
+}
+```
 
+## AsyncSeriesWaterfallHook
 
+异步串行瀑布钩子,上一个事件的返回值会传递给下一个事件。
+
+```javascript
+let { AsyncSeriesWaterfallHook } = require('tapable');
+
+class Lesson {
+  constructor() {
+    this.hooks = {
+      arch: new AsyncSeriesWaterfallHook(['name'])
+    }
+  }
+  tap() {
+    this.hooks.arch.tapAsync('node', (name, cb) => {
+      setTimeout(() => {
+        console.log('node', name);
+        cb(null, 'result');
+      }, 1000)
+    })
+    this.hooks.arch.tapAsync('react', (data, cb) => {
+      console.log('react', data);
+      cb();
+    })
+  }
+  start() {
+    this.hooks.arch.callAsync('jw', () => {
+      console.log('end');
+    })
+  }
+}
+```
 
 ## webpack手写
 
+手写简易 webpack 的基本流程:
+1. 读取入口文件
+2. 分析模块依赖
+3. 递归处理所有依赖
+4. 生成打包后的代码
 
+核心步骤包括: 分析模块、创建依赖关系、AST解析、生成打包结果。
 
 ## webpack分析及处理
 
+读取配置文件和入口文件,开始处理。
 
+```javascript
+let fs = require('fs');
+let path = require('path');
+
+class Compiler {
+  constructor(config) {
+    this.config = config;
+    this.entryId;
+    this.modules = {};
+    this.entry = config.entry;
+    this.root = process.cwd();
+  }
+  run() {
+    // 执行并创建模块的依赖关系
+    this.buildModule(path.resolve(this.root, this.entry), true);
+    // 发射打包后的文件
+    this.emitFile();
+  }
+}
+```
 
 ## 创建依赖关系
 
+构建模块并收集依赖。
 
+```javascript
+buildModule(modulePath, isEntry) {
+  let source = this.getSource(modulePath);
+  let moduleName = './' + path.relative(this.root, modulePath);
+  
+  if (isEntry) {
+    this.entryId = moduleName;
+  }
+  
+  let { sourceCode, dependencies } = this.parse(source, path.dirname(moduleName));
+  this.modules[moduleName] = sourceCode;
+  
+  dependencies.forEach(dep => {
+    this.buildModule(path.join(this.root, dep), false);
+  })
+}
+```
 
 ## AST递归解析
 
+使用 `@babel/parser` 和 `@babel/traverse` 解析源码。
 
+```javascript
+let babylon = require('@babel/parser');
+let traverse = require('@babel/traverse').default;
+let t = require('@babel/types');
+
+parse(source, parentPath) {
+  let ast = babylon.parse(source);
+  let dependencies = [];
+  
+  traverse(ast, {
+    CallExpression(p) {
+      if (p.node.callee.name === 'require') {
+        let moduleName = p.node.arguments[0].value;
+        dependencies.push(moduleName);
+        p.node.arguments = [t.stringLiteral('./' + path.join(parentPath, moduleName))];
+      }
+    }
+  })
+  
+  let sourceCode = generator(ast).code;
+  return { sourceCode, dependencies };
+}
+```
 
 ## 生成打包结果
 
+生成最终的打包文件。
 
+```javascript
+emitFile() {
+  let main = path.join(this.config.output.path, this.config.output.filename);
+  
+  let template = `(function(modules) {
+    function require(moduleId) {
+      function localRequire(relativePath) {
+        return require(modules[moduleId][1][relativePath]);
+      }
+      var module = { exports: {} };
+      modules[moduleId][0].call(module.exports, localRequire, module, module.exports);
+      return module.exports;
+    }
+    require('${this.entryId}')
+  })({${this.modules}})`;
+  
+  fs.writeFileSync(main, template);
+}
+```
 
 ## 增加loader
 
+在 webpack 中集成 loader 处理。
 
+```javascript
+getSource(modulePath) {
+  let content = fs.readFileSync(modulePath, 'utf8');
+  let rules = this.config.module.rules;
+  
+  for (let i = 0; i < rules.length; i++) {
+    let rule = rules[i];
+    let { test, use } = rule;
+    if (test.test(modulePath)) {
+      for (let j = use.length - 1; j >= 0; j--) {
+        let loader = require(use[j]);
+        content = loader(content);
+      }
+    }
+  }
+  return content;
+}
+```
 
 ## 增加plugins
 
+在 webpack 中集成插件系统。
 
+```javascript
+constructor(config) {
+  this.config = config;
+  this.hooks = {
+    entryOption: new SyncHook(),
+    compile: new SyncHook(),
+    afterCompile: new SyncHook(),
+    emit: new SyncHook(),
+    done: new SyncHook()
+  }
+  
+  let plugins = this.config.plugins;
+  if (Array.isArray(plugins)) {
+    plugins.forEach(plugin => {
+      plugin.apply(this);
+    })
+  }
+}
+```
 
-## loader
+## loader 基础
 
+loader 本质是一个函数,接收源码,返回处理后的源码。
 
+```javascript
+// loader本质就是一个函数
+function loader(source) {
+  // source是源代码
+  return source; // 返回处理后的代码
+}
+
+module.exports = loader;
+```
 
 ## loader配置
 
+配置自定义 loader 的路径。
 
+```javascript
+module.exports = {
+  resolveLoader: {
+    modules: ['node_modules', path.resolve(__dirname, 'loaders')]
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: 'my-loader' // 会在loaders目录下查找
+      }
+    ]
+  }
+}
+```
 
 ## babel-loader实现
 
+简易 babel-loader 实现。
 
+```javascript
+let babel = require('@babel/core');
+
+function loader(source) {
+  let options = this.query; // 获取配置的options
+  let { code } = babel.transform(source, {
+    ...options,
+    sourceMap: true
+  })
+  return code;
+}
+
+module.exports = loader;
+```
 
 ## banner-loader实现
 
+在文件顶部添加注释的 loader。
 
+```javascript
+let loaderUtils = require('loader-utils');
+let fs = require('fs');
+
+function loader(source) {
+  let options = loaderUtils.getOptions(this);
+  let cb = this.async(); // 异步loader
+  
+  if (options.filename) {
+    fs.readFile(options.filename, 'utf8', (err, data) => {
+      cb(err, data + source);
+    })
+  } else {
+    cb(null, options.text + source);
+  }
+}
+
+module.exports = loader;
+```
 
 ## 实现file-loader和url-loader
 
+处理文件和转 base64 的 loader。
 
+```javascript
+// file-loader
+let loaderUtils = require('loader-utils');
 
-## less-loader和css-loader
+function loader(source) {
+  let filename = loaderUtils.interpolateName(this, '[hash].[ext]', { content: source });
+  this.emitFile(filename, source);
+  return `module.exports = "${filename}"`;
+}
 
+loader.raw = true; // 处理二进制
+module.exports = loader;
 
+// url-loader
+function loader(source) {
+  let { limit } = loaderUtils.getOptions(this);
+  if (limit && limit > source.length) {
+    return `module.exports = "data:image/png;base64,${source.toString('base64')}"`;
+  } else {
+    return require('./file-loader').call(this, source);
+  }
+}
+loader.raw = true;
+module.exports = loader;
+```
 
-## css-loader
+## less-loader和css-loader实现
 
+处理样式的 loader。
 
+```javascript
+// less-loader
+let less = require('less');
+
+function loader(source) {
+  let css = '';
+  less.render(source, (err, output) => {
+    css = output.css;
+  })
+  return css;
+}
+
+module.exports = loader;
+
+// style-loader
+function loader(source) {
+  let str = `
+    let style = document.createElement('style');
+    style.innerHTML = ${JSON.stringify(source)};
+    document.head.appendChild(style);
+  `;
+  return str;
+}
+
+module.exports = loader;
+```
+
+## css-loader实现
+
+处理 css 中 `@import` 和 `url()` 的 loader。
+
+```javascript
+function loader(source) {
+  let reg = /url\((.+?)\)/g;
+  let pos = 0;
+  let arr = ['let list = []'];
+  
+  while(current = reg.exec(source)) {
+    let [matchUrl, g] = current;
+    let last = reg.lastIndex - matchUrl.length;
+    arr.push(`list.push(${JSON.stringify(source.slice(pos, last))})`);
+    arr.push(`list.push('url(' + require(${g}) + ')')`);
+    pos = reg.lastIndex;
+  }
+  arr.push(`list.push(${JSON.stringify(source.slice(pos))})`);
+  arr.push(`module.exports = list.join('')`);
+  return arr.join('\n');
+}
+
+module.exports = loader;
+```
 
 ## webpack中的插件
 
+插件是一个类,需要实现 apply 方法。
 
+```javascript
+class MyPlugin {
+  constructor(options) {
+    this.options = options;
+  }
+  
+  apply(compiler) {
+    compiler.hooks.emit.tap('MyPlugin', (compilation) => {
+      // compilation 包含打包的所有信息
+      console.log('emit');
+    })
+  }
+}
 
-## 文件列表插件
+module.exports = MyPlugin;
+```
 
+## 文件列表插件 (FileListPlugin)
 
+生成打包文件列表的插件。
 
-## 内联webpack插件
+```javascript
+class FileListPlugin {
+  constructor(options) {
+    this.filename = options.filename || 'filelist.md';
+  }
+  
+  apply(compiler) {
+    compiler.hooks.emit.tap('FileListPlugin', (compilation) => {
+      let assets = compilation.assets;
+      let content = '## 文件列表\n';
+      
+      Object.keys(assets).forEach(filename => {
+        content += `- ${filename}\n`;
+      })
+      
+      assets[this.filename] = {
+        source() { return content },
+        size() { return content.length }
+      }
+    })
+  }
+}
 
+module.exports = FileListPlugin;
+```
 
+## 内联webpack插件 (InlineSourcePlugin)
+
+将外链资源内联到 HTML 中的插件。
+
+```javascript
+let HtmlWebpackPlugin = require('html-webpack-plugin');
+
+class InlineSourcePlugin {
+  apply(compiler) {
+    compiler.hooks.compilation.tap('InlineSourcePlugin', (compilation) => {
+      HtmlWebpackPlugin.getHooks(compilation).alterAssetTagGroups.tapAsync(
+        'InlineSourcePlugin',
+        (data, cb) => {
+          data.headTags = data.headTags.map(tag => {
+            if (tag.tagName === 'script') {
+              tag = {
+                tagName: 'script',
+                innerHTML: compilation.assets[tag.attributes.src].source(),
+                closeTag: true
+              }
+            }
+            return tag;
+          })
+          cb(null, data);
+        }
+      )
+    })
+  }
+}
+
+module.exports = InlineSourcePlugin;
+```
 
 ## 打包后自动发布
+
+使用钩子在打包完成后自动发布。
+
+```javascript
+class UploadPlugin {
+  apply(compiler) {
+    compiler.hooks.afterEmit.tapAsync('UploadPlugin', (compilation, cb) => {
+      // 打包完成后执行
+      console.log('开始上传文件...');
+      
+      // 这里可以使用 scp、ftp 等方式上传文件
+      // 例如使用 child_process 执行上传命令
+      let { exec } = require('child_process');
+      exec('scp -r ./dist/* user@server:/path', (err) => {
+        if (err) console.log('上传失败', err);
+        else console.log('上传成功');
+        cb();
+      })
+    })
+  }
+}
+
+module.exports = UploadPlugin;
+```
