@@ -106,6 +106,7 @@ module.exports = [
         text: 'React基础',
         children: [
           '/react/basic.md',
+          '/react/react-vs-vue.md',
         ]
       },
       {
