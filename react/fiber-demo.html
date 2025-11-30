@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>Minimal Fiber Example</title>
+</head>
+<body>
+  <h2>Minimal Fiber Demo（可中断渲染）</h2>
+  <div id="root"></div>
+
+  <script>
+    /**
+     * -----------------------------
+     * Minimal Fiber 实现原理演示
+     * -----------------------------
+     * 核心点：
+     * 1. Fiber 节点 = 一个工作单元
+     * 2. 用 requestIdleCallback 将任务切片
+     * 3. 每一帧只执行一点点工作（可中断）
+     * 4. 类似 React Fiber 的协调过程
+     */
+
+    // 模拟一个 Fiber 虚拟节点结构（child / sibling）
+    function createFiber(text, children = []) {
+      return {
+        text,
+        dom: null,
+        parent: null,
+        child: null,
+        sibling: null,
+        children
+      };
+    }
+
+    // 将 children 转成 child / sibling 链表
+    function linkChildren(parentFiber) {
+      const children = parentFiber.children;
+
+      let prev = null;
+      children.forEach((child, i) => {
+        child.parent = parentFiber;
+        if (i === 0) {
+          parentFiber.child = child;
+        } else {
+          prev.sibling = child;
+        }
+        prev = child;
+      });
+    }
+
+    // 要渲染的 “虚拟 Fiber 树”
+    const fiberTree = createFiber("A", [
+      createFiber("B", [
+        createFiber("D"),
+        createFiber("E"),
+      ]),
+      createFiber("C", [
+        createFiber("F"),
+        createFiber("G"),
+      ]),
+    ]);
+
+    // 构建 child / sibling 链表
+    linkChildren(fiberTree);
+    linkChildren(fiberTree.child);
+    linkChildren(fiberTree.child.sibling);
+
+    let nextUnitOfWork = fiberTree; // 下一个工作单元（Fiber）
+
+    function performUnitOfWork(fiber) {
+      // 1. 创建 DOM（工作内容）
+      if (!fiber.dom) {
+        const dom = document.createElement("div");
+        dom.textContent = fiber.text;
+        dom.style.border = "1px solid #333";
+        dom.style.margin = "4px";
+        dom.style.padding = "4px";
+        fiber.dom = dom;
+
+        if (fiber.parent && fiber.parent.dom) {
+          fiber.parent.dom.appendChild(dom);
+        }
+      }
+
+      // 2. 返回下一步要处理的 Fiber（DFS 深度优先）
+      if (fiber.child) return fiber.child;
+      let next = fiber;
+      while (next) {
+        if (next.sibling) return next.sibling;
+        next = next.parent;
+      }
+
+      return null;
+    }
+
+    function workLoop(deadline) {
+      console.log(deadline.timeRemaining());
+      
+      // deadline.timeRemaining() 查看本帧还有多少可用时间
+      while (nextUnitOfWork && deadline.timeRemaining() > 1) {
+        nextUnitOfWork = performUnitOfWork(nextUnitOfWork);
+      }
+
+      // 如果还有未完成的 Fiber，下一帧继续
+      if (nextUnitOfWork) {
+        requestIdleCallback(workLoop);
+      } else {
+        console.log("Fiber 渲染完成！");
+      }
+    }
+
+    // 挂载根节点
+    document.getElementById("root").appendChild(
+      (fiberTree.dom = document.createElement("div"))
+    );
+
+    // 开始 Fiber 调度
+    requestIdleCallback(workLoop);
+  </script>
+</body>
+</html>

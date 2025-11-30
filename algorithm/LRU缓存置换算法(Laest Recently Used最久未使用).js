@@ -21,7 +21,8 @@ class LRUCache {
     }
     this.#map.set(key, value);
     if (this.#map.size > this.#length) {
-      this.#map.delete(this.#map.keys().next().value);
+      const firstKey = this.#map.keys().next().value;
+      this.#map.delete(firstKey);
     }
     return this.#map;
   }

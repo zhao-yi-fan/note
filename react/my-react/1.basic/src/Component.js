@@ -33,7 +33,7 @@ class Updater {
   updateComponent () {
     const { classInstance, pendingStates } = this;
     if (pendingStates.length > 0) {
-      sholdUpdate(classInstance, this.getState());
+      shouldUpdate(classInstance, this.getState());
     }
   }
   getState () {
@@ -50,7 +50,7 @@ class Updater {
   }
 }
 
-function sholdUpdate (classInstance, nextState) {
+function shouldUpdate (classInstance, nextState) {
   classInstance.state = nextState; // 先把新状态赋值给实例的state
   classInstance.forceUpdate(); // 强制更新
 }

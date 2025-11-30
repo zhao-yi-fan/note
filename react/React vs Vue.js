@@ -160,8 +160,8 @@
                           │
                           ▼
               ┌────────────────────────┐
-              │     Fiber Render Phase  │   ← 可中断、可恢复
-              │  (构建 Fiber 链表，diff)│
+              │     Fiber Render Phase │   ← 可中断、可恢复
+              │  (构建 Fiber 链表，diff) │
               └────────────────────────┘
                           │
                           ▼

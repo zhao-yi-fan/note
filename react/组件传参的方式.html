@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>React Props Examples</title>
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+
+    /**************************************
+     * 1. 父 → 子：props 传基本参数
+     **************************************/
+    function ChildProps({ name, age }) {
+      return <div>ChildProps: {name} - {age}</div>;
+    }
+
+    /**************************************
+     * 2. 父 → 子：children（插槽）
+     **************************************/
+    function ChildWithChildren({ children }) {
+      return <div>ChildWithChildren: {children}</div>;
+    }
+
+    /**************************************
+     * 3. 父 → 子：render props
+     **************************************/
+    function RenderProps({ render }) {
+      return <div>RenderProps: {render("Hello from render props")}</div>;
+    }
+
+    /**************************************
+     * 4. 父 → 子：props spreading 展开传参
+     **************************************/
+    function SpreadProps({ user, city }) {
+      return <div>SpreadProps: {user.name} - {city}</div>;
+    }
+
+    /**************************************
+     * 5. 子 → 父：事件回调
+     **************************************/
+    function ChildEmit({ onSend }) {
+      return (
+        <button onClick={() => onSend("Message from child")}>
+          Click to send message to parent
+        </button>
+      );
+    }
+
+    /**************************************
+     * 6. 子 → 父：forwardRef + useImperativeHandle
+     **************************************/
+    const ChildRef = React.forwardRef((props, ref) => {
+      const inputRef = React.useRef();
+      React.useImperativeHandle(ref, () => ({
+        focus() {
+          inputRef.current.focus();
+        }
+      }));
+      return <input ref={inputRef} placeholder="ChildRef input" />;
+    });
+
+    /**************************************
+     * 7. 跨层级通信：Context
+     **************************************/
+    const MyContext = React.createContext();
+
+    function DeepChild() {
+      const user = React.useContext(MyContext);
+      return <div>DeepChild from Context: {user.name}</div>;
+    }
+
+    function ContextParent() {
+      return (
+        <MyContext.Provider value={{ name: "Context User" }}>
+          <DeepChild />
+        </MyContext.Provider>
+      );
+    }
+
+    /**************************************
+     * 8. 非父子通信：EventBus（mitt 简易实现）
+     **************************************/
+    const bus = {
+      events: {},
+      on(event, fn) {
+        this.events[event] = this.events[event] || [];
+        this.events[event].push(fn);
+      },
+      emit(event, data) {
+        (this.events[event] || []).forEach(fn => fn(data));
+      }
+    };
+
+    function EventBusSender() {
+      return (
+        <button onClick={() => bus.emit("greet", "Hello via EventBus")}>
+          Emit EventBus Message
+        </button>
+      );
+    }
+
+    function EventBusReceiver() {
+      const [msg, setMsg] = React.useState("");
+      React.useEffect(() => {
+        bus.on("greet", data => setMsg(data));
+      }, []);
+      return <div>EventBusReceiver: {msg}</div>;
+    }
+
+    /**************************************
+     * Root App
+     **************************************/
+    function App() {
+      const ref = React.useRef();
+
+      return (
+        <div style={{ fontFamily: "Arial", padding: "20px" }}>
+
+          <h2>1. 父 → 子：props</h2>
+          <ChildProps name="Alice" age={18} />
+
+          <h2>2. children（插槽）</h2>
+          <ChildWithChildren>Content passed via children</ChildWithChildren>
+
+          <h2>3. render props</h2>
+          <RenderProps render={(msg) => <span>{msg}</span>} />
+
+          <h2>4. props spreading 展开传参</h2>
+          <SpreadProps {...{ user: { name: "Bob" }, city: "Beijing" }} />
+
+          <h2>5. 子 → 父：事件回调</h2>
+          <ChildEmit onSend={(msg) => alert("Parent received: " + msg)} />
+
+          <h2>6. ref 传参（子 → 父）</h2>
+          <ChildRef ref={ref} />
+          <button onClick={() => ref.current.focus()}>Focus child input</button>
+
+          <h2>7. Context 跨层级通信</h2>
+          <ContextParent />
+
+          <h2>8. EventBus（非父子通信）</h2>
+          <EventBusSender />
+          <EventBusReceiver />
+
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, document.getElementById("root"));
+  </script>
+</body>
+
+</html>
