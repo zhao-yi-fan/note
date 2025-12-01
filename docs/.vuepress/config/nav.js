@@ -119,7 +119,7 @@ module.exports = [
       {
         text: 'Redux',
         children: [
-
+          '/react/redux.md',
         ]
       },
     ],

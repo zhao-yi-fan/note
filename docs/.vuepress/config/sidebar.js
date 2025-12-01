@@ -61,6 +61,12 @@ module.exports = {
       ]
     },
     {
+      text: 'Redux',
+      children: [
+        '/react/redux.md',
+      ]
+    },
+    {
       text: 'React示例',
       children: [
         '/react/example/diff.md',
