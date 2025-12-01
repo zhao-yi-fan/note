@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>子应用页面</title>
+  <style>
+    body {
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+    
+    .sub-header {
+      color: #ff6b6b;
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+    
+    .card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 12px;
+      margin: 20px 0;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    
+    .info-box {
+      background: #f8f9fa;
+      border-left: 4px solid #667eea;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 4px;
+    }
+    
+    button {
+      background: #4CAF50;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 5px;
+      transition: all 0.3s;
+    }
+    
+    button:hover {
+      background: #45a049;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    .feature-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .feature-list li {
+      padding: 10px;
+      margin: 8px 0;
+      background: white;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .feature-list li:before {
+      content: "✨ ";
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1 class="sub-header">🚀 微前端子应用</h1>
+  
+  <div class="card">
+    <h2>欢迎来到子应用</h2>
+    <p>这是一个独立的子应用页面，可以被主应用加载并实现样式隔离</p>
+  </div>
+
+  <div class="info-box">
+    <h3>📦 子应用信息</h3>
+    <p><strong>应用名称：</strong> SubApp Demo</p>
+    <p><strong>版本：</strong> 1.0.0</p>
+    <p><strong>加载时间：</strong> <span id="loadTime"></span></p>
+  </div>
+
+  <div>
+    <h3>🎯 功能演示</h3>
+    <button onclick="changeGlobalVar()">修改全局变量</button>
+    <button onclick="showDialog()">显示弹窗</button>
+    <button onclick="toggleTheme()">切换主题</button>
+  </div>
+
+  <div class="info-box">
+    <h3>✨ CSS 隔离特性</h3>
+    <ul class="feature-list">
+      <li>Shadow DOM 隔离：真正的样式封装，完全隔离</li>
+      <li>Scoped CSS：通过添加属性选择器实现作用域</li>
+      <li>样式前缀：给所有 CSS 选择器添加命名空间</li>
+      <li>动态样式：支持动态添加和移除样式</li>
+    </ul>
+  </div>
+
+  <div id="output" class="info-box">
+    <h3>📊 操作输出</h3>
+    <div id="log">暂无操作</div>
+  </div>
+
+  <script>
+    // 显示加载时间
+    document.getElementById('loadTime').textContent = new Date().toLocaleTimeString();
+
+    // 子应用的全局变量
+    window.subAppData = {
+      name: 'SubApp',
+      count: 0,
+      theme: 'light'
+    };
+
+    function log(message) {
+      const logDiv = document.getElementById('log');
+      const time = new Date().toLocaleTimeString();
+      logDiv.innerHTML = `[${time}] ${message}<br>` + logDiv.innerHTML;
+    }
+
+    function changeGlobalVar() {
+      window.subAppData.count++;
+      window.subAppGlobalVar = '来自子应用的全局变量: ' + window.subAppData.count;
+      log(`✅ 修改全局变量成功，计数: ${window.subAppData.count}`);
+      console.log('子应用全局变量:', window.subAppGlobalVar);
+    }
+
+    function showDialog() {
+      log('💬 显示弹窗');
+      alert('这是子应用的弹窗！\n\n当前计数: ' + window.subAppData.count);
+    }
+
+    function toggleTheme() {
+      window.subAppData.theme = window.subAppData.theme === 'light' ? 'dark' : 'light';
+      
+      if (window.subAppData.theme === 'dark') {
+        document.body.style.background = '#2c3e50';
+        document.body.style.color = '#ecf0f1';
+        log('🌙 切换到深色主题');
+      } else {
+        document.body.style.background = 'white';
+        document.body.style.color = '#333';
+        log('☀️ 切换到浅色主题');
+      }
+    }
+
+    // 子应用初始化
+    console.log('🚀 子应用已加载');
+    log('🎉 子应用初始化完成');
+
+    // 暴露子应用生命周期（qiankun 规范）
+    if (window.__POWERED_BY_QIANKUN__) {
+      console.log('🔧 运行在 qiankun 环境中');
+    }
+
+    // 导出生命周期函数
+    window.subAppLifecycles = {
+      bootstrap: () => {
+        console.log('📦 子应用 bootstrap');
+        log('📦 Bootstrap 生命周期触发');
+      },
+      mount: () => {
+        console.log('🎯 子应用 mount');
+        log('🎯 Mount 生命周期触发');
+      },
+      unmount: () => {
+        console.log('👋 子应用 unmount');
+        log('👋 Unmount 生命周期触发');
+      }
+    };
+  </script>
+</body>
+</html>
+

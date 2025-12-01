@@ -14,15 +14,15 @@ Function.prototype.myBind = function (context) {
   };
 };
 
-
 const obj = {
-  sum: '123'
+  sum: "123",
+};
+
+function fn(a, b, c, d) {
+  console.log(arguments);
+  
+  return this.sum + a + b;
 }
 
-function fn (a, b) {
-  return this.sum + a + b
-
-}
-
-const newBindFn = fn.myBind(obj, 1, 2)
-console.log(newBindFn())
+const newBindFn = fn.myBind(obj, 1, 2);
+console.log(newBindFn(3, 4));
