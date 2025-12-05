@@ -3,12 +3,10 @@ import mustache from "mustache";
 
 const parser = new htmlparser2.Parser({
   onopentag(name, attributes) {
-    const tokens = mustache.parse(name);
-    console.log("name:", name, "tokens: ", tokens);
+    console.log("name:", name, "attributes", attributes);
+    const tokens = mustache.parse(attributes);
+    console.log("name:", name, "attributes", attributes, "tokens: ", tokens);
     console.log("onopentag: ", arguments);
-    if (name === "script" && attributes.type === "text/javascript") {
-      console.log("JS! Hooray!");
-    }
   },
 
   ontext(text) {
@@ -40,6 +38,6 @@ const parser = new htmlparser2.Parser({
     console.log("comment: ", comment);
   },
 });
-const vueStr = `<br id="1"/><div! class="tabBox">你好，我是{{name}}</div!><br id="2"/>`;
+const vueStr = `<div class="tabBox">你好，我是{{name}}</div>`;
 parser.write(vueStr);
 parser.end();
