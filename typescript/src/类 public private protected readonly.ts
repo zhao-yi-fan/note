@@ -21,7 +21,7 @@ let pointer = new Pointer(1, 2, 3, 4, 5, 6);
 // protected 受保护的父类本身子类能访问到这个属性
 // private 只有自己能访问到
 
-// 如果constructor被标识成了private 或者proteced 则此类不能被new,被标识成了private 不能被子类继承
+// 如果constructor被标识成了private 或者 protected 则此类不能被new,被标识成了private 不能被子类继承
 
 class Animal {
   private name!: string;
@@ -58,7 +58,7 @@ class Cat extends Animal {
   }
   say() {
     // 原型中的super指代的是父类的原型
-    super.say(); // Aniaml.prototype
+    super.say(); // Animal.prototype
     console.log("cat say");
   }
   //属性访问器，来访问私有属性

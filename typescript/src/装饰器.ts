@@ -9,7 +9,8 @@ function addSay(target: any) {
   };
 }
 
-function toUppcaseCase(target: any, key: string) { // target是类的原型 key是属性名
+function toUpcaseCase(target: any, key: string) {
+  // target是类的原型 key是属性名
   // target是类的原型 key是属性名
   let value = "";
   Object.defineProperty(target, key, {
@@ -45,7 +46,7 @@ function params(target: any, key: string, index: number) {
 @addSay
 class Person {
   say!: Function;
-  @toUppcaseCase
+  @toUpcaseCase
   name: string = "zhufeng"; // 直接默认走set方法
   @double(3) // 可以传参
   static age: number = 10; // 修饰类静态属性时 不会走set方法

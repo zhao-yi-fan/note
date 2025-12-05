@@ -20,13 +20,14 @@ fullName({ firstName: "z", lastName: "f" });
 
 /* // 2）描述函数
 interface IFullName {
-  (firtName: string, lastName: string): string;
+  (firstName: string, lastName: string): string;
 }
-const fullName = (firtName: string, lastName: string): string => {
-  return firtName + lastName;
+const fullName = (firstName: string, lastName: string): string => {
+  return firstName + lastName;
 }; */
 
-/* // 混合类型计数器 一个函数返回一个函数，返回的函数有属性
+/* 
+// 混合类型计数器 一个函数返回一个函数，返回的函数有属性
 interface ICount {
   count: number;
   (): number;
@@ -36,7 +37,8 @@ const fn: ICount = () => {
 };
 fn.count = 0;
 console.log(fn());
-console.log(fn()); */
+console.log(fn());
+ */
 
 //接口特性
 /* 

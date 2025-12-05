@@ -3,7 +3,7 @@
 let str: string | number; //当没有初始化的时候只能调用两者类型中的共同方法
 // str.tostring
 // str.valueof
-str = 1; //会根据赋值来推到后续的方法
+str = 1; //会根据赋值来推导后续的方法
 str.toFixed();
 str = "abc";
 str.toLowerCase();
