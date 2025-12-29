@@ -11,7 +11,24 @@ console.log(require('crypto').createHmac('sha1','zf').update('name=zf').digest('
 // cookie
 app.keys = ['zf'];
 router.get('/read', ctx => {
-  ctx.body = ctx.cookies.get('name');
+
+  // 设置cors
+  // ctx.set('Access-Control-Allow-Origin', 'http://localhost:8080');
+
+  // ctx.set('Access-Control-Allow-Credentials', 'true');
+
+  // 响应头增加json
+  ctx.set('Content-Type', 'application/json; charset=utf-8');
+  
+  // 显式设置状态码，并确保响应体有内容
+  ctx.status = 200;
+  ctx.body = {
+    code: 200,
+    message: 'success',
+    data: {
+      name: ctx.cookies.get('name'),
+    }
+  } 
 })
 router.get('/write', ctx => {
   ctx.cookies.set('name', 'zf', { signed: true });

