@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vue 父子生命周期顺序演示</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji"; padding: 20px; line-height: 1.5; }
+    pre { background: #f6f8fa; padding: 12px; border-radius: 8px; overflow: auto; }
+    .hint { color: #555; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Vue 父子生命周期打印顺序（created / beforeMount / mounted）</h1>
+  <p class="hint">打开控制台也能看到相同输出。下面的输出区域会按顺序逐行追加。</p>
+
+  <h2>输出</h2>
+  <pre id="log"></pre>
+
+  <!-- Vue 2 (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+  <script>
+    // 一个小 logger：同时写到页面和 console
+    function log(msg) {
+      const el = document.getElementById('log');
+      el.textContent += msg + "\n";
+      console.log(msg);
+    }
+
+    // 子组件
+    const Child = {
+      name: 'Child',
+      template: '<div style="padding:8px;border:1px dashed #999;border-radius:6px;margin-top:8px;">子组件渲染区域</div>',
+      created() { log('子 created'); },
+      beforeMount() { log('子 beforeMount'); },
+      mounted() { log('子 mounted'); }
+    };
+
+    // 父组件
+    const Parent = {
+      name: 'Parent',
+      components: { Child },
+      template: '<div style="padding:12px;border:1px solid #ccc;border-radius:8px;">父组件渲染区域<Child/></div>',
+      created() { log('父 created'); },
+      beforeMount() { log('父 beforeMount'); },
+      mounted() { log('父 mounted'); }
+    };
+
+    // 根实例：挂载 Parent
+    new Vue({
+      el: '#app',
+      render: h => h(Parent)
+    });
+  </script>
+
+  <h2>渲染区域</h2>
+  <div id="app"></div>
+
+  <p class="hint">预期顺序：父 created → 子 created → 父 beforeMount → 子 beforeMount → 子 mounted → 父 mounted</p>
+</body>
+</html>

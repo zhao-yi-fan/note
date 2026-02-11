@@ -15,7 +15,7 @@ var obj1 = {
 var a = 3;
 obj1.obj2.f();
 
-
+// 40
 
 
 

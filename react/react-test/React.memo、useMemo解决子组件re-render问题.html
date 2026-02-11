@@ -16,36 +16,36 @@
   <script type="text/babel">
     const { useEffect, useMemo, useState, useCallback } = React;
 
-    // class App extends React.PureComponent {
-    //   state = {
-    //     n: 0,
-    //     m: 0,
-    //   }
-    //   add = () => {
-    //     this.setState({
-    //       n: this.state.n + 1
-    //     })
-    //   }
-    //   addChild = () => {
-    //     this.setState({
-    //       m: this.state.m + 1
-    //     })
-    //   }
-    //   render () {
-    //   console.log('App render')
-    //     return (
-    //       <div>
-    //         <div>
-    //           n:{this.state.n}
-    //           <button onClick={this.add}>n+1</button>
-    //           <button onClick={this.addChild}>m+1</button>
-    //         </div>
-    //         <hr />
-    //         <Child data={this.state.m} onClick={this.addChild} />
-    //       </div>
-    //     )
-    //   }
-    // }
+    /* class App extends React.PureComponent {
+      state = {
+        n: 0,
+        m: 0,
+      }
+      add = () => {
+        this.setState({
+          n: this.state.n + 1
+        })
+      }
+      addChild = () => {
+        this.setState({
+          m: this.state.m + 1
+        })
+      }
+      render () {
+      console.log('App render')
+        return (
+          <div>
+            <div>
+              n:{this.state.n}
+              <button onClick={this.add}>n+1</button>
+              <button onClick={this.addChild}>m+1</button>
+            </div>
+            <hr />
+            <Child data={this.state.m} onClick={this.addChild} />
+          </div>
+        )
+      }
+    } */
     function App () {
       const [n, setN] = useState(0);
       const [m, setM] = useState(0);

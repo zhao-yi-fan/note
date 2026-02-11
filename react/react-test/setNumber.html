@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="//unpkg.com/react@17.0.2/umd/react.development.js" crossorigin></script>
+  <script src="//unpkg.com/react-dom@17.0.2/umd/react-dom.development.js" crossorigin></script>
+  <script src="//unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type="text/babel">
+    const { useState } = React
+    /* function App () {
+      const [n, setNumber] = useState(0)
+      console.log('render');
+
+      return <React.Fragment>
+        <div>{n}</div>
+        <button onClick={() => {
+          setNumber((n) => n + 1);
+          setNumber((n) => n + 2);
+          setNumber((n) => n + 3);
+        }}>+1</button>
+      </React.Fragment>
+    } */
+
+    class App extends React.Component {
+      constructor() {
+        super();
+        this.state = {
+          n: 0
+        }
+      }
+
+      render () {
+        return <React.Fragment>
+          <div>{this.state.n}</div>
+          <button onClick={() => {
+            this.setState({
+              n: this.state.n + 1
+            });
+            this.setState({
+              n: this.state.n + 1
+            });
+            this.setState({
+              n: this.state.n + 1
+            });
+          }}>+1</button>
+        </React.Fragment>
+      }
+    }
+
+
+    ReactDOM.render(<App name={'test'} />, document.getElementById("app"))
+  </script>
+</body>
+
+</html>

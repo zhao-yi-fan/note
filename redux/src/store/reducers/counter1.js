@@ -1,11 +1,11 @@
 import * as actionTypes from '../action-types'
 // Counter1组件对应的state
-const intialState = {
+const initialState = {
   number: 0,
   color: 'black'
 }
 // Counter1组件对应的reducer
-function counter1 (state = intialState, action) {
+function counter1 (state = initialState, action) {
   switch (action.type) {
     case actionTypes.ADD1:
       return { ...state, number: state.number + 1 }

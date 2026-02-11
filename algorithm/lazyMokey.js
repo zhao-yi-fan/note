@@ -1,13 +1,13 @@
-// 实现 Monkey，返回的对象提供 eat 和 sleep 两个函数，支持链式调用。具体调用方式如下所示：
-// new Monkey('Alan').eat('Banana').sleep(4).eat('Apple').sleep(5).eat('Pear')
-// 代码执行后输出:
+/* 实现 Monkey，返回的对象提供 eat 和 sleep 两个函数，支持链式调用。具体调用方式如下所示：
+new Monkey('Alan').eat('Banana').sleep(4).eat('Apple').sleep(5).eat('Pear')
+代码执行后输出:
 
-// my name is Alan
-// I eat Banana
-// 等待 4 s
-// I eat Apple
-// 等待 5 s
-// I eat Pear
+my name is Alan
+I eat Banana
+等待 4 s
+I eat Apple
+等待 5 s
+I eat Pear */
 
 
 /**

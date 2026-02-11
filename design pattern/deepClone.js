@@ -3,7 +3,7 @@ function deepClone(obj, cache = new WeakMap()) {
   if (obj === null || typeof obj !== "object") return obj;
 
   // 1. 如果已有缓存，直接返回
-  if (cache.has(obj)) return map.get(obj);
+  if (cache.has(obj)) return cache.get(obj);
 
   const clone = Array.isArray(obj) ? [] : {};
 

@@ -18,7 +18,7 @@ function createStore (reducer, preloadedState) {
   function subscribe (listener) {
     listeners.push(listener);
   }
-  dispatch({ type: '@@REDXU/INIT' })
+  dispatch({ type: '@@REDUX/INIT' })
   return {
     getState, // 用来获取当前仓库中的状态
     dispatch, // 向仓库派发动作

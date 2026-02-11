@@ -1,23 +1,16 @@
-function jumpFloor (number) {
-  let dep = 0;
-  function fn (number) {
-    const rest = number - 1;
-    const rest2 = number - 2;
-    if (rest === 0 || rest2 === 0) {
-      dep++;
-    }
-    if (rest < 0 || rest2 < 0) {
-      return
-    }
-    fn(rest);
-    fn(rest2);
-  }
-  fn(number);
+function jumpFloor(n) {
+  if (n <= 2) return n;
 
-  console.log(dep)
-  return dep
+  let a = 1, b = 2;
+  for (let i = 3; i <= n; i++) {
+    const sum = a + b;
+    a = b;
+    b = sum;
+  }
+  return b;
 }
-jumpFloor(9)
+
+console.log(jumpFloor(3)); // 55
 
 
 /* 

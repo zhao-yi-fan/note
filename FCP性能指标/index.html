@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Web Performance Demo</title>
+  <style>
+    body {
+      font-family: Arial;
+      padding: 20px;
+    }
+    #log {
+      background: #f7f7f7;
+      padding: 10px;
+      border: 1px solid #ddd;
+      margin-top: 20px;
+      white-space: pre-line;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Web Performance Metrics Demo</h2>
+<p>下面将实时展示 FP / FCP / LCP / 白屏时间（FP） 等关键性能指标：</p>
+
+<div id="log">Loading...</div>
+
+<script>
+  const logEl = document.getElementById("log");
+  const log = (msg) => {
+    console.log(msg);
+    logEl.textContent += msg + "\n";
+  };
+
+  log("等待性能指标...\n");
+
+  // ---------------------------
+  // 1️⃣ FP & FCP（首次绘制 / 首次内容绘制）
+  // ---------------------------
+  new PerformanceObserver((entryList) => {
+    entryList.getEntries().forEach((entry) => {
+      if (entry.name === "first-paint") {
+        log(`FP（首次绘制）: ${entry.startTime.toFixed(2)} ms`);
+      }
+      if (entry.name === "first-contentful-paint") {
+        log(`FCP（首次内容绘制）: ${entry.startTime.toFixed(2)} ms`);
+      }
+    });
+  }).observe({ type: "paint", buffered: true });
+
+
+  // ---------------------------
+  // 2️⃣ LCP（最大内容绘制）
+  // ---------------------------
+  let lcpValue = null;
+  new PerformanceObserver((entryList) => {
+    const entries = entryList.getEntries();
+    const lastEntry = entries[entries.length - 1];
+    lcpValue = lastEntry.startTime;
+    log(`LCP（最大内容绘制）: ${lcpValue.toFixed(2)} ms`);
+    console.log(lastEntry, 'LCP', lastEntry.element);
+    
+  }).observe({ type: "largest-contentful-paint", buffered: true });
+
+
+  // ---------------------------
+  // 3️⃣ 白屏时间 = FP
+  // ---------------------------
+  // 当 FP 被打印时，就是白屏结束的时间
+  // 所以这里单独在最后输出一次说明
+  setTimeout(() => {
+    log("\n白屏时间（FP 即为白屏时间）已经输出在上方。");
+  }, 2000);
+
+
+  // ---------------------------
+  // 4️⃣ CLS（布局偏移累计）
+  // ---------------------------
+  let clsValue = 0;
+  new PerformanceObserver((entryList) => {
+    for (const entry of entryList.getEntries()) {
+      if (!entry.hadRecentInput) {
+        clsValue += entry.value;
+        log(`CLS（累计布局偏移）: ${clsValue.toFixed(4)}`);
+      }
+    }
+  }).observe({ type: "layout-shift", buffered: true });
+
+
+  // ---------------------------
+  // 5️⃣ 加载完成输出所有指标
+  // ---------------------------
+  window.addEventListener("load", () => {
+    log("\n=== 页面加载完成 ===");
+    log(`最终 LCP: ${lcpValue ? lcpValue.toFixed(2) : "N/A"} ms`);
+    log(`最终 CLS: ${clsValue.toFixed(4)}`);
+  });
+
+</script>
+
+</body>
+</html>

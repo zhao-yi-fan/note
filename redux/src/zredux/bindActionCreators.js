@@ -1,6 +1,6 @@
 /**
  * 
- * @param {*} actionCreatpr function add(){return {type:ADD}}
+ * @param {*} actionCreator function add(){return {type:ADD}}
  * @param {*} dispatch 
  */
 function bindActionCreator (actionCreator, dispatch) {

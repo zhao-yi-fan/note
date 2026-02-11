@@ -11,18 +11,18 @@ void main() {
   // 不同点：final声明之后可以修改，const声明之后不能修改。
   // const要求更加严格，const定义的是编译器的常量，不能是运行结果，final就二者都行
   // final
-  final b = {"name": "zf"};
+  /* final b = {"name": "zf"};
   b["name"] = "zhufeng";
-  print(b);
+  print(b); */
   // const
   const c = {"name": "zf"};
   ;
-  c["name"] = "zhufeng";
+  // c["name"] = "zhufeng";
   print(c);
 
   // 对象/map/键值对 取值必须用中括号
 
-  final n1 = sum(1,2);
+  final n1 = sum(1, 2);
   print(n1);
   // const n2 = sum(1,2);
 }

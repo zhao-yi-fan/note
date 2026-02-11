@@ -14,9 +14,17 @@
 <body>
   <div id="root"></div>
   <script type="text/babel">
+    /**
+     * React.memo是控制是否渲染组件
+     * useMemo是缓存计算结果
+     * useCallback是缓存函数 防止函数在每次渲染时都重新创建
+     * 
+     * useCallback的出现并不是必须出现React.memo
+     * useCallback 只是让函数引用稳定，useMemo 让值稳定，它们不控制渲染。
+     * React.memo 才是控制组件是否重新渲染的关键。
+     * 如果想避免“父组件导致子组件多次渲染”，useCallback 需要和 React.memo 搭配，但 useCallback 在其他场景（例如 useEffect 的依赖稳定）也单独有意义。
+      */
     const { useEffect, useMemo, useState } = React;
-
-
 
     let Child = ({ data, handleClick }) => {
       console.log('Child render');
@@ -32,10 +40,11 @@
       const [number, setNumber] = React.useState(0);
       let data = React.useMemo(() => ({ number }), [number]);
       let handleClick = React.useCallback(() => setNumber(number + 1), [number]);
+      // let handleClick = () => setNumber(number + 1);
       return (
         <div>
           <input type="text" value={name} onChange={event => setName(event.target.value)} />
-          <Child data={data} handleClick={handleClick} />
+          <Child data={{number}} />
         </div>
       )
     }
