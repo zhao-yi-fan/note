@@ -73,6 +73,7 @@ AI 人工智能 ─> LangChain ───────> LLM应用开发
 | `javascript/` | JS核心概念：变量提升、闭包、原型链、Promise、ES6+ | ⏳ 整理中 | 🟡 |
 | `typescript/` | TS类型系统、泛型、装饰器 | ⏳ 整理中 | 🟡 |
 | `css-html/` | CSS布局、HTML5 API、Less预处理器、模板引擎 | ⏳ 整理中 | 🟡 |
+| `seo/` | SEO优化、Meta标签、Theme Color | ⏳ 整理中 | 🟡 |
 | `react/` | React hooks、组件化、状态管理 | ⏳ 整理中 | 🟡 |
 | `vue/` | Vue3组合式API、SSR、测试 | ⏳ 整理中 | 🟡 |
 | `next/` | Next.js (React SSR框架) | 📝 计划中 | ⚪ |
@@ -85,6 +86,7 @@ AI 人工智能 ─> LangChain ───────> LLM应用开发
 | `security/` | XSS、CSRF等前端安全 | ⏳ 整理中 | 🟡 |
 | `micro-frontend/` | 微前端架构、qiankun | ⏳ 整理中 | 🟡 |
 | `visualization/` | 数据可视化、大屏开发、ECharts | ⏳ 整理中 | 🟡 |
+| `seo/` | SEO优化、Meta标签、Theme Color | ⏳ 整理中 | 🟡 |
 
 ### ⚙️ Backend - 后端开发
 
@@ -105,7 +107,7 @@ AI 人工智能 ─> LangChain ───────> LLM应用开发
 | `git/` | Git工作流、常用命令、分支策略 | ⏳ 整理中 | 🟡 |
 | `testing/` | 单元测试、集成测试、Jest、Vue Test Utils | ✅ 完成 | 🟢 |
 | `design-patterns/` | JavaScript设计模式 | ⏳ 整理中 | 🟡 |
-| `module-federation/` | Webpack模块联邦、微前端架构 | ⏳ 整理中 | 🟡 |
+| `module-federation/` | Webpack模块联邦、微前端架构、Host/Remote示例 | ⏳ 整理中 | 🟡 |
 
 ### 🐳 DevOps - 运维部署
 
@@ -123,7 +125,7 @@ AI 人工智能 ─> LangChain ───────> LLM应用开发
 
 | 目录 | 内容 | 进度 | 状态 |
 |------|------|------|------|
-| `ajax-http/` | Ajax、Axios、Fetch、HTTP协议详解 | ⏳ 整理中 | 🟡 |
+| `ajax-http/` | Ajax、Axios、Fetch、HTTP协议详解、取消请求 | ⏳ 整理中 | 🟡 |
 | `websocket/` | WebSocket、Socket.io、Server-Sent Events | ⏳ 整理中 | 🟡 |
 | `cross-origin/` | 跨域解决方案：CORS、JSONP、Proxy | ⏳ 整理中 | 🟡 |
 | `dns/` | DNS解析原理、优化策略 | ⏳ 整理中 | 🟡 |
