@@ -107,7 +107,8 @@ AI 人工智能 ─> LangChain ───────> LLM应用开发
 | `git/` | Git工作流、常用命令、分支策略 | ⏳ 整理中 | 🟡 |
 | `testing/` | 单元测试、集成测试、Jest、Vue Test Utils | ✅ 完成 | 🟢 |
 | `design-patterns/` | JavaScript设计模式 | ⏳ 整理中 | 🟡 |
-| `module-federation/` | Webpack模块联邦、微前端架构、Host/Remote示例 | ⏳ 整理中 | 🟡 |
+| `zmp/` | 百度YY微前端框架（基于Module Federation） | ⏳ 整理中 | 🟡 |
+| `module-federation/` | Webpack模块联邦规范、微前端架构 | 📝 计划中 | ⚪ |
 
 ### 🐳 DevOps - 运维部署
 
