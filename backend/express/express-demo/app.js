@@ -29,7 +29,7 @@ app.get('/', function (req, res) {
 
 // 登录页
 app.get('/login', function (req, res) {
-    res.json(`
+    res.send(`
     <!DOCTYPE html>
     <html lang="en">
     <head>
