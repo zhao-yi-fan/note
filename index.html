@@ -78,7 +78,8 @@
 
                 let content = '';
                 if (file.content) {
-                    content = atob(file.content.replace(/\n/g, ''));
+                    const binary = atob(file.content.replace(/\n/g, ''));
+                    content = new TextDecoder('utf-8').decode(Uint8Array.from(binary, c => c.charCodeAt(0)));
                 } else {
                     const rawResponse = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/${branch}/${filePath}`);
                     content = await rawResponse.text();
