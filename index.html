@@ -31,27 +31,32 @@
         const viewer = document.getElementById('file-viewer');
 
         const params = new URLSearchParams(window.location.search);
-        const token = params.get('token') || '';
+        const urlToken = params.get('token');
+        if (urlToken) {
+            localStorage.setItem('github_token', urlToken);
+        }
+        const token = localStorage.getItem('github_token') || '';
         const headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
             ...(token && { 'Authorization': `token ${token}` })
         };
 
         async function listContents(path = '') {
-            window.history.pushState({}, '', `?path=${path}`);
+            const tokenParam = token ? `&token=${token}` : '';
+            window.history.pushState({}, '', `?path=${path}${tokenParam}`);
             try {
                 const response = await fetch(`${apiBaseUrl}/${path}?ref=${branch}`, { headers });
                 if (!response.ok) throw new Error(`获取目录失败: ${response.status}`);
                 const contents = await response.json();
 
-                let html = path ? `<div class="back-button"><a href="?path=${path.split('/').slice(0, -1).join('/')}">⬅ 返回上级</a></div>` : '';
+                let html = path ? `<div class="back-button"><a href="?path=${path.split('/').slice(0, -1).join('/')}${tokenParam}">⬅ 返回上级</a></div>` : '';
                 html += '<ul>';
                 contents.forEach(item => {
                     const icon = item.type === 'dir' ? '📁' : '📄';
                     const cls = item.type === 'dir' ? 'directory' : 'file';
                     const href = item.type === 'dir' 
-                        ? `?path=${item.path}` 
-                        : `?path=${item.path}&view=1`;
+                        ? `?path=${item.path}${tokenParam}` 
+                        : `?path=${item.path}&view=1${tokenParam}`;
                     html += `<li class="${cls}"><a href="${href}">${icon} ${item.name}</a></li>`;
                 });
                 html += '</ul>';
@@ -80,7 +85,7 @@
 
                 viewer.innerHTML = `
                     <div class="back-button">
-                        <a href="?path=${filePath.split('/').slice(0, -1).join('/')}">⬅ 返回文件列表</a>
+                        <a href="?path=${filePath.split('/').slice(0, -1).join('/')}${tokenParam}">⬅ 返回文件列表</a>
                     </div>
                     <h3>📄 ${file.name}</h3>
                     <p>
