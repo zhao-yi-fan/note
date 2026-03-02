@@ -30,8 +30,11 @@
         const apiBaseUrl = `https://api.github.com/repos/${username}/${repo}/contents`;
         const viewer = document.getElementById('file-viewer');
 
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get('token') || '';
         const headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            ...(token && { 'Authorization': `token ${token}` })
         };
 
         async function listContents(path = '') {
