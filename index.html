@@ -3,118 +3,294 @@
 <head>
     <title>仓库文件查看器</title>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ant-design-vue@4.2.3/dist/reset.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ant-design-vue@4.2.3/dist/antd.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github.min.css">
     <style>
-        body { font-family: monospace; padding: 20px; background: #f5f5f5; max-width: 1200px; margin: 0 auto; }
-        h1 { color: #333; }
-        #file-viewer { background: white; padding: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        ul { list-style: none; padding: 0; }
-        li { padding: 8px 0; border-bottom: 1px solid #eee; cursor: pointer; }
-        li:hover { background: #f9f9f9; }
-        li.directory { font-weight: bold; color: #0366d6; }
-        a { text-decoration: none; color: inherit; }
-        pre { background: #f6f8fa; padding: 15px; border-radius: 5px; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
-        .back-button { margin-bottom: 15px; }
-        .back-button a { color: #0366d6; }
-        .nav { margin-bottom: 20px; color: #666; }
+        body { background: #f5f5f5; min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+        .file-card { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 24px; }
+        .file-item { padding: 12px 16px; border-radius: 6px; cursor: pointer; transition: all 0.2s; display: block; color: rgba(0,0,0,0.88); }
+        .file-item:hover { background: #f5f5f5; }
+        .file-item.directory { font-weight: 500; }
+        .file-item .icon { margin-right: 8px; }
+        .file-item .name { font-size: 14px; }
+        .code-viewer pre { margin: 0; padding: 16px; background: #f6f8fa; border-radius: 6px; overflow-x: auto; }
+        .code-viewer code { font-family: 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 13px; line-height: 1.5; }
+        .header { margin-bottom: 16px; }
+        .header h1 { margin: 0; font-size: 20px; font-weight: 600; }
+        .actions { margin-top: 16px; }
     </style>
 </head>
 <body>
-    <h1>📁 仓库文件浏览器</h1>
-    <p class="nav">点击文件夹进入，点击文件查看内容</p>
-    <div id="file-viewer"></div>
+    <div id="app" class="container">
+        <a-card class="file-card">
+            <template #title>
+                <div class="header">
+                    <h1>📁 仓库文件浏览器</h1>
+                    <a-breadcrumb v-if="breadcrumbs.length" style="margin-top: 12px;">
+                        <a-breadcrumb-item>
+                            <a @click="goToPath('')">根目录</a>
+                        </a-breadcrumb-item>
+                        <a-breadcrumb-item v-for="(item, index) in breadcrumbs" :key="item.path">
+                            <a @click="goToPath(item.path)" v-if="index < breadcrumbs.length - 1">{{ item.name }}</a>
+                            <span v-else>{{ item.name }}</span>
+                        </a-breadcrumb-item>
+                    </a-breadcrumb>
+                </div>
+            </template>
+
+            <div v-if="loading">
+                <a-spin tip="加载中..." />
+            </div>
+
+            <div v-else-if="error">
+                <a-result status="error" :title="error"></a-result>
+            </div>
+
+            <div v-else-if="viewingFile">
+                <div class="actions">
+                    <a-button @click="goBack">
+                        <LeftOutlined /> 返回
+                    </a-button>
+                    <a-button :href="rawUrl" target="_blank">
+                        <ExportOutlined /> Raw
+                    </a-button>
+                    <a-button :href="githubUrl" target="_blank">
+                        <GithubOutlined /> GitHub
+                    </a-button>
+                </div>
+                <div class="code-viewer" style="margin-top: 16px;">
+                    <pre><code v-html="highlightedCode"></code></pre>
+                </div>
+            </div>
+
+            <a-directory-tree v-else :tree-data="treeData" :show-icon="true" @select="onSelect">
+                <template #icon><FolderOutlined /></template>
+            </a-directory-tree>
+        </a-card>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.4.21/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ant-design-vue@4.2.3/dist/antd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/core.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/javascript.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/typescript.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/json.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/xml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/css.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/python.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/bash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/markdown.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/yaml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/html.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/css.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/sql.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/go.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/java.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/c.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/cpp.min.js"></script>
 
     <script>
-        const username = 'zhao-yi-fan';
-        const repo = 'study';
-        const branch = 'master';
-        const apiBaseUrl = `https://api.github.com/repos/${username}/${repo}/contents`;
-        const viewer = document.getElementById('file-viewer');
+        const { createApp, ref, computed, onMounted, h } = Vue;
+        const { LeftOutlined, ExportOutlined, GithubOutlined, FolderOutlined, FileOutlined } = antd.icons;
 
-        const params = new URLSearchParams(window.location.search);
-        const urlToken = params.get('token');
-        if (urlToken) {
-            localStorage.setItem('github_token', urlToken);
-        }
-        const token = localStorage.getItem('github_token') || '';
-        const headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-            ...(token && { 'Authorization': `token ${token}` })
-        };
+        hljs.registerLanguage('js', hljsJavaScript);
+        hljs.registerLanguage('ts', hljsTypeScript);
+        hljs.registerLanguage('json', hljsJson);
+        hljs.registerLanguage('html', hljsXml);
+        hljs.registerLanguage('xml', hljsXml);
+        hljs.registerLanguage('css', hljsCss);
+        hljs.registerLanguage('python', hljsPython);
+        hljs.registerLanguage('sh', hljsBash);
+        hljs.registerLanguage('bash', hljsBash);
+        hljs.registerLanguage('md', hljsMarkdown);
+        hljs.registerLanguage('markdown', hljsMarkdown);
+        hljs.registerLanguage('yaml', hljsYaml);
+        hljs.registerLanguage('yml', hljsYaml);
+        hljs.registerLanguage('sql', hljsSql);
+        hljs.registerLanguage('go', hljsGo);
+        hljs.registerLanguage('java', hljsJava);
+        hljs.registerLanguage('c', hljsC);
+        hljs.registerLanguage('cpp', hljsCpp);
 
-        function getTokenParam() {
-            return token ? `&token=${token}` : '';
-        }
+        const app = createApp({
+            setup() {
+                const username = 'zhao-yi-fan';
+                const repo = 'study';
+                const branch = 'master';
+                const apiBaseUrl = `https://api.github.com/repos/${username}/${repo}/contents`;
 
-        async function listContents(path = '') {
-            const tokenParam = getTokenParam();
-            window.history.pushState({}, '', `?path=${path}${tokenParam}`);
-            try {
-                const response = await fetch(`${apiBaseUrl}/${path}?ref=${branch}`, { headers });
-                if (!response.ok) throw new Error(`获取目录失败: ${response.status}`);
-                const contents = await response.json();
+                const params = new URLSearchParams(window.location.search);
+                const urlToken = params.get('token');
+                if (urlToken) {
+                    localStorage.setItem('github_token', urlToken);
+                }
+                const token = localStorage.getItem('github_token') || '';
+                const headers = {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                    ...(token && { 'Authorization': `token ${token}` })
+                };
 
-                let html = path ? `<div class="back-button"><a href="?path=${path.split('/').slice(0, -1).join('/')}${tokenParam}">⬅ 返回上级</a></div>` : '';
-                html += '<ul>';
-                contents.forEach(item => {
-                    const icon = item.type === 'dir' ? '📁' : '📄';
-                    const cls = item.type === 'dir' ? 'directory' : 'file';
-                    const href = item.type === 'dir' 
-                        ? `?path=${item.path}${tokenParam}` 
-                        : `?path=${item.path}&view=1${tokenParam}`;
-                    html += `<li class="${cls}"><a href="${href}">${icon} ${item.name}</a></li>`;
+                const currentPath = ref(params.get('path') || '');
+                const isViewingFile = ref(params.get('view') === '1');
+                const loading = ref(false);
+                const error = ref('');
+                const contents = ref([]);
+                const fileContent = ref('');
+                const currentFile = ref(null);
+
+                const getTokenParam = () => token ? `&token=${token}` : '';
+
+                const breadcrumbs = computed(() => {
+                    if (!currentPath.value) return [];
+                    const parts = currentPath.value.split('/');
+                    const crumbs = [];
+                    let path = '';
+                    parts.forEach(part => {
+                        path += path ? '/' + part : part;
+                        crumbs.push({ name: part, path });
+                    });
+                    return crumbs;
                 });
-                html += '</ul>';
-                viewer.innerHTML = html;
-            } catch (error) {
-                viewer.innerHTML = `<p style="color: red;">错误：${error.message}</p>`;
-            }
-        }
 
-        async function viewFile(filePath) {
-            try {
-                const response = await fetch(`${apiBaseUrl}/${filePath}?ref=${branch}`, { headers });
-                if (!response.ok) throw new Error(`获取文件失败: ${response.status}`);
-                const file = await response.json();
+                const treeData = computed(() => {
+                    return contents.value.map(item => ({
+                        key: item.path,
+                        title: item.name,
+                        isLeaf: item.type === 'file',
+                        icon: item.type === 'dir' ? h(FolderOutlined) : h(FileOutlined)
+                    }));
+                });
 
-                let content = '';
-                if (file.content) {
-                    const binary = atob(file.content.replace(/\n/g, ''));
-                    content = new TextDecoder('utf-8').decode(Uint8Array.from(binary, c => c.charCodeAt(0)));
-                } else {
-                    const rawResponse = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/${branch}/${filePath}`);
-                    content = await rawResponse.text();
+                const rawUrl = computed(() => currentFile.value 
+                    ? `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${currentFile.value.path}`
+                    : '');
+                
+                const githubUrl = computed(() => currentFile.value
+                    ? `https://github.com/${username}/${repo}/blob/${branch}/${currentFile.value.path}`
+                    : '');
+
+                const highlightedCode = computed(() => {
+                    if (!fileContent.value) return '';
+                    const ext = currentFile.value?.name.split('.').pop() || '';
+                    const langMap = {
+                        'js': 'javascript', 'ts': 'typescript', 'json': 'json',
+                        'html': 'xml', 'xml': 'xml', 'css': 'css', 'py': 'python',
+                        'sh': 'bash', 'md': 'markdown', 'yaml': 'yaml', 'yml': 'yaml',
+                        'sql': 'sql', 'go': 'go', 'java': 'java', 'c': 'c', 'cpp': 'cpp'
+                    };
+                    const lang = langMap[ext] || 'plaintext';
+                    try {
+                        return hljs.highlight(fileContent.value, { language: lang }).value;
+                    } catch {
+                        return escapeHtml(fileContent.value);
+                    }
+                });
+
+                function escapeHtml(text) {
+                    const div = document.createElement('div');
+                    div.textContent = text;
+                    return div.innerHTML;
                 }
 
-                const rawUrl = `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${filePath}`;
-                const githubUrl = `https://github.com/${username}/${repo}/blob/${branch}/${filePath}`;
+                async function loadContents(path = '') {
+                    loading.value = true;
+                    error.value = '';
+                    try {
+                        const response = await fetch(`${apiBaseUrl}/${path}?ref=${branch}`, { headers });
+                        if (!response.ok) throw new Error(`获取目录失败: ${response.status}`);
+                        contents.value = await response.json();
+                    } catch (e) {
+                        error.value = e.message;
+                    } finally {
+                        loading.value = false;
+                    }
+                }
 
-                viewer.innerHTML = `
-                    <div class="back-button">
-                        <a href="?path=${filePath.split('/').slice(0, -1).join('/')}${getTokenParam()}">⬅ 返回文件列表</a>
-                    </div>
-                    <h3>📄 ${file.name}</h3>
-                    <p>
-                        <a href="${rawUrl}" target="_blank">Raw</a> | 
-                        <a href="${githubUrl}" target="_blank">GitHub</a>
-                    </p>
-                    <pre>${escapeHtml(content)}</pre>
-                `;
-            } catch (error) {
-                viewer.innerHTML = `<p style="color: red;">错误：${error.message}</p>`;
+                async function loadFile(filePath) {
+                    loading.value = true;
+                    error.value = '';
+                    try {
+                        const response = await fetch(`${apiBaseUrl}/${filePath}?ref=${branch}`, { headers });
+                        if (!response.ok) throw new Error(`获取文件失败: ${response.status}`);
+                        const file = await response.json();
+                        currentFile.value = file;
+
+                        let content = '';
+                        if (file.content) {
+                            const binary = atob(file.content.replace(/\n/g, ''));
+                            content = new TextDecoder('utf-8').decode(Uint8Array.from(binary, c => c.charCodeAt(0)));
+                        } else {
+                            const rawResponse = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/${branch}/${filePath}`);
+                            content = await rawResponse.text();
+                        }
+                        fileContent.value = content;
+                    } catch (e) {
+                        error.value = e.message;
+                    } finally {
+                        loading.value = false;
+                    }
+                }
+
+                function goToPath(path) {
+                    currentPath.value = path;
+                    isViewingFile.value = false;
+                    const tokenParam = getTokenParam();
+                    window.history.pushState({}, '', `?path=${path}${tokenParam}`);
+                    loadContents(path);
+                }
+
+                function goBack() {
+                    isViewingFile.value = false;
+                    const tokenParam = getTokenParam();
+                    window.history.pushState({}, '', `?path=${currentPath.value}${tokenParam}`);
+                    loadContents(currentPath.value);
+                }
+
+                function onSelect(keys) {
+                    if (keys.length === 0) return;
+                    const key = keys[0];
+                    const item = contents.value.find(c => c.path === key);
+                    if (item) {
+                        if (item.type === 'dir') {
+                            goToPath(item.path);
+                        } else {
+                            currentPath.value = item.path;
+                            isViewingFile.value = true;
+                            const tokenParam = getTokenParam();
+                            window.history.pushState({}, '', `?path=${item.path}&view=1${tokenParam}`);
+                            loadFile(item.path);
+                        }
+                    }
+                }
+
+                onMounted(() => {
+                    if (isViewingFile.value) {
+                        loadFile(currentPath.value);
+                    } else {
+                        loadContents(currentPath.value);
+                    }
+                });
+
+                return {
+                    loading,
+                    error,
+                    treeData,
+                    breadcrumbs,
+                    viewingFile: isViewingFile,
+                    highlightedCode,
+                    rawUrl,
+                    githubUrl,
+                    goToPath,
+                    goBack,
+                    onSelect
+                };
             }
-        }
+        });
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        if (params.get('view') === '1') {
-            viewFile(params.get('path'));
-        } else {
-            listContents(params.get('path') || '');
-        }
+        app.use(antd);
+        app.mount('#app');
     </script>
 </body>
 </html>
