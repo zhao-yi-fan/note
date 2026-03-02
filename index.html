@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>仓库文件查看器</title>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: monospace; padding: 20px; background: #f5f5f5; max-width: 1200px; margin: 0 auto; }
+        h1 { color: #333; }
+        #file-viewer { background: white; padding: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        ul { list-style: none; padding: 0; }
+        li { padding: 8px 0; border-bottom: 1px solid #eee; cursor: pointer; }
+        li:hover { background: #f9f9f9; }
+        li.directory { font-weight: bold; color: #0366d6; }
+        a { text-decoration: none; color: inherit; }
+        pre { background: #f6f8fa; padding: 15px; border-radius: 5px; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+        .back-button { margin-bottom: 15px; }
+        .back-button a { color: #0366d6; }
+        .nav { margin-bottom: 20px; color: #666; }
+    </style>
+</head>
+<body>
+    <h1>📁 仓库文件浏览器</h1>
+    <p class="nav">点击文件夹进入，点击文件查看内容</p>
+    <div id="file-viewer"></div>
+
+    <script>
+        const username = 'zhao-yi-fan';
+        const repo = 'study';
+        const branch = 'master';
+        const apiBaseUrl = `https://api.github.com/repos/${username}/${repo}/contents`;
+        const viewer = document.getElementById('file-viewer');
+
+        function getPath() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('path') || '';
+        }
+
+        async function listContents(path = '') {
+            window.history.pushState({}, '', `?path=${path}`);
+            try {
+                const response = await fetch(`${apiBaseUrl}/${path}?ref=${branch}`);
+                if (!response.ok) throw new Error('获取目录失败');
+                const contents = await response.json();
+
+                let html = path ? `<div class="back-button"><a href="?path=${path.split('/').slice(0, -1).join('/')}">⬅ 返回上级</a></div>` : '';
+                html += '<ul>';
+                contents.forEach(item => {
+                    const icon = item.type === 'dir' ? '📁' : '📄';
+                    const cls = item.type === 'dir' ? 'directory' : 'file';
+                    const href = item.type === 'dir' 
+                        ? `?path=${item.path}` 
+                        : `?path=${item.path}&view=1`;
+                    html += `<li class="${cls}"><a href="${href}">${icon} ${item.name}</a></li>`;
+                });
+                html += '</ul>';
+                viewer.innerHTML = html;
+            } catch (error) {
+                viewer.innerHTML = `<p style="color: red;">错误：${error.message}</p>`;
+            }
+        }
+
+        async function viewFile(filePath) {
+            try {
+                const response = await fetch(`${apiBaseUrl}/${filePath}?ref=${branch}`);
+                if (!response.ok) throw new Error('获取文件失败');
+                const file = await response.json();
+
+                let content = '';
+                if (file.content) {
+                    content = atob(file.content);
+                } else {
+                    const rawResponse = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/${branch}/${filePath}`);
+                    content = await rawResponse.text();
+                }
+
+                const rawUrl = `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${filePath}`;
+                const githubUrl = `https://github.com/${username}/${repo}/blob/${branch}/${filePath}`;
+
+                viewer.innerHTML = `
+                    <div class="back-button">
+                        <a href="?path=${filePath.split('/').slice(0, -1).join('/')}">⬅ 返回文件列表</a>
+                    </div>
+                    <h3>📄 ${file.name}</h3>
+                    <p>
+                        <a href="${rawUrl}" target="_blank">Raw</a> | 
+                        <a href="${githubUrl}" target="_blank">GitHub</a>
+                    </p>
+                    <pre>${escapeHtml(content)}</pre>
+                `;
+            } catch (error) {
+                viewer.innerHTML = `<p style="color: red;">错误：${error.message}</p>`;
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('view') === '1') {
+            viewFile(params.get('path'));
+        } else {
+            listContents(params.get('path'));
+        }
+    </script>
+</body>
+</html>
