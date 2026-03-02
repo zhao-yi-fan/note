@@ -30,17 +30,15 @@
         const apiBaseUrl = `https://api.github.com/repos/${username}/${repo}/contents`;
         const viewer = document.getElementById('file-viewer');
 
-        function getPath() {
-            const params = new URLSearchParams(window.location.search);
-            const path = params.get('path');
-            return path ? path : '';
-        }
+        const headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        };
 
         async function listContents(path = '') {
             window.history.pushState({}, '', `?path=${path}`);
             try {
-                const response = await fetch(`${apiBaseUrl}/${path}?ref=${branch}`);
-                if (!response.ok) throw new Error('获取目录失败');
+                const response = await fetch(`${apiBaseUrl}/${path}?ref=${branch}`, { headers });
+                if (!response.ok) throw new Error(`获取目录失败: ${response.status}`);
                 const contents = await response.json();
 
                 let html = path ? `<div class="back-button"><a href="?path=${path.split('/').slice(0, -1).join('/')}">⬅ 返回上级</a></div>` : '';
@@ -62,8 +60,8 @@
 
         async function viewFile(filePath) {
             try {
-                const response = await fetch(`${apiBaseUrl}/${filePath}?ref=${branch}`);
-                if (!response.ok) throw new Error('获取文件失败');
+                const response = await fetch(`${apiBaseUrl}/${filePath}?ref=${branch}`, { headers });
+                if (!response.ok) throw new Error(`获取文件失败: ${response.status}`);
                 const file = await response.json();
 
                 let content = '';
