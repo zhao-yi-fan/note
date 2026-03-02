@@ -32,7 +32,8 @@
 
         function getPath() {
             const params = new URLSearchParams(window.location.search);
-            return params.get('path') || '';
+            const path = params.get('path');
+            return path ? path : '';
         }
 
         async function listContents(path = '') {
@@ -99,10 +100,11 @@
         }
 
         const params = new URLSearchParams(window.location.search);
+        const initialPath = params.get('view') === '1' ? (params.get('path') || '') : (params.get('path') || '');
         if (params.get('view') === '1') {
             viewFile(params.get('path'));
         } else {
-            listContents(params.get('path'));
+            listContents(params.get('path') || '');
         }
     </script>
 </body>
