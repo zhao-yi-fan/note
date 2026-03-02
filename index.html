@@ -41,8 +41,12 @@
             ...(token && { 'Authorization': `token ${token}` })
         };
 
+        function getTokenParam() {
+            return token ? `&token=${token}` : '';
+        }
+
         async function listContents(path = '') {
-            const tokenParam = token ? `&token=${token}` : '';
+            const tokenParam = getTokenParam();
             window.history.pushState({}, '', `?path=${path}${tokenParam}`);
             try {
                 const response = await fetch(`${apiBaseUrl}/${path}?ref=${branch}`, { headers });
@@ -85,7 +89,7 @@
 
                 viewer.innerHTML = `
                     <div class="back-button">
-                        <a href="?path=${filePath.split('/').slice(0, -1).join('/')}${tokenParam}">⬅ 返回文件列表</a>
+                        <a href="?path=${filePath.split('/').slice(0, -1).join('/')}${getTokenParam()}">⬅ 返回文件列表</a>
                     </div>
                     <h3>📄 ${file.name}</h3>
                     <p>
