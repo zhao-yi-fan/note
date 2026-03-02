@@ -78,7 +78,7 @@
 
                 let content = '';
                 if (file.content) {
-                    content = atob(file.content);
+                    content = atob(file.content.replace(/\n/g, ''));
                 } else {
                     const rawResponse = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/${branch}/${filePath}`);
                     content = await rawResponse.text();
