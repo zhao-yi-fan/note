@@ -20,12 +20,17 @@
     <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/antd@5.12.8/dist/antd.min.js"></script>
+    <script src="https://unpkg.com/@ant-design/icons@5.2.8/dist/index.umd.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://unpkg.com/highlight.js@11.9.0/lib/index.js"></script>
 
     <script type="text/babel">
         const { useState, useEffect, useMemo } = React;
         const { Card, Breadcrumb, Button, Spin, Result, Tree, Space } = antd;
+        
+        // 配置 antd 图标
+        const FolderOutlined = (props) => <span {...props}>📁</span>;
+        const FileOutlined = (props) => <span {...props}>📄</span>;
 
         const username = 'zhao-yi-fan';
         const repo = 'study';
@@ -72,7 +77,7 @@
                     key: item.path,
                     title: item.name,
                     isLeaf: item.type === 'file',
-                    icon: item.type === 'dir' ? '📁' : '📄'
+                    icon: item.type === 'dir' ? <FolderOutlined /> : <FileOutlined />
                 }));
             }, [contents]);
 
