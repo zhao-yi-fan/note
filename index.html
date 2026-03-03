@@ -11,7 +11,7 @@
         .card { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 24px; }
         .header { margin-bottom: 20px; }
         .header h1 { margin: 0 0 12px 0; font-size: 20px; font-weight: 600; }
-        .breadcrumb { display: flex; align-items: center; gap: 8px; color: #666; font-size: 14px; }
+        .breadcrumb { display: flex; align-items: center; gap: 8px; color: #666; font-size: 14px; flex-wrap: wrap; }
         .breadcrumb a { color: #1890ff; text-decoration: none; cursor: pointer; }
         .breadcrumb a:hover { text-decoration: underline; }
         .breadcrumb span { color: #333; }
@@ -31,18 +31,34 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <div class="header">
-                <h1>📁 仓库文件浏览器</h1>
-                <div class="breadcrumb" id="breadcrumb"></div>
-            </div>
-            <div id="content"></div>
-        </div>
-    </div>
+    <div id="app" class="container"></div>
 
     <script src="https://unpkg.com/highlight.js@11.9.0/lib/index.js"></script>
     <script>
+        // Svelte 风格的状态管理 - 使用 Proxy 实现响应式
+        function reactive(initial) {
+            const state = {};
+            const subscribers = new Set();
+            
+            for (const key in initial) {
+                let value = initial[key];
+                Object.defineProperty(state, key, {
+                    get() { return value; },
+                    set(newValue) {
+                        value = newValue;
+                        subscribers.forEach(fn => fn());
+                    }
+                });
+            }
+            
+            state.$subscribe = (fn) => {
+                subscribers.add(fn);
+                return () => subscribers.delete(fn);
+            };
+            
+            return state;
+        }
+
         const username = 'zhao-yi-fan';
         const repo = 'study';
         const branch = 'master';
@@ -64,61 +80,10 @@
             return token ? `&token=${token}` : '';
         }
 
-        let currentPath = params.get('path') || '';
-        let isViewingFile = params.get('view') === '1';
-        let currentFile = null;
-
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
-        }
-
-        function renderBreadcrumb() {
-            const breadcrumb = document.getElementById('breadcrumb');
-            if (!currentPath) {
-                breadcrumb.innerHTML = '';
-                return;
-            }
-            
-            let html = `<a href="?path=${getTokenParam()}">根目录</a>`;
-            const parts = currentPath.split('/');
-            let path = '';
-            parts.forEach((part, index) => {
-                path += path ? '/' + part : part;
-                const isLast = index === parts.length - 1;
-                if (isLast) {
-                    html += ` <span>/ ${part}</span>`;
-                } else {
-                    html += ` <span>/ <a href="?path=${path}${getTokenParam()}">${part}</a></span>`;
-                }
-            });
-            breadcrumb.innerHTML = html;
-        }
-
-        function renderFileList(contents) {
-            const content = document.getElementById('content');
-            if (!contents || contents.length === 0) {
-                content.innerHTML = '<div class="loading">空目录</div>';
-                return;
-            }
-
-            let html = '<ul class="file-list">';
-            contents.forEach(item => {
-                const icon = item.type === 'dir' ? '📁' : '📄';
-                const cls = item.type === 'dir' ? 'directory' : 'file';
-                const href = item.type === 'dir' 
-                    ? `?path=${item.path}${getTokenParam()}` 
-                    : `?path=${item.path}&view=1${getTokenParam()}`;
-                const size = item.size ? formatSize(item.size) : '';
-                html += `<li class="file-item ${cls}" onclick="location.href='${href}'">
-                    <span class="icon">${icon}</span>
-                    <span class="name">${escapeHtml(item.name)}</span>
-                    <span class="size">${size}</span>
-                </li>`;
-            });
-            html += '</ul>';
-            content.innerHTML = html;
         }
 
         function formatSize(bytes) {
@@ -132,9 +97,33 @@
             return bytes.toFixed(1) + ' ' + units[i];
         }
 
-        function renderFileView(file, content) {
-            const contentEl = document.getElementById('content');
-            const ext = file.name.split('.').pop() || '';
+        // Svelte 风格的状态
+        const state = reactive({
+            currentPath: params.get('path') || '',
+            isViewingFile: params.get('view') === '1',
+            loading: false,
+            error: '',
+            contents: [],
+            fileContent: '',
+            currentFile: null
+        });
+
+        // 计算属性
+        function getBreadcrumbs() {
+            if (!state.currentPath) return [];
+            const parts = state.currentPath.split('/');
+            const crumbs = [];
+            let path = '';
+            parts.forEach(part => {
+                path += path ? '/' + part : part;
+                crumbs.push({ name: part, path });
+            });
+            return crumbs;
+        }
+
+        function getHighlightedCode() {
+            if (!state.fileContent || !state.currentFile) return '';
+            const ext = state.currentFile.name.split('.').pop() || '';
             const langMap = {
                 'js': 'javascript', 'ts': 'typescript', 'json': 'json',
                 'html': 'xml', 'xml': 'xml', 'css': 'css', 'py': 'python',
@@ -143,65 +132,123 @@
                 'vue': 'xml', 'jsx': 'javascript', 'tsx': 'typescript'
             };
             const lang = langMap[ext] || 'plaintext';
-            
-            let highlighted;
             try {
-                highlighted = hljs.highlight(content, { language: lang }).value;
+                return hljs.highlight(state.fileContent, { language: lang }).value;
             } catch {
-                highlighted = escapeHtml(content);
+                return escapeHtml(state.fileContent);
             }
+        }
 
-            const rawUrl = `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${file.path}`;
-            const githubUrl = `https://github.com/${username}/${repo}/blob/${branch}/${file.path}`;
+        function getRawUrl() {
+            return state.currentFile 
+                ? `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${state.currentFile.path}`
+                : '';
+        }
 
-            contentEl.innerHTML = `
-                <div class="actions">
-                    <button class="btn" onclick="goBack()">← 返回</button>
-                    <button class="btn" onclick="window.open('${rawUrl}', '_blank')">Raw</button>
-                    <button class="btn" onclick="window.open('${githubUrl}', '_blank')">GitHub</button>
-                </div>
-                <div class="code-viewer">
-                    <pre><code>${highlighted}</code></pre>
-                </div>
+        function getGithubUrl() {
+            return state.currentFile
+                ? `https://github.com/${username}/${repo}/blob/${branch}/${state.currentFile.path}`
+                : '';
+        }
+
+        // 渲染函数
+        function render() {
+            const breadcrumbs = getBreadcrumbs();
+            const app = document.getElementById('app');
+            
+            let html = `
+                <div class="card">
+                    <div class="header">
+                        <h1>📁 仓库文件浏览器</h1>
+                        ${breadcrumbs.length > 0 ? `
+                            <div class="breadcrumb">
+                                <a href="" onclick="event.preventDefault(); goToPath('')">根目录</a>
+                                ${breadcrumbs.map((item, index) => `
+                                    <span>
+                                        / ${index < breadcrumbs.length - 1 
+                                            ? `<a href="" onclick="event.preventDefault(); goToPath('${item.path}')">${item.name}</a>`
+                                            : `<span>${item.name}</span>`
+                                        }
+                                    </span>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
             `;
-        }
-
-        function renderError(msg) {
-            document.getElementById('content').innerHTML = `<div class="error">${escapeHtml(msg)}</div>`;
-        }
-
-        function renderLoading() {
-            document.getElementById('content').innerHTML = '<div class="loading">加载中...</div>';
+            
+            if (state.loading) {
+                html += `<div class="loading">加载中...</div>`;
+            }
+            
+            if (state.error) {
+                html += `<div class="error">${escapeHtml(state.error)}</div>`;
+            }
+            
+            if (!state.loading && !state.error && state.isViewingFile) {
+                html += `
+                    <div>
+                        <div class="actions">
+                            <button class="btn" onclick="goBack()">← 返回</button>
+                            <button class="btn" onclick="window.open('${getRawUrl()}', '_blank')">Raw</button>
+                            <button class="btn" onclick="window.open('${getGithubUrl()}', '_blank')">GitHub</button>
+                        </div>
+                        <div class="code-viewer">
+                            <pre><code>${getHighlightedCode()}</code></pre>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            if (!state.loading && !state.error && !state.isViewingFile) {
+                html += `
+                    <ul class="file-list">
+                        ${state.contents.map(item => `
+                            <li class="file-item ${item.type === 'dir' ? 'directory' : ''}" 
+                                onclick="${item.type === 'dir' ? `goToPath('${item.path}')` : `viewFile('${item.path}')`}">
+                                <span class="icon">${item.type === 'dir' ? '📁' : '📄'}</span>
+                                <span class="name">${escapeHtml(item.name)}</span>
+                                <span class="size">${formatSize(item.size)}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+            }
+            
+            html += `</div>`;
+            app.innerHTML = html;
         }
 
         async function loadContents(path = '') {
-            renderLoading();
-            renderBreadcrumb();
-            currentPath = path;
-            isViewingFile = false;
+            state.loading = true;
+            state.error = '';
+            state.currentPath = path;
+            state.isViewingFile = false;
             window.history.pushState({}, '', `?path=${path}${getTokenParam()}`);
-            
+
             try {
                 const response = await fetch(`${apiBaseUrl}/${path}?ref=${branch}`, { headers });
                 if (!response.ok) throw new Error(`获取目录失败: ${response.status}`);
                 const data = await response.json();
-                renderFileList(Array.isArray(data) ? data : []);
+                state.contents = Array.isArray(data) ? data : [];
             } catch (e) {
-                renderError(e.message);
+                state.error = e.message;
+            } finally {
+                state.loading = false;
             }
         }
 
         async function loadFile(filePath) {
-            renderLoading();
-            currentPath = filePath;
-            isViewingFile = true;
+            state.loading = true;
+            state.error = '';
+            state.currentPath = filePath;
+            state.isViewingFile = true;
             window.history.pushState({}, '', `?path=${filePath}&view=1${getTokenParam()}`);
-            
+
             try {
                 const response = await fetch(`${apiBaseUrl}/${filePath}?ref=${branch}`, { headers });
                 if (!response.ok) throw new Error(`获取文件失败: ${response.status}`);
                 const file = await response.json();
-                currentFile = file;
+                state.currentFile = file;
 
                 let content = '';
                 if (file.content) {
@@ -211,23 +258,35 @@
                     const rawResponse = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/${branch}/${filePath}`);
                     content = await rawResponse.text();
                 }
-
-                renderBreadcrumb();
-                renderFileView(file, content);
+                state.fileContent = content;
             } catch (e) {
-                renderError(e.message);
+                state.error = e.message;
+            } finally {
+                state.loading = false;
             }
         }
 
+        function goToPath(path) {
+            loadContents(path);
+        }
+
+        function viewFile(filePath) {
+            loadFile(filePath);
+        }
+
         function goBack() {
-            const parentPath = currentPath.split('/').slice(0, -1).join('/');
+            const parentPath = state.currentPath.split('/').slice(0, -1).join('/');
             loadContents(parentPath);
         }
 
-        if (isViewingFile) {
-            loadFile(currentPath);
+        // 订阅状态变化，自动重新渲染
+        state.$subscribe(render);
+
+        // 初始化
+        if (state.isViewingFile) {
+            loadFile(state.currentPath);
         } else {
-            loadContents(currentPath);
+            loadContents(state.currentPath);
         }
     </script>
 </body>
