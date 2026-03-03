@@ -3,240 +3,232 @@
 <head>
     <title>仓库文件查看器</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://unpkg.com/antd@5.12.8/dist/reset.css">
     <link rel="stylesheet" href="https://unpkg.com/highlight.js@11.9.0/styles/github.css">
     <style>
         * { box-sizing: border-box; }
-        body { margin: 0; background: #f5f5f5; min-height: 100vh; }
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; min-height: 100vh; }
         .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
-        .file-card { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 24px; }
+        .card { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 24px; }
+        .header { margin-bottom: 20px; }
+        .header h1 { margin: 0 0 12px 0; font-size: 20px; font-weight: 600; }
+        .breadcrumb { display: flex; align-items: center; gap: 8px; color: #666; font-size: 14px; }
+        .breadcrumb a { color: #1890ff; text-decoration: none; cursor: pointer; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .breadcrumb span { color: #333; }
+        .file-list { list-style: none; margin: 0; padding: 0; }
+        .file-item { padding: 12px 16px; border-radius: 6px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; }
+        .file-item:hover { background: #f5f5f5; }
+        .file-item .icon { margin-right: 10px; font-size: 16px; }
+        .file-item.directory { font-weight: 500; color: #1890ff; }
+        .file-item .size { margin-left: auto; color: #999; font-size: 12px; }
+        .actions { margin-bottom: 16px; display: flex; gap: 8px; }
+        .btn { padding: 6px 16px; border: 1px solid #d9d9d9; border-radius: 4px; background: white; cursor: pointer; font-size: 14px; }
+        .btn:hover { border-color: #1890ff; color: #1890ff; }
         .code-viewer pre { margin: 0; padding: 16px; background: #f6f8fa; border-radius: 6px; overflow-x: auto; }
         .code-viewer code { font-family: 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 13px; line-height: 1.5; }
+        .loading { text-align: center; padding: 40px; color: #999; }
+        .error { padding: 20px; background: #fff2f0; border: 1px solid #ffccc7; border-radius: 4px; color: #ff4d4f; }
     </style>
 </head>
 <body>
-    <div id="root" class="container"></div>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h1>📁 仓库文件浏览器</h1>
+                <div class="breadcrumb" id="breadcrumb"></div>
+            </div>
+            <div id="content"></div>
+        </div>
+    </div>
 
-    <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/antd@5.12.8/dist/antd.min.js"></script>
-    <script src="https://unpkg.com/@ant-design/icons@5.2.8/dist/index.umd.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://unpkg.com/highlight.js@11.9.0/lib/index.js"></script>
-
-    <script type="text/babel">
-        const { useState, useEffect, useMemo } = React;
-        const { Card, Breadcrumb, Button, Spin, Result, Tree, Space } = antd;
-        
-        // 配置 antd 图标
-        const FolderOutlined = (props) => <span {...props}>📁</span>;
-        const FileOutlined = (props) => <span {...props}>📄</span>;
-
+    <script>
         const username = 'zhao-yi-fan';
         const repo = 'study';
         const branch = 'master';
         const apiBaseUrl = `https://api.github.com/repos/${username}/${repo}/contents`;
 
-        function App() {
-            const params = new URLSearchParams(window.location.search);
-            const urlToken = params.get('token');
-            if (urlToken) {
-                localStorage.setItem('github_token', urlToken);
-            }
-            const token = localStorage.getItem('github_token') || '';
-            
-            const headers = useMemo(() => ({
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                ...(token && { 'Authorization': `token ${token}` })
-            }), [token]);
+        const params = new URLSearchParams(window.location.search);
+        const urlToken = params.get('token');
+        if (urlToken) {
+            localStorage.setItem('github_token', urlToken);
+        }
+        const token = localStorage.getItem('github_token') || '';
+        
+        const headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            ...(token && { 'Authorization': `token ${token}` })
+        };
 
-            const [currentPath, setCurrentPath] = useState(params.get('path') || '');
-            const [isViewingFile, setIsViewingFile] = useState(params.get('view') === '1');
-            const [loading, setLoading] = useState(false);
-            const [error, setError] = useState('');
-            const [contents, setContents] = useState([]);
-            const [fileContent, setFileContent] = useState('');
-            const [currentFile, setCurrentFile] = useState(null);
-
-            const getTokenParam = () => token ? `&token=${token}` : '';
-
-            const breadcrumbs = useMemo(() => {
-                if (!currentPath) return [];
-                const parts = currentPath.split('/');
-                const crumbs = [];
-                let path = '';
-                parts.forEach(part => {
-                    path += path ? '/' + part : part;
-                    crumbs.push({ name: part, path });
-                });
-                return crumbs;
-            }, [currentPath]);
-
-            const treeData = useMemo(() => {
-                return contents.map(item => ({
-                    key: item.path,
-                    title: item.name,
-                    isLeaf: item.type === 'file',
-                    icon: item.type === 'dir' ? <FolderOutlined /> : <FileOutlined />
-                }));
-            }, [contents]);
-
-            const rawUrl = currentFile ? `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${currentFile.path}` : '';
-            const githubUrl = currentFile ? `https://github.com/${username}/${repo}/blob/${branch}/${currentFile.path}` : '';
-
-            const highlightedCode = useMemo(() => {
-                if (!fileContent || !currentFile) return '';
-                const ext = currentFile.name.split('.').pop() || '';
-                const langMap = {
-                    'js': 'javascript', 'ts': 'typescript', 'json': 'json',
-                    'html': 'xml', 'xml': 'xml', 'css': 'css', 'py': 'python',
-                    'sh': 'bash', 'md': 'markdown', 'yaml': 'yaml', 'yml': 'yaml',
-                    'sql': 'sql', 'go': 'go', 'java': 'java', 'c': 'c', 'cpp': 'cpp',
-                    'vue': 'xml', 'react': 'javascript', 'jsx': 'javascript'
-                };
-                const lang = langMap[ext] || 'plaintext';
-                try {
-                    return hljs.highlight(fileContent, { language: lang }).value;
-                } catch {
-                    return escapeHtml(fileContent);
-                }
-            }, [fileContent, currentFile]);
-
-            function escapeHtml(text) {
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
-            }
-
-            async function loadContents(path = '') {
-                setLoading(true);
-                setError('');
-                try {
-                    const response = await fetch(`${apiBaseUrl}/${path}?ref=${branch}`, { headers });
-                    if (!response.ok) throw new Error(`获取目录失败: ${response.status}`);
-                    const data = await response.json();
-                    setContents(Array.isArray(data) ? data : []);
-                } catch (e) {
-                    setError(e.message);
-                } finally {
-                    setLoading(false);
-                }
-            }
-
-            async function loadFile(filePath) {
-                setLoading(true);
-                setError('');
-                try {
-                    const response = await fetch(`${apiBaseUrl}/${filePath}?ref=${branch}`, { headers });
-                    if (!response.ok) throw new Error(`获取文件失败: ${response.status}`);
-                    const file = await response.json();
-                    setCurrentFile(file);
-
-                    let content = '';
-                    if (file.content) {
-                        const binary = atob(file.content.replace(/\n/g, ''));
-                        content = new TextDecoder('utf-8').decode(Uint8Array.from(binary, c => c.charCodeAt(0)));
-                    } else {
-                        const rawResponse = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/${branch}/${filePath}`);
-                        content = await rawResponse.text();
-                    }
-                    setFileContent(content);
-                } catch (e) {
-                    setError(e.message);
-                } finally {
-                    setLoading(false);
-                }
-            }
-
-            function goToPath(path) {
-                setCurrentPath(path);
-                setIsViewingFile(false);
-                const tokenParam = getTokenParam();
-                window.history.pushState({}, '', `?path=${path}${tokenParam}`);
-                loadContents(path);
-            }
-
-            function goBack() {
-                setIsViewingFile(false);
-                const tokenParam = getTokenParam();
-                window.history.pushState({}, '', `?path=${currentPath}${tokenParam}`);
-                loadContents(currentPath);
-            }
-
-            function onSelect(keys, { node }) {
-                if (node.isLeaf) {
-                    setCurrentPath(node.key);
-                    setIsViewingFile(true);
-                    const tokenParam = getTokenParam();
-                    window.history.pushState({}, '', `?path=${node.key}&view=1${tokenParam}`);
-                    loadFile(node.key);
-                } else {
-                    goToPath(node.key);
-                }
-            }
-
-            useEffect(() => {
-                if (isViewingFile) {
-                    loadFile(currentPath);
-                } else {
-                    loadContents(currentPath);
-                }
-            }, []);
-
-            const title = (
-                <div>
-                    <div style={{ fontSize: 20, fontWeight: 600 }}>📁 仓库文件浏览器</div>
-                    {breadcrumbs.length > 0 && (
-                        <Breadcrumb style={{ marginTop: 12 }}>
-                            <Breadcrumb.Item>
-                                <a onClick={() => goToPath('')}>根目录</a>
-                            </Breadcrumb.Item>
-                            {breadcrumbs.map((item, index) => (
-                                <Breadcrumb.Item key={item.path}>
-                                    {index < breadcrumbs.length - 1 ? (
-                                        <a onClick={() => goToPath(item.path)}>{item.name}</a>
-                                    ) : (
-                                        <span>{item.name}</span>
-                                    )}
-                                </Breadcrumb.Item>
-                            ))}
-                        </Breadcrumb>
-                    )}
-                </div>
-            );
-
-            return (
-                <Card title={title} className="file-card">
-                    {loading && <Spin tip="加载中..." />}
-                    
-                    {error && <Result status="error" title={error} />}
-                    
-                    {!loading && !error && isViewingFile && (
-                        <div>
-                            <Space style={{ marginBottom: 16 }}>
-                                <Button onClick={goBack}>← 返回</Button>
-                                <Button href={rawUrl} target="_blank">Raw</Button>
-                                <Button href={githubUrl} target="_blank">GitHub</Button>
-                            </Space>
-                            <div className="code-viewer">
-                                <pre><code dangerouslySetInnerHTML={{ __html: highlightedCode }} /></pre>
-                            </div>
-                        </div>
-                    )}
-
-                    {!loading && !error && !isViewingFile && (
-                        <Tree
-                            showIcon
-                            treeData={treeData}
-                            onSelect={onSelect}
-                        />
-                    )}
-                </Card>
-            );
+        function getTokenParam() {
+            return token ? `&token=${token}` : '';
         }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        let currentPath = params.get('path') || '';
+        let isViewingFile = params.get('view') === '1';
+        let currentFile = null;
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function renderBreadcrumb() {
+            const breadcrumb = document.getElementById('breadcrumb');
+            if (!currentPath) {
+                breadcrumb.innerHTML = '';
+                return;
+            }
+            
+            let html = `<a href="?path=${getTokenParam()}">根目录</a>`;
+            const parts = currentPath.split('/');
+            let path = '';
+            parts.forEach((part, index) => {
+                path += path ? '/' + part : part;
+                const isLast = index === parts.length - 1;
+                if (isLast) {
+                    html += ` <span>/ ${part}</span>`;
+                } else {
+                    html += ` <span>/ <a href="?path=${path}${getTokenParam()}">${part}</a></span>`;
+                }
+            });
+            breadcrumb.innerHTML = html;
+        }
+
+        function renderFileList(contents) {
+            const content = document.getElementById('content');
+            if (!contents || contents.length === 0) {
+                content.innerHTML = '<div class="loading">空目录</div>';
+                return;
+            }
+
+            let html = '<ul class="file-list">';
+            contents.forEach(item => {
+                const icon = item.type === 'dir' ? '📁' : '📄';
+                const cls = item.type === 'dir' ? 'directory' : 'file';
+                const href = item.type === 'dir' 
+                    ? `?path=${item.path}${getTokenParam()}` 
+                    : `?path=${item.path}&view=1${getTokenParam()}`;
+                const size = item.size ? formatSize(item.size) : '';
+                html += `<li class="file-item ${cls}" onclick="location.href='${href}'">
+                    <span class="icon">${icon}</span>
+                    <span class="name">${escapeHtml(item.name)}</span>
+                    <span class="size">${size}</span>
+                </li>`;
+            });
+            html += '</ul>';
+            content.innerHTML = html;
+        }
+
+        function formatSize(bytes) {
+            if (!bytes) return '';
+            const units = ['B', 'KB', 'MB', 'GB'];
+            let i = 0;
+            while (bytes >= 1024 && i < units.length - 1) {
+                bytes /= 1024;
+                i++;
+            }
+            return bytes.toFixed(1) + ' ' + units[i];
+        }
+
+        function renderFileView(file, content) {
+            const contentEl = document.getElementById('content');
+            const ext = file.name.split('.').pop() || '';
+            const langMap = {
+                'js': 'javascript', 'ts': 'typescript', 'json': 'json',
+                'html': 'xml', 'xml': 'xml', 'css': 'css', 'py': 'python',
+                'sh': 'bash', 'md': 'markdown', 'yaml': 'yaml', 'yml': 'yaml',
+                'sql': 'sql', 'go': 'go', 'java': 'java', 'c': 'c', 'cpp': 'cpp',
+                'vue': 'xml', 'jsx': 'javascript', 'tsx': 'typescript'
+            };
+            const lang = langMap[ext] || 'plaintext';
+            
+            let highlighted;
+            try {
+                highlighted = hljs.highlight(content, { language: lang }).value;
+            } catch {
+                highlighted = escapeHtml(content);
+            }
+
+            const rawUrl = `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${file.path}`;
+            const githubUrl = `https://github.com/${username}/${repo}/blob/${branch}/${file.path}`;
+
+            contentEl.innerHTML = `
+                <div class="actions">
+                    <button class="btn" onclick="goBack()">← 返回</button>
+                    <button class="btn" onclick="window.open('${rawUrl}', '_blank')">Raw</button>
+                    <button class="btn" onclick="window.open('${githubUrl}', '_blank')">GitHub</button>
+                </div>
+                <div class="code-viewer">
+                    <pre><code>${highlighted}</code></pre>
+                </div>
+            `;
+        }
+
+        function renderError(msg) {
+            document.getElementById('content').innerHTML = `<div class="error">${escapeHtml(msg)}</div>`;
+        }
+
+        function renderLoading() {
+            document.getElementById('content').innerHTML = '<div class="loading">加载中...</div>';
+        }
+
+        async function loadContents(path = '') {
+            renderLoading();
+            renderBreadcrumb();
+            currentPath = path;
+            isViewingFile = false;
+            window.history.pushState({}, '', `?path=${path}${getTokenParam()}`);
+            
+            try {
+                const response = await fetch(`${apiBaseUrl}/${path}?ref=${branch}`, { headers });
+                if (!response.ok) throw new Error(`获取目录失败: ${response.status}`);
+                const data = await response.json();
+                renderFileList(Array.isArray(data) ? data : []);
+            } catch (e) {
+                renderError(e.message);
+            }
+        }
+
+        async function loadFile(filePath) {
+            renderLoading();
+            currentPath = filePath;
+            isViewingFile = true;
+            window.history.pushState({}, '', `?path=${filePath}&view=1${getTokenParam()}`);
+            
+            try {
+                const response = await fetch(`${apiBaseUrl}/${filePath}?ref=${branch}`, { headers });
+                if (!response.ok) throw new Error(`获取文件失败: ${response.status}`);
+                const file = await response.json();
+                currentFile = file;
+
+                let content = '';
+                if (file.content) {
+                    const binary = atob(file.content.replace(/\n/g, ''));
+                    content = new TextDecoder('utf-8').decode(Uint8Array.from(binary, c => c.charCodeAt(0)));
+                } else {
+                    const rawResponse = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/${branch}/${filePath}`);
+                    content = await rawResponse.text();
+                }
+
+                renderBreadcrumb();
+                renderFileView(file, content);
+            } catch (e) {
+                renderError(e.message);
+            }
+        }
+
+        function goBack() {
+            const parentPath = currentPath.split('/').slice(0, -1).join('/');
+            loadContents(parentPath);
+        }
+
+        if (isViewingFile) {
+            loadFile(currentPath);
+        } else {
+            loadContents(currentPath);
+        }
     </script>
 </body>
 </html>
