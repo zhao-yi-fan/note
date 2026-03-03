@@ -105,7 +105,8 @@
             error: '',
             contents: [],
             fileContent: '',
-            currentFile: null
+            currentFile: null,
+            isImage: false
         });
 
         // 计算属性
@@ -185,18 +186,33 @@
             }
             
             if (!state.loading && !state.error && state.isViewingFile) {
-                html += `
-                    <div>
-                        <div class="actions">
-                            <button class="btn" onclick="goBack()">← 返回</button>
-                            <button class="btn" onclick="window.open('${getRawUrl()}', '_blank')">Raw</button>
-                            <button class="btn" onclick="window.open('${getGithubUrl()}', '_blank')">GitHub</button>
+                if (state.isImage) {
+                    html += `
+                        <div>
+                            <div class="actions">
+                                <button class="btn" onclick="goBack()">← 返回</button>
+                                <button class="btn" onclick="window.open('${getRawUrl()}', '_blank')">Raw</button>
+                                <button class="btn" onclick="window.open('${getGithubUrl()}', '_blank')">GitHub</button>
+                            </div>
+                            <div class="image-viewer" style="text-align: center;">
+                                <img src="${escapeHtml(state.fileContent)}" style="max-width: 100%;" />
+                            </div>
                         </div>
-                        <div class="code-viewer">
-                            <pre><code>${getHighlightedCode()}</code></pre>
+                    `;
+                } else {
+                    html += `
+                        <div>
+                            <div class="actions">
+                                <button class="btn" onclick="goBack()">← 返回</button>
+                                <button class="btn" onclick="window.open('${getRawUrl()}', '_blank')">Raw</button>
+                                <button class="btn" onclick="window.open('${getGithubUrl()}', '_blank')">GitHub</button>
+                            </div>
+                            <div class="code-viewer">
+                                <pre><code>${getHighlightedCode()}</code></pre>
+                            </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                }
             }
             
             if (!state.loading && !state.error && !state.isViewingFile) {
@@ -250,10 +266,24 @@
                 const file = await response.json();
                 state.currentFile = file;
 
+                const ext = file.name.split('.').pop().toLowerCase() || '';
+                const imageExts = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'ico', 'bmp'];
+                state.isImage = imageExts.includes(ext);
+
                 let content = '';
                 if (file.content) {
-                    const binary = atob(file.content.replace(/\n/g, ''));
-                    content = new TextDecoder('utf-8').decode(Uint8Array.from(binary, c => c.charCodeAt(0)));
+                    if (state.isImage) {
+                        const mimeTypes = {
+                            'png': 'image/png', 'jpg': 'image/jpeg', 'jpeg': 'image/jpeg',
+                            'gif': 'image/gif', 'webp': 'image/webp', 'svg': 'image/svg+xml',
+                            'ico': 'image/x-icon', 'bmp': 'image/bmp'
+                        };
+                        const mime = mimeTypes[ext] || 'image/png';
+                        content = `data:${mime};base64,${file.content.replace(/\n/g, '')}`;
+                    } else {
+                        const binary = atob(file.content.replace(/\n/g, ''));
+                        content = new TextDecoder('utf-8').decode(Uint8Array.from(binary, c => c.charCodeAt(0)));
+                    }
                 } else {
                     const rawResponse = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/${branch}/${filePath}`);
                     content = await rawResponse.text();
