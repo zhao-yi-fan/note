@@ -28,4 +28,10 @@ yarn-error.log*
 .temp
 .cache
 
-dist
+# VuePress build output
+docs/.vuepress/dist
+
+# playground
+playground/**/node_modules
+playground/**/.cache
+playground/**/.temp
