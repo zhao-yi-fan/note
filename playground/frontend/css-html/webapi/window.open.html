@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="ckbtn">点我在新窗口打开页面</button>
+    <button id="bqbtn">点我在新标签页打开页面</button>
+    <button id="gbbtn">关闭新窗口或标签页</button>
+    <script>
+      document.querySelector("#ckbtn").onclick = function() {
+        newScreen = window.open("", "", "width=400,height=400,top=100,left=200")
+        newScreen.document.write("<p>这是'我的窗口'</p>")
+      }
+      document.querySelector("#bqbtn").onclick = function() {
+        newScreen = window.open("http://www.baidu.com", "",)
+      }
+      document.querySelector("#gbbtn").onclick = function() {
+        newScreen.close()
+      }
+    </script>
+  </body>
+</html>

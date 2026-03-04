@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="//unpkg.com/react@17.0.2/umd/react.development.js" crossorigin></script>
+  <script src="//unpkg.com/react-dom@17.0.2/umd/react-dom.development.js" crossorigin></script>
+  <script src="//unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useEffect, useMemo, useState, useCallback } = React;
+
+    /* class App extends React.PureComponent {
+      state = {
+        n: 0,
+        m: 0,
+      }
+      add = () => {
+        this.setState({
+          n: this.state.n + 1
+        })
+      }
+      addChild = () => {
+        this.setState({
+          m: this.state.m + 1
+        })
+      }
+      render () {
+      console.log('App render')
+        return (
+          <div>
+            <div>
+              n:{this.state.n}
+              <button onClick={this.add}>n+1</button>
+              <button onClick={this.addChild}>m+1</button>
+            </div>
+            <hr />
+            <Child data={this.state.m} onClick={this.addChild} />
+          </div>
+        )
+      }
+    } */
+    function App () {
+      const [n, setN] = useState(0);
+      const [m, setM] = useState(0);
+
+      const add = () => {
+        setN(i => i + 1);
+      };
+      const addChild = () => {
+        setM(i => i + 1);
+      };
+      // 如果不用useMemo，每次点击n+1，都会使onClickChild重新生成，导致子组件re-render
+      /* const onClickChild = useMemo(() => {
+        return () => {
+          setM(i => i + 1);
+        }
+      }, []) */
+      const onClickChild = useCallback(() => {
+        setM(i => i + 1);
+      }, [])
+      // const onClickChild = () => {
+      //   setM(i => i + 1);
+      // }
+      console.log('App render')
+      return (
+        <div>
+          <div>
+            n:{n}
+            <button onClick={add}>n+1</button>
+            <button onClick={addChild}>m+1</button>
+          </div>
+          <hr />
+          <Child data={m} onClick={onClickChild} />
+        </div>
+      )
+    }
+    function Child (props) {
+      console.log('child render')
+      return (
+        <div>
+          child:{props.data}
+          <button onClick={props.onClick}>m+1</button>
+        </div>
+      )
+    }
+    // 封装child
+    const MemoChild = React.memo(Child)
+    const MemoApp = React.memo(App)
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+
+</html>

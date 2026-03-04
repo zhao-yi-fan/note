@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <div id="app2"></div>
+
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <script>
+    const { useRef } = React;
+
+    function UncontrolledInput () {
+      const inputRef = useRef();
+
+      function handleShowValue () {
+        alert("当前输入值：" + inputRef.current.value);
+      }
+
+      return (
+        React.createElement("div", null,
+          React.createElement("h3", null, "非受控组件"),
+          React.createElement("input", {
+            defaultValue: "初始值",
+            ref: inputRef
+          }),
+          React.createElement("button", { onClick: handleShowValue }, "获取值")
+        )
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("app2")).render(
+      React.createElement(UncontrolledInput)
+    );
+  </script>
+</body>
+
+</html>

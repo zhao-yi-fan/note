@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 指令的作用 操作dom 有特定功能 -->
+    <!-- 自定义指令 -->
+    <style>
+        .content {
+            background-color: red;
+            height: 100px;
+            width: 100px;
+        }
+    </style>
+    <div id="app">
+        <!-- | 管道符 用来过滤的 -->
+        {{xx | toUpper(3)}}
+    </div>
+    <script src="//unpkg.com/vue@2.7.16/dist/vue.js"></script>
+    <!-- 需要对展现的数据进行包装 但是不能改变原来的数据 hello -->
+    <!-- 过滤器和指令都是没有this指向的 -->
+    <script>
+        Vue.filter('toUpper', function (value, count = 1) {// 过滤器函数收到xx的值作为第一个参数
+            return value.slice(0, count).toUpperCase() + value.slice(count);
+        });
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                xx: 'hello'
+            },
+            methods: {
+            }
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="clock"></div>
+    <script>
+      let clock = document.querySelector("#clock")
+      // 长轮询
+      function send() {
+        let xhr = new XMLHttpRequest()
+        xhr.open("GET", "/clock", true)
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+            console.log(xhr.responseText)
+            clock.innerHTML = xhr.responseText
+            send(); // 什么时候数据回来了，再发起下一次请求
+          }
+        }
+        xhr.send()
+      }
+      send();
+    </script>
+  </body>
+</html>

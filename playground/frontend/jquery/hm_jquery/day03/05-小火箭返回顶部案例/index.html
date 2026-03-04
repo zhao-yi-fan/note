@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    body {
+      height: 8000px;
+    }
+
+    a {
+      color: #FFF;
+    }
+
+    .actGotop {
+      position: fixed;
+      bottom: 50px;
+      right: 50px;
+      width: 150px;
+      height: 195px;
+      display: none;
+      z-index: 100;
+    }
+
+    .actGotop a,
+    .actGotop a:link {
+      width: 150px;
+      height: 195px;
+      display: inline-block;
+      background: url(images/gotop.png) no-repeat;
+      outline: none;
+    }
+
+    .actGotop a:hover {
+      width: 150px;
+      height: 195px;
+      background: url(images/gotop.gif) no-repeat;
+      outline: none;
+    }
+  </style>
+
+
+</head>
+
+<body>
+  <!-- 返回顶部小火箭 -->
+  <div class="actGotop"><a href="javascript:;" title="Top"></a></div>
+  asdsad
+
+
+  <script src="https://unpkg.com/jquery@1.12.4/dist/jquery.js"></script>
+  <script>
+    $(function(){
+      $(window).scroll(function(){
+        if($(window).scrollTop()>1000){
+          $(".actGotop").fadeIn(1000);
+        }else{
+          $(".actGotop").fadeOut(1000);
+        }
+      });
+      
+      $(".actGotop").click(function(){
+        //动画到顶部
+        $("html,body").stop().animate({scrollTop:0},3000);//chrome支持html 不支持body. IE6 7 8 支持body.
+        //没有过度,直接到顶部
+        //$(window).scrollTop(0);
+      });
+    });
+  </script>
+</body>
+
+</html>

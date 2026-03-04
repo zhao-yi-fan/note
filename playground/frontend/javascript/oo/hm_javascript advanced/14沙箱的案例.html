@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>这是一个div</div>
+    <div>这是一个div</div>
+    <div>这是一个div</div>
+    <p>这是一个p标签</p>
+    <p>这是一个p标签</p>
+    <p>这是一个p标签</p>
+    <script>
+        var getTag = 10;
+        var dvObjs = 20;
+        var pObjs = 30;
+
+        (function () {
+            function getTag(tagName) {
+                return document.getElementsByTagName(tagName);
+            }
+            var dvObjs = getTag("div");
+            for (i = 0; i < dvObjs.length; i++) {
+                dvObjs[i].style.border = "1px solid #ccc";
+            }
+            var pObjs = getTag("p");
+            for (i = 0; i < pObjs.length; i++) {
+                pObjs[i].style.border = "1px solid #ccc";
+            }
+        }());
+
+
+        console.log(getTag);
+        console.log(dvObjs);
+        console.log(pObjs);
+    </script>
+</body>
+
+</html>

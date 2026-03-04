@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="//unpkg.com/jquery/dist/jquery.js"></script>
+</head>
+
+<body>
+
+  <div>
+    1:
+    <input type="checkbox" name="dom" value="1" id="dom" checked>
+  </div>
+  <div>
+    2:
+    <input type="checkbox" name="dom" value="2" checked>
+  </div>
+
+  <script>
+    /**
+     * 1. attribute和property共享数据，attribute更改了会对property造成影响，反之亦然，但是两者的自定义属性是独立的数据，即使name一样，也互不影响
+     * 2. 并不是所有的attribute与对应的property名字都一致，比如刚才使用的attribute 的class属性，使用property操作的时候应该是这样className
+     * 3. 对于值是true/false的property，类似于input的checked attribute等，attribute取得值是HTML文档字面量值，property是取得计算结果，property改变并不影响attribute字面量，但attribute改变会一向property计算
+     * 4.如果当前input中初始化未定义checked属性,则不管当前是否选中$('input[type="radio"]').attr("checked")都会返回undefined；
+     如果当前input中初始化已定义checked属性,则不管是否选中，$('input[type="radio"]').attr("checked")都会返回checked. 
+      */
+
+    /* ********************jquery******************** */
+
+    // 1.自定义属性
+    // $('input[name="dom"][value="1"]').prop('aaa', false) // 没加在DOM上，加在了property上
+    // $('input[name="dom"][value="1"]').attr('aaa', false) // 加在了DOM上，没有加在property上
+    // console.dir($('input[name="dom"][value="1"]'));
+
+
+    // 3.1. attr 改数据会同步改prop (attribute 是 DOM上的属性)
+    // $('input[name="dom"][value="1"]').attr('checked', true)
+    // console.log($('input[name="dom"][value="1"]').prop('checked'), 111); // true
+    // console.log($('input[name="dom"][value="1"]').attr('checked'), 222); // checked
+
+
+    // 3.2. prop 改变值不会同步改attr (property 是 DOM对应js对象上的属性)
+    // $('input[name="dom"][value="1"]').prop('checked', true)
+    // console.log($('input[name="dom"][value="1"]').prop('checked'), 111); // true
+    // console.log($('input[name="dom"][value="1"]').attr('checked'), 222); // undefined
+
+    // 3.3.对于值是true/false的property，类似于input的checked attribute等，attribute取得值是HTML文档字面量值，property是取得计算结果，property改变并不影响attribute字面量，但attribute改变会一向property计算
+    // $('input[name="dom"][value="1"]').attr('checked', true)
+    // console.log($('input[name="dom"][value="1"]').prop('checked'), 111); // true
+    // console.log($('input[name="dom"][value="1"]').attr('checked'), 222); // checked
+    // $('input[name="dom"][value="1"]').prop('checked', false)
+    // console.log($('input[name="dom"][value="1"]').prop('checked'), 333); // false
+    // console.log($('input[name="dom"][value="1"]').attr('checked'), 444); // checked
+    // $('input[name="dom"][value="1"]').attr('checked', false)
+    // console.log($('input[name="dom"][value="1"]').prop('checked'), 555); // false
+    // console.log($('input[name="dom"][value="1"]').attr('checked'), 666); // undefined
+
+
+    // 4.
+    // 如果当前input中初始化未定义checked属性,则不管当前是否选中$('input[type="radio"]').attr("checked")都会返回undefined；
+    // 如果当前input中初始化已定义checked属性,则不管是否选中，$('input[type="radio"]').attr("checked")都会返回checked. 
+
+    $('input[name="dom"][value="1"]').on('click', function (){
+      console.log($(this).attr('checked'),123); // 一直都是 undefined 或者 一直都是 checked
+      // console.log($(this).prop('checked'),123); // 正确的 true / false
+      // console.log(dom.getAttribute('checked')); // 必须写checked="checked" 才能打印出checked
+    })
+
+
+    /* ********************jquery******************** */
+  </script>
+</body>
+
+</html>

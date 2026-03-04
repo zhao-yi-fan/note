@@ -1,0 +1,10 @@
+@import './a.css';
+body {
+  background: red;
+}
+
+div{
+  width: 100px;
+  height: 100px;
+  background: url('./logo.jpg') /* css中直接引入，因为有file-loader了，相当于require("./logo.jpg") */
+}

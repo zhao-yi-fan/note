@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <!-- v-model 是把value值绑定给元素 并且添加input事件 -->
+        <!-- v-bind 只是动态绑定属性 -->
+        <!-- v-model 可以放到任何地方 -->
+        <input type="text" v-model="msg">
+        <input type="text" :value="msg" @input="change($event)">
+        {{msg}}
+        <br>
+
+        <!-- 复选框有两个值 true/false -->
+        <input type="checkbox" v-model="check">{{check}}
+        <br>
+
+        <!-- 多个爱好 [] checkbox 需要给value的值 多个的时候-->
+        <input type="checkbox" v-model="checks" value="游泳">
+        <input type="checkbox" v-model="checks" value="健身">
+        <input type="checkbox" v-model="checks" value="吃饭"> {{checks}}
+        <br>
+
+        <!-- 实现radio的分组 也是通过这个v-model -->
+        男<input type="radio" value="男" v-model="gender">
+        女<input type="radio" value="女" v-model="gender">
+        <br>
+
+        <!-- select 选择一个-->
+        <select v-model="select">
+            <option value="111" key="111" disabled>请选择</option>
+            <option v-for="o in options" :key="o.id" :value="o.id">{{o.title}}</option>
+        </select>
+        {{select}}
+        <br>
+        <!-- select 选择多个 multiple多选属性 选择要按ctrl-->
+        <select v-model="select1" multiple>
+            <option value="111" key="111" disabled>请选择</option>
+            <option v-for="o in options" :key="o.id" :value="o.id">{{o.title}}</option>
+        </select>
+        {{select1}}
+        <br>
+
+        <!-- textarea -> input v-model -->
+    </div>
+    <script src="//unpkg.com/vue@2.7.16/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'hello',
+                check: true,
+                checks: [],
+                gender: '男',
+                select: '111',
+                select1: [],
+                options: [
+                    { title: '数学', id: 1 },
+                    { title: '语文', id: 2 },
+                    { title: '英语', id: 3 },
+                ]
+            },
+            methods: {
+                change(e) {
+                    this.msg = e.target.value;
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

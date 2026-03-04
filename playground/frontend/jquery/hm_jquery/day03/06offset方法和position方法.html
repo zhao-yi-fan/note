@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+        margin: 0;
+        padding: 0;
+        }
+        
+        .father {
+        width: 400px;
+        height: 400px;
+        background-color: pink;
+        position: relative;
+        margin: 100px;
+        }
+        
+        .son {
+        width: 200px;
+        height: 200px;
+        background-color: red;
+        position: absolute;
+        top: 100px;
+        left: 100px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="father">
+        <div class="son"></div>
+    </div>
+    <script src="https://unpkg.com/jquery@1.12.4/dist/jquery.js">
+        
+    </script>
+    <script>
+        $(function(){
+            //offset是一个对象,里面存的是该元素外边界到document的距离(都是数值,没有px单位)
+            console.log($(".son").offset());
+            //position是该元素外边界到该元素已定位的父元素border内边界的距离(都是数值,没有px单位)
+            console.log($(".son").position().left);
+        })
+    </script>
+      
+</body>
+</html>

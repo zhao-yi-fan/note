@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      .box {
+        width: 200px;
+        height: 200px;
+        display: inline-block;
+        background: burlywood;
+        border: 5px solid #ccc;
+      }
+
+      .img {
+        width: 100%;
+        height: 100%;
+      }
+
+      .fill {
+        /* 【不】保持原有的比例。【不】保持替换内容原始尺寸大小。替换内容拉伸填满整个content box。 */
+        object-fit: fill;
+      }
+
+      .contain {
+        /* 保持原有尺寸比例。【不】保持替换内容原始尺寸大小。保证替换内容尺寸一定可以在容器里面放得下。因此，此参数可能会在容器内留下空白。自带垂直水平居中。 */
+        object-fit: contain;
+      }
+
+      .cover {
+        /* 保持原有尺寸比例。【不】保持替换内容原始尺寸大小。保证替换内容尺寸一定大于容器尺寸，宽度和高度至少有一个和容器一致。因此，此参数可能会让替换内容（如图片）部分区域不可见。只展示中间的部分。 */
+        object-fit: cover;
+      }
+
+      .none {
+        /* 保持原有尺寸比例。保持替换内容原始尺寸大小。只展示图片中心。 */
+        object-fit: none;
+      }
+
+      .scale-down {
+        /* 具有动态特性，实际的替换内容表现是none和contain最终尺寸小的那个属性值的表现。如果盒子比图片小，则展示contain样式的；如果盒子比图片大，则展示none样式的，此时图片垂直水平居中在盒子中。 */
+        object-fit: scale-down;
+      }
+      .yuantubox {
+        width: 200px;
+        height: 200px;
+        display: inline-block;
+        background: black;
+        border: 5px solid #ccc;
+      }
+      .yuantu {
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+    fill
+    <div class="box">
+      <img src="./宽图.jpg" class="img fill" alt="" />
+    </div>
+    contain
+    <div class="box">
+      <img src="./宽图.jpg" class="img contain" alt="" />
+    </div>
+    cover
+    <div class="box">
+      <img src="./宽图.jpg" class="img cover" alt="" />
+    </div>
+    none
+    <div class="box">
+      <img src="./宽图.jpg" class="img none" alt="" />
+    </div>
+    scale-down
+    <div class="box">
+      <img src="./宽图.jpg" class="img scale-down" alt="" />
+    </div>
+    <div class="yuantubox">
+      <img src="./宽图.jpg" class="yuantu" alt="" />
+    </div>
+  </body>
+</html>

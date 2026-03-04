@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://unpkg.com/jquery@3.6.1/dist/jquery.js"></script>
+  <script src="node_modules/velocity-animate/velocity.js"></script>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    .father {
+      background: #ccc;
+      width: 100%;
+      height: 500px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .item {
+      width: 33.3%;
+      height: 100%;
+      background: #000;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="father">
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+  </div>
+  <script>
+    $('.item').velocity(
+      {
+        opacity: 0.5
+      },
+      500
+    )
+    $('.item')
+      .mouseenter(function () {
+        $(this).velocity(
+          {
+            opacity: 0
+          },
+          200
+        )
+      })
+      .mouseout(function () {
+        $(this).velocity(
+          {
+            opacity: 0.5
+          },
+          200
+        )
+      })
+  </script>
+</body>
+
+</html>

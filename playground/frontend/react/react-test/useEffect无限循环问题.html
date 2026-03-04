@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="//unpkg.com/react@17.0.2/umd/react.development.js" crossorigin></script>
+  <script src="//unpkg.com/react-dom@17.0.2/umd/react-dom.development.js" crossorigin></script>
+  <script src="//unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type="text/babel">
+    // 基本类型、组件状态(useState)可以放到依赖里，但是对象、数组、函数等引用类型不可以放到依赖里
+    const { useEffect, useMemo, useState } = React;
+    function App () {
+      const [num, setNum] = useState(0)
+      // let ab = { name: 'jack' } // 无限循环
+      // let ab = [] // 无限循环
+      let ab = 0 // 不无限循环
+      useEffect(() => {
+        console.log('App useEffect')
+        setNum(num + 1)
+      }, [ab])
+      return <div>
+      </div>
+    }
+
+    ReactDOM.render(<App />, document.getElementById('app'))
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="reset.min.css" />
+  </head>
+  <body>
+    <!-- 
+    响应式布局：在不同尺寸的设备上都能良好的展示，这就是响应式布局设计(Responsive Layout)
+    公司中的产品形态：
+      1.PC端（全屏页面需要宽度自适应，但是一般都是固定宽度的）
+      2.PC+移动端用同一套项目（简单的页面，例如：产品介绍，公司展示类的官网等）
+      3.移动端
+        嵌入到APP中的H5
+        微信中分享出来的H5
+        微信公众号
+        小程序
+        靠浏览器访问的H5
+        ...
+      4.RN(React Native) / ionic / cordova ... JS开发APP的框架，使用JS代码开发APP，最后框架会把代码转换为 安卓和IOS 需要的代码
+    如何实现响应式布局开发？
+      最常用的方案：REM等比缩放响应式布局
+
+      做移动端H5开发，首先加meta标签
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        REM和PX一样都是样式单位，PX是固定单位，REM是相对单位（相对于当前页面根元素HTML的字体设定的单位）
+
+        我们开始给HTML的字体大小设置为100px(1rem=100px)，接下来我们写样式的时候，把所有的尺寸都用REM设定（测量出来的PX值/100就是应该设置REM的值），如果HTML的FONT-SIZE不变，用REM和PX一样，但是如果字体大小改变，也就是改变了REM和PX之间的换算比例，那么之前所有用REM做单位的样式都会自动按照最新的比例进行缩放（实现了改动HTML的FONT-SIZE，整个页面中的元素都跟着缩放了，牵一发而动全身）
+
+        真实项目中，设计师给我们一套设计稿（常用的尺寸：640*1136 750*1334 640*960 ...），拿到设计稿后，我们严格按照设计稿中的尺寸去编写样式
+          html{font-size:100px}
+          接下来写样式，把测量出来的px都除以100变为REM，所有的单位基于REM来搞
+
+        假设设计稿是750，也就相当于750的设备下，1rem=100px
+          我们页面运行在320的设备上，我们需要修改HTML的字体大小，以此实现页面跟着整体缩放：320/750*100 => 当前设备上HTML的字体大小
+   -->
+    <style>
+      html {
+        /* 
+        1.最好不要写10：浏览器默认最小的字体是12px
+        2.font-size设置为多少，相当于1rem等于多少像素
+        3.之所以设置为100px,就是为了方便计算rem和px转换的比例
+         */
+        font-size: 100px;/* 1rem=100px */
+      }
+      .box1 {
+        margin: .2rem;
+        width: 100px;
+        height: 100px;
+        background: lightcoral;
+      }
+      .box2 {
+        margin: 20px;
+        width: 200px;
+        height: 200px;
+        background: lightgreen;
+      }
+      .box3 {
+        margin: 20px;
+        width: 300px;
+        height: 300px;
+        background: lightblue;
+      }
+    </style>
+    <div class="box1"></div>
+    <div class="box2"></div>
+    <div class="box3"></div>
+  </body>
+</html>

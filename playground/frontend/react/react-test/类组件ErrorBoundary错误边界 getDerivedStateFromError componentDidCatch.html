@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="//unpkg.com/react@17.0.2/umd/react.development.js" crossorigin></script>
+  <script src="//unpkg.com/react-dom@17.0.2/umd/react-dom.development.js" crossorigin></script>
+  <script src="//unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { Component } = React;
+    /**
+     * 用来捕获后代代码中的错误，渲染出备用页面
+     * 特点： 只能捕获后代组件声明周期产生的错误，不能捕获自己组件的错误和其他组件在合成事件、定时器中产生的错误
+     */
+    class Parent extends Component {
+      state = {
+        carList: '',
+        hasError: ''
+      }
+
+      static getDerivedStateFromError (error) {
+        console.log(error)
+        // 在render之前触发
+        // 返回新的state
+        return {
+          hasError: true,
+          aaa: 123
+        }
+      }
+
+      componentDidCatch (error, info) {
+        // 统计页面的错误，发送请求到后台去
+        console.log(error, info);
+        // this.hasError = error
+      }
+      render () {
+        console.log(this);
+        return (
+          <div>
+            <hr />
+            {this.state.hasError ? <span>网络不稳定，请稍后再试</span> : <A />}
+          </div>
+        )
+      }
+    }
+
+    class A extends Component {
+      render () {
+        return <div>{this.props.carList.map(item => {
+          return (
+            <span>{item.name}</span>
+          )
+        })}</div>
+      }
+    }
+    ReactDOM.render(<Parent />, document.getElementById('root'));
+  </script>
+</body>
+
+</html>

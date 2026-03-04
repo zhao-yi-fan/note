@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Document</title>
+  <script src="//unpkg.com/vue/dist/vue.global.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    {{username}}
+    {{count}}
+    {{count1}}
+  </div>
+  <script>
+    console.log(Vue);
+    const { createApp, h, ref, unref } = Vue;
+    console.log(h('h1', {}, 'text'));
+    const app = createApp({
+      props: ['username'],
+      setup() {
+        let count = 0;
+        let count1 = ref(0);
+        setTimeout(() => {
+          count++;
+          count1.value++;
+          console.log(count);
+          console.log(unref(count1)); // 相当于count1.value
+        }, 2000);
+        return {
+          count,
+          count1,
+        }
+      },
+      // render() {
+      //   return h('div', {}, [
+      //     'Some text comes first.',
+      //     h('h1', 'A headline'),
+      //   ])
+      // }
+    }, {
+      username: 'Evan'
+    })
+    app.mount('#app')
+
+
+    console.log(app.config)
+  </script>
+</body>
+
+</html>

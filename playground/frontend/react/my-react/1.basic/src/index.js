@@ -1,0 +1,6 @@
+// import './example/index1'
+// import './example/index2'
+// import './example/setState封装'
+// import './example/ref原生组件'
+// import './example/ref类组件'
+import './example/ref函数组件forwardRef'

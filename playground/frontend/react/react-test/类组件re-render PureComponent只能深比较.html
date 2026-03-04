@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="//unpkg.com/react@17.0.2/umd/react.development.js" crossorigin></script>
+  <script src="//unpkg.com/react-dom@17.0.2/umd/react-dom.development.js" crossorigin></script>
+  <script src="//unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { Component, PureComponent } = React;
+    /**
+     * 状态改变会触发render函数
+     * 原因： Component中的shouldComponentUpdate总是返回true
+     * 解决： 1、重写shouldComponentUpdate方法 比较新旧state或props，如果有变化才返回true，如果没有变化返回false
+     *       2、使用PureComponent：重写了shouldComponentUpdate方法，只有state或props数据有变化才返回true
+     *        注意：只是进行了数据的浅比较，如果只是数据对象内部变化，内存地址没变化，返回false
+     *              不要直接修改state数据，而是要产生新数据
+     */
+    class Parent extends PureComponent {
+      state = {
+        carName: '奔驰'
+      }
+      // shouldComponentUpdate (nextProps, nextState) {
+      //   console.log('parent shouldComponentUpdate', nextProps, nextState);
+      //   return nextState.carName !== this.state.carName
+      // }
+
+      replaceCar = () => {
+        // this.setState({
+        //   carName: '奥拓'
+        // })
+        
+        // this.setState({}) // 不做任何改变，不应该render
+
+        // PureComponent时：在原有state地址上改数据，不会触发render
+        this.state.carName = '奥拓'
+        this.setState(this.state)
+      }
+      render () {
+        console.log('parent render');
+        return (
+          <div>
+            {this.state.carName}
+            <button onClick={this.replaceCar}>改变车</button>
+            <hr />  
+            <Child carName={this.state.carName} />
+          </div>
+        )
+      }
+    }
+
+    class Child extends PureComponent {
+      // shouldComponentUpdate (nextProps, nextState) {
+      //   console.log('child shouldComponentUpdate', nextProps, nextState);
+      //   return nextProps.carName !== this.props.carName
+      // }
+      render () {
+        console.log('Child render');
+        return (
+          <div>
+            {this.props.carName}
+          </div>
+        )
+      }
+    }
+    ReactDOM.render(<Parent />, document.getElementById('root'));
+  </script>
+</body>
+
+</html>

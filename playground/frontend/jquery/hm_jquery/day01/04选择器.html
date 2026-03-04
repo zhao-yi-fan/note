@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <ul>
+        <li>我是1个li</li>
+        <li>我是2个li</li>
+        <li>我是3个li</li>
+        <li>我是4个li</li>
+        <li>我是5个li</li>
+        <li>我是6个li</li>
+        <li>我是7个li</li>
+        <li>我是8个li</li>
+        <li>我是9个li</li>
+        <li>我是10个li</li>
+    </ul>
+    <script src="https://unpkg.com/jquery@1.12.4/dist/jquery.js">
+        
+    </script>
+    <script>
+        $(function(){
+            //$("li:even").css("backgroundColor","red");//even偶数
+            //$("li:odd").css("backgroundColor","cyan");//odd奇数
+            $("li:eq(1)").css("backgroundColor","yellow");//1是下标
+            $("li:gt(1)").css("fontSize","20px");//大于1的
+            $("li:lt(1)").css("fontSize","30px");//小于1的
+            $("li:first").css("backgroundColor","pink");//第一个
+            $("li:last").css("backgroundColor","hotpink");
+        });
+    </script>
+</body>
+</html>

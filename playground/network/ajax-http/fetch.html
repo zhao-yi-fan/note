@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        fetch('https://pss.bdstatic.com/r/www/cache/static/aladdin-san/app/right_recommends_merge/result_b977b98.js', {
+            method: 'GET',
+            headers: {
+                //=> 设置请求头
+                // 'Content-Type': 'x-www-form-urlencoded'
+            },
+            // credentials: 'include'//=> 不管同源还是跨域请求都带着COOKIE信息
+        }).then(result => {
+            console.log(result);
+            /* 
+            headers:{} 包含响应头信息
+            redirected: false 是否重定向
+            status: 状态码
+            statusText: 状态码描述
+            type: 'basic'/'cors'    basic同源  cors跨域
+            url: 请求的地址
+            __proto__: Response
+                arrayBuffer()
+                blob()
+                json()
+                text()
+                ...
+                基于这些方法可以快速的把从服务器获取的结果找到
+             */
+        }).catch(msg => {
+            console.log(msg);
+        })
+
+        // 实际用法
+        /* fetch('https://www.easy-mock.com/mock/5cb165067aab7f78650d2087/example/proxy').then(result=>{
+            let {status} = result;
+            if(/^(4|5)\d{2}$/.test(status)){
+                throw new Error('query data is error!');
+                return;
+            }
+            return result.json();
+        }).then(result=>{
+            console.log(result);
+        }).catch(msg=>{
+            console.log(msg);
+        }) */
+
+        //post请求
+        /* fetch('https://www.easy-mock.com/mock/5cb165067aab7f78650d2087/example/mock', {
+            method: 'post',
+            body: "name=iiicic&age=1"//=> body中只支持字符串(GET请求还无法设置body,只能在地址中设置参数)
+        }).then(result => {
+            let { status } = result;
+            if (/^(4|5)\d{2}$/.test(status)) {
+                throw new Error('query data is error!')
+                return;
+            }
+            return result.json();
+
+        }).then(result => {
+            console.log(result)
+        }).catch(msg => {
+            console.log(msg);
+        }) */
+    </script>
+</body>
+
+</html>

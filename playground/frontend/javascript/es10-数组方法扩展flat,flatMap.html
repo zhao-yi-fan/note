@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // flat 平 默认参数是1 （深度）
+    const arr = [1, 2, 3, 4, [5, 6]]
+    console.log(arr.flat());
+    const arr1 = [1, 2, 3, 4, [5, 6, [7, 8, 9]]]
+    console.log(arr1.flat());
+    console.log(arr1.flat(2));
+
+
+
+    const arr3 = [1, 2, 3, 4, 5, 6]
+    console.log(arr3.map(item => item * 10));
+    console.log(arr3.map(item => [item * 10]));
+    // map的同时把二维数组铺平
+    console.log(arr3.flatMap(item => [item * 10]));
+
+
+
+  </script>
+</body>
+
+</html>

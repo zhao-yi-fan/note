@@ -1,0 +1,20 @@
+{
+  "name": "10.NODEPROMISE",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "zyf": "lessc -v"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^10.12.18",
+    "less_zyf": "^1.0.0",
+    "zepto": "^1.2.0"
+  },
+  "devDependencies": {
+    "less": "^3.9.0"
+  }
+}

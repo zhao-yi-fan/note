@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <input type="button" value="选中" />
+    <input type="button" value="不选中" />
+    <input type="checkbox" id="ck"/>
+    <script src="https://unpkg.com/jquery@1.12.4/dist/jquery.js">
+        
+    </script>
+    <script>
+        //attr方法在对checked disabled enabled属性是在jq1.6以下有问题的,需要用prop方法
+        $(function(){
+            // $("input").eq(0).click(function(){
+            //     $("#ck").attr("checked",true);
+            // });
+            // $("input").eq(1).click(function(){
+            //     $("#ck").attr("checked",false);
+            // });
+            $("input").eq(0).click(function(){
+                $("#ck").prop("checked",true);
+            });
+            $("input").eq(1).click(function(){
+                $("#ck").prop("checked",false);
+            });
+        });
+    </script>
+</body>
+</html>

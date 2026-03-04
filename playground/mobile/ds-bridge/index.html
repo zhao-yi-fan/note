@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>dsBridge 原理极简示例（H5 侧）</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .card {
+      background: #fff;
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+      margin-bottom: 16px;
+    }
+    button {
+      padding: 8px 14px;
+      margin-right: 8px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      background: #1677ff;
+      color: #fff;
+    }
+    pre {
+      background: #111827;
+      color: #e5e7eb;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      overflow-x: auto;
+    }
+    .log {
+      font-size: 13px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>dsBridge 原理极简示例（H5 侧，模拟版）</h1>
+  <p>
+    这个页面不依赖真实 dsBridge，而是模拟其核心实现，
+    方便理解：<strong>H5 通过 prompt 把调用信息传给原生，原生拦截后再回调 JS</strong>。
+  </p>
+
+  <div class="card">
+    <h2>1. JS 调原生（同步）</h2>
+    <button onclick="callNativeSync()">调用 native.syncEcho（同步）</button>
+    <div class="log" id="syncLog"></div>
+  </div>
+
+  <div class="card">
+    <h2>2. JS 调原生（异步）</h2>
+    <button onclick="callNativeAsync()">调用 native.asyncEcho（异步）</button>
+    <div class="log" id="asyncLog"></div>
+  </div>
+
+  <div class="card">
+    <h2>3. 原生调 JS（通过 register 注册）</h2>
+    <p>
+      原生侧稍后会通过 <code>evaluateJavascript</code> 或 <code>evaluateJavaScript</code>
+      执行 <code>window._handleMessageFromNative</code>，
+      找到这里注册好的回调并触发。
+    </p>
+    <pre>
+// 原生伪代码（Android）
+webView.evaluateJavascript(
+  "window._handleMessageFromNative('cb_1', '{\\"msg\\":\\"from native\\"}', true)",
+  null
+);
+    </pre>
+    <div class="log" id="nativeLog"></div>
+  </div>
+
+  <div class="card">
+    <h2>4. 关键：极简版 dsBridge 内部实现（H5 侧）</h2>
+    <pre id="codeView"></pre>
+  </div>
+
+  <script>
+    // ===============================
+    // 极简版 dsBridge 实现（只为展示原理）
+    // ===============================
+    (function () {
+      // 用于存储异步回调的表，key 是 callbackId
+      var callbackMap = {};
+      var callbackSeq = 0;
+
+      function genCallbackId() {
+        callbackSeq += 1;
+        return 'cb_' + callbackSeq;
+      }
+
+      // 向外暴露的对象：window.dsBridge
+      window.dsBridge = {
+        /**
+         * JS 调原生的总入口
+         * @param {string} method 方法名，如 "native.syncEcho"
+         * @param {any} args    参数对象
+         * @param {function} cb 可选回调，不传则认为是同步调用
+         */
+        call: function (method, args, cb) {
+          var isAsync = typeof cb === 'function';
+          var callbackId = null;
+
+          if (isAsync) {
+            // 异步：生成一个 callbackId，存起来，稍后原生会带着它回调回来
+            callbackId = genCallbackId();
+            callbackMap[callbackId] = cb;
+          }
+
+          // 约定一个消息结构，方便原生解析
+          var message = {
+            method: method,
+            args: args || null,
+            callbackId: callbackId
+          };
+
+          // *** 核心：通过 prompt 把 message 传给原生 ***
+          // - 第一个参数 message：一般放一个前缀，便于原生判断是否处理
+          // - 第二个参数 defaultValue：放真正的 JSON 数据
+          var json = JSON.stringify(message);
+          var retStr = window.prompt('_dsbridge=' + method, json);
+
+          // 对于同步调用：原生会在 onJsPrompt / runJavaScriptTextInputPanelWithPrompt 里
+          // 直接 return 一个字符串，这里可以立刻拿到
+          if (!isAsync) {
+            if (!retStr) return null;
+            try {
+              return JSON.parse(retStr);
+            } catch (e) {
+              return retStr;
+            }
+          }
+
+          // 对于异步调用：retStr 一般没意义（通常为 null），真正结果
+          // 会由原生稍后调用 window._handleMessageFromNative(...) 触发
+        },
+
+        /**
+         * 注册给原生调用的 JS 方法
+         * 比如原生希望调用 "js.showToast"，就可以在这里注册
+         */
+        register: function (name, fn) {
+          if (!window._jsApi) {
+            window._jsApi = {};
+          }
+          window._jsApi[name] = fn;
+        }
+      };
+
+      /**
+       * 这个函数不会被业务代码直接调用，
+       * 是约定给“原生 → JS”调用的入口。
+       *
+       * 原生在处理完异步任务后，会执行：
+       *   window._handleMessageFromNative(callbackId, jsonData, isComplete)
+       */
+      window._handleMessageFromNative = function (callbackId, data, complete) {
+        var cb = callbackMap[callbackId];
+        if (!cb) return;
+
+        try {
+          var parsed = typeof data === 'string' ? JSON.parse(data) : data;
+          cb(parsed);
+        } catch (e) {
+          cb(data);
+        }
+
+        // complete = true 表示这个回调生命周期结束，可以删除
+        if (complete) {
+          delete callbackMap[callbackId];
+        }
+      };
+
+      /**
+       * 原生想直接调用 JS 中注册的方法时，一般通过：
+       *   window._invokeJsMethod('js.showToast', '{...}')
+       */
+      window._invokeJsMethod = function (name, jsonArgs) {
+        if (!window._jsApi) return;
+        var fn = window._jsApi[name];
+        if (typeof fn !== 'function') return;
+
+        var args = null;
+        try {
+          args = typeof jsonArgs === 'string' ? JSON.parse(jsonArgs) : jsonArgs;
+        } catch (e) {
+          args = jsonArgs;
+        }
+        fn(args);
+      };
+    })();
+
+    // ===============================
+    // 业务侧：使用 dsBridge
+    // ===============================
+
+    // 1. 同步调用原生：希望立即拿到返回值
+    function callNativeSync() {
+      var log = document.getElementById('syncLog');
+      log.textContent = '调用中...';
+
+      // 假设原生实现了 native.syncEcho 方法，入参为 { msg: 'hello' }
+      // 且会立刻返回一个 JSON：{ msg: 'native sync response' }
+      var result = window.dsBridge.call('native.syncEcho', { msg: 'hello from JS' });
+
+      log.textContent = 'JS 收到同步返回:\n' + JSON.stringify(result, null, 2);
+    }
+
+    // 2. 异步调用原生：通过 callbackId + _handleMessageFromNative 回调
+    function callNativeAsync() {
+      var log = document.getElementById('asyncLog');
+      log.textContent = '调用中...';
+
+      window.dsBridge.call(
+        'native.asyncEcho',
+        { msg: 'hello async from JS' },
+        function (ret) {
+          log.textContent = 'JS 收到异步返回:\n' + JSON.stringify(ret, null, 2);
+        }
+      );
+    }
+
+    // 3. 注册一个 JS 方法给原生调用
+    window.dsBridge.register('js.showFromNative', function (data) {
+      var log = document.getElementById('nativeLog');
+      log.textContent = '原生调用 js.showFromNative，传入数据:\n' + JSON.stringify(data, null, 2);
+    });
+
+    // 4. 页面展示源码，方便你在浏览器里直接看
+    (function showSource() {
+      var fnStr = (function () {
+        /*
+        (function () {
+          var callbackMap = {};
+          var callbackSeq = 0;
+
+          function genCallbackId() {
+            callbackSeq += 1;
+            return 'cb_' + callbackSeq;
+          }
+
+          window.dsBridge = {
+            call: function (method, args, cb) {
+              var isAsync = typeof cb === 'function';
+              var callbackId = null;
+              if (isAsync) {
+                callbackId = genCallbackId();
+                callbackMap[callbackId] = cb;
+              }
+              var message = { method: method, args: args || null, callbackId: callbackId };
+              var json = JSON.stringify(message);
+              var retStr = window.prompt('_dsbridge=' + method, json);
+              if (!isAsync) {
+                if (!retStr) return null;
+                try { return JSON.parse(retStr); } catch (e) { return retStr; }
+              }
+            },
+            register: function (name, fn) {
+              if (!window._jsApi) window._jsApi = {};
+              window._jsApi[name] = fn;
+            }
+          };
+
+          window._handleMessageFromNative = function (callbackId, data, complete) {
+            var cb = callbackMap[callbackId];
+            if (!cb) return;
+            try {
+              var parsed = typeof data === 'string' ? JSON.parse(data) : data;
+              cb(parsed);
+            } catch (e) {
+              cb(data);
+            }
+            if (complete) delete callbackMap[callbackId];
+          };
+
+          window._invokeJsMethod = function (name, jsonArgs) {
+            if (!window._jsApi) return;
+            var fn = window._jsApi[name];
+            if (typeof fn !== 'function') return;
+            var args = null;
+            try {
+              args = typeof jsonArgs === 'string' ? JSON.parse(jsonArgs) : jsonArgs;
+            } catch (e) {
+              args = jsonArgs;
+            }
+            fn(args);
+          };
+        })();
+        */
+      }).toString();
+
+      var body = fnStr
+        .split('/*')[1]
+        .split('*/')[0]
+        .replace(/^ {8}/gm, '');
+      document.getElementById('codeView').textContent = body;
+    })();
+  </script>
+</body>
+</html>

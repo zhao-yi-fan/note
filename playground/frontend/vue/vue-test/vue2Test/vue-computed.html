@@ -1,0 +1,63 @@
+<!-- 
+  计算属性 计算属性对应的变量（数组或者对象），如果变量改变了引用的话，新的引用值的改变也是会使计算属性响应式的  
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Document</title>
+  <script src="//unpkg.com/vue@2.7.16/dist/vue.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <div v-for="(item, index) in arrComp" :key="index">
+      {{ item.name }}
+    </div>
+    <div>obj:{{nameComputed}}</div>
+    <button @click="clickFn">按钮</button>
+  </div>
+  <script>
+
+    new Vue({
+      el: "#app",
+      data () {
+        return {
+          arr: [
+            { name: '张三' }
+          ],
+          obj: {
+            name: '张三'
+          }
+        }
+      },
+      computed: {
+        nameComputed () {
+          return this.obj.name + '1'
+        },
+        arrComp () {
+          return this.arr.map(i => {
+            return { name: i.name + '1' }
+          })
+        }
+      },
+      methods: {
+        clickFn () {
+          this.obj = {
+            name: '李四'
+          }
+
+          this.arr = [{
+            name: '李四'
+          }]
+          console.log(this.obj);
+        }
+      },
+    })
+  </script>
+</body>
+
+</html>

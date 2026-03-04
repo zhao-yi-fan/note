@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <a href="http://www.itcast.cn">assadsad</a>
+    <script src="https://unpkg.com/jquery@1.12.4/dist/jquery.js"></script>
+    <script>
+        $(function(){
+            $("a").on("click",function(e){
+                alert("hehehe");
+
+                //看情况来用单独的阻止事件冒泡或者阻止浏览器默认跳转
+                //阻止浏览器默认跳转
+                e.preventDefault();
+                //阻止事件冒泡       cancelBubble=true是专门针对IE的阻止冒泡事件,在jq中不能用,做兼容给了stopPropagation();
+                e.stopPropagation();
+                //return false;//既能阻止事件冒泡也能阻止浏览器默认跳转
+            });
+
+            //增加事件冒泡
+            $("body").on("click",function(){
+                alert("嘻嘻嘻");
+            });
+            
+        });
+    </script>
+</body>
+</html>

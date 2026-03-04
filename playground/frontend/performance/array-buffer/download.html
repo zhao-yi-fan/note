@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button onclick="download()">下载</button>
+  <script>
+    function download() {
+      let debug = { name: 'zhufeng' }
+      let str = JSON.stringify(debug);
+      let blob = new Blob([str], {
+        type: 'application/json'
+
+      })
+      let a = document.createElement('a')
+      a.download = 'user.json';
+      a.rel = 'noopener';
+      a.href = URL.createObjectURL(blob); // src url href
+      a.dispatchEvent(new MouseEvent('click'));
+      URL.revokeObjectURL(blob);
+    }
+  </script>
+</body>
+
+</html>

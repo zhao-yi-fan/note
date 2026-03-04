@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .dv1 {
+            width: 200px;
+            height: 300px;
+            background-color: pink;
+            margin: 100px auto;
+            border: 1px solid black;
+            position: relative;
+        }
+
+        .dv2 {
+            width: 100%;
+            height: 30px;
+            background-color: yellow;
+            cursor: s-resize;
+            position: absolute;
+            bottom: 0px;
+
+        }
+
+        li {
+            list-style: none;
+            height: 30px;
+            line-height: 30px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="dv1" class="dv1">
+        <ul>
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+            <li>6</li>
+            <li>7</li>
+        </ul>
+
+    </div>
+
+    <script>
+        function jQuery(obj) {
+            this.obj = obj;
+        }
+
+        jQuery.prototype.xial = function () {
+            //点击->>按下->>移动  获取鼠标移动的距离 div的高相应的变化 向下移动变大,向上移动变小
+            var dv2 = document.createElement("div");
+            dv2.className = "dv2";
+            this.obj.appendChild(dv2);
+
+            //鼠标按下
+            dv2.onmousedown = function () {
+                var spaceY = this.obj.offsetTop;
+                console.log(spaceY);
+                
+                //鼠标移动
+                document.onmousemove = function (e) {
+                    this.obj.style.height = e.clientY - spaceY + "px";//dv1的高
+                    // this.parentElement.style.height = window.event.clientY - parseInt(this.parentElement.setoffTop) + "px";//也是dv1的高,this是dv2,parentElement是dv1
+                    return false;//鼠标上下滑动会选中li中的字,把选中的字的鼠标按下加移动事件取消掉
+                }.bind(this);
+
+                //鼠标抬起
+                document.onmouseup = function () {
+                    document.onmousemove = null;
+                    document.onmouseup = null;
+                }
+
+            }.bind(this)
+        }
+
+        function $(ele) {
+            return new jQuery(document.querySelector(ele));
+        }
+
+        $("#dv1").xial();
+    </script>
+</body>
+
+</html>

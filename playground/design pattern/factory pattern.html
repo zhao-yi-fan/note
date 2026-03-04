@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        function creatObject(name, age) {
+            var obj = new Object;
+            obj.name = name;
+            obj.age = age;
+            obj.sayHi = function () {
+                console.log("我叫" + this.name + ",我今年" + this.age + "岁了");
+            };
+            return obj;
+        }
+
+        var per1 = creatObject("小红", 18);
+        per1.sayHi();
+        var per2 = creatObject("小芳", 23);
+        per2.sayHi();
+    </script>
+</head>
+<body>
+
+</body>
+</html>

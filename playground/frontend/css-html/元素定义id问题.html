@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    #oDiv {
+      width: 200px;
+      height: 200px;
+      background: pink;
+    }
+  </style>
+</head>
+
+<body>
+  <input type="text" id="textInp" />
+  <div id="oDiv"></div>
+  <script>
+    console.dir(textInp)
+    textInp.oninput = function () {
+      console.log(textInp.value)
+    }
+    // let dd = document.getElementById('oDiv')
+    oDiv.onclick = function () {
+      console.log('1111')
+    }
+  </script>
+  <!-- 
+    当一个元素加上ID时，ID的值就成了window对象的属性名称
+    <div id='foo'></div>
+    此时就生成了一个window.foo的全局变量，你可以给它赋值等操作，比如
+    foo=111;
+    console.log(foo);
+    但是，不要使用这种写法，兼容性极差，而且容易污染全局，造成各种冲突和错误
+   -->
+</body>
+
+</html>

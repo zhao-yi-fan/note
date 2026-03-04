@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      /* overflow:hidden 作用：溢出隐藏、清除浮动、父子盒子解决外边距塌陷 */
+      .top {
+        width: 300px;
+        height: 100px;
+        background: chartreuse;
+        margin-bottom: 50px;
+      }
+      .bottom {
+        width: 300px;
+        height: 100px;
+        background: coral;
+        padding-top: 80px;
+      }
+      /* .father {
+        width: 100px;
+        background: green;
+        margin-top:50px;
+        margin-left:50px;
+      }
+      .son {
+        width: 100px;
+        height: 300px;
+        background: red;
+        margin-top:80px;
+        margin-left:80px;
+      } */
+    </style>
+  </head>
+  <body>
+    <!-- 兄弟 -->
+    <div class="top"></div>
+    <div class="bottom"></div>
+    <!-- 父子 只会在上下 左右不会有塌陷 -->
+    <!-- 1. 父级加overflow:hidden -->
+    <div class="father">
+      <div class="son"></div>
+    </div>
+  </body>
+</html>

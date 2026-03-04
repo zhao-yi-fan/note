@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="//unpkg.com/vue@2.7.16/dist/vue.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <input type="text" v-bind:value="value" v-on:input="change">
+    <p>{{value}}</p>
+  </div>
+  <script>
+    // options api
+    let app = new Vue({
+      el: '#app',
+      data() {
+        return {
+          value: '123'
+        }
+      },
+      methods: {
+        change(e) {
+          console.log(e,'e=====');
+          console.log(e.target.value, 'value');
+
+          console.log(this.value, 'value====');
+          this.value = e.target.value
+        }
+      },
+    })
+  </script>
+</body>
+
+</html>

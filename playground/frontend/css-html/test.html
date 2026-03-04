@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <select name="interest" lay-filter="aihao">
+    <option value="0">写作</option>
+    <option value="1">阅读</option>
+  </select>
+  <script src="utils.js"></script>
+  <script>
+    console.log(Utils);
+    ; (function () {
+      var Index_browser = Utils.browerType;
+      var isPC = true;  //是否移动端参数
+      console.log(window.screen)
+      console.log(Index_browser.versions)
+      //增加移动端判断
+      if (Index_browser.versions.mobile || Index_browser.versions.ios || Index_browser.versions.android ||
+        Index_browser.versions.iPhone || Index_browser.versions.iPad) {
+        isPC = false;
+      } else if (window.screen.width < 1280) {
+        isPC = false;
+      }
+    })()
+    var type = Utils.getEntriesByType()
+    console.log(type, '性能')
+
+
+
+    /* 需要再浏览器界面操作一下，然后刷新或者关闭才会触发 */
+    window.onbeforeunload = function (event) {
+      console.log('每次执行');
+      var confirmationMessage = "你确定要离开吗？";
+      (event || window.event).returnValue = confirmationMessage;
+      return confirmationMessage;
+    }
+  </script>
+</body>
+
+</html>

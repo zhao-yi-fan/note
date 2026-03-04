@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		div[class] {  /* 选取div中带class属性的 */
+			background-color: pink;
+		}
+		div[class^=font] {  /* 选取类名开头是font的 */
+			color: #f10215;
+		}
+		div[class$=footer] {  /* 选取类名后面是footer的 */
+			color: red;
+		}
+		div[class*=tao] { /*  选取任意位置的类名带tao的 */
+			color: purple;
+		}
+	</style>
+</head>
+<body>
+	<div class="font12">属性选择器</div>
+    <div class="font12">属性选择器</div>
+    <div class="font24">属性选择器</div>
+    <div class="font24">属性选择器</div>
+    <div class="font24">属性选择器</div>
+    <div class="24font">属性选择器123</div>
+    <div class="sub-footer">属性选择器footer</div>
+    <div class="jd-footer">属性选择器footer</div>
+    <div class="news-tao-nav">属性选择器</div>
+    <div class="news-tao-header">属性选择器</div>
+    <div>属性选择器</div>
+</body>
+</html>

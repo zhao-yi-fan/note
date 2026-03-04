@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		a{
+			width: 183px;
+			height: 130px;
+			display: inline-block;
+			margin: 20px;
+			overflow:  hidden;
+		}
+		img {
+			width: 193px;
+			height: 130px;
+			transition: margin-left 0.4s;
+		}
+		a:hover img{
+			margin-left: -10px;   /* 想用padding只能是正值,不论margin和padding只能按左边和上边移动 */
+		}
+	</style>
+</head>
+<body>
+	<a href="#"><img src="images/1.jpg" alt=""></a>
+	<a href="#"><img src="images/2.jpg" alt=""></a>
+	<a href="#"><img src="images/3.jpg" alt=""></a>
+</body>
+</html>

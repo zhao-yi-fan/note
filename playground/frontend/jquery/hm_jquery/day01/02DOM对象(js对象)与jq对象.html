@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <li id="cloth">你</li>
+    <li>好</li>
+    <li>吗</li>
+    <script src="https://unpkg.com/jquery@1.12.4/dist/jquery.js">
+        
+    </script>
+    <script>
+        
+        //js转换jq对象
+        // var cloth = document.getElementById("cloth");
+        // $(cloth).text("呵呵");
+
+        //jq对象转换js对象
+        var $li = $("li");
+        $li[1].style.backgroundColor = "red";
+        $li.get(2).style.backgroundColor = "pink";
+        
+    </script>
+</body>
+</html>

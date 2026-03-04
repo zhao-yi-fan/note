@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .screen {
+      background-color: #333;
+      transform-origin: 0px 0px;
+      transition: all 0s ease 0s;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="screen"></div>
+
+  <script>
+    function handleScreenAuto () {
+      const w = 1440; // 设计稿的宽度
+      const h = 754; // 设计稿的高度
+      const clientWidth = document.documentElement.clientWidth;
+      const clientHeight = document.documentElement.clientHeight;
+      const scaleW = clientWidth / w;
+      const scaleH = clientHeight / h;
+      let scale = 1;
+      if (clientWidth / clientHeight < w / h) {
+        scale = scaleW;
+        document.querySelector('.screen').style.height = `${clientHeight / scale}px`
+      } else {
+        scale = scaleH;
+        document.querySelector('.screen').style.width = `${clientWidth / scale}px`
+      }
+      document.querySelector('.screen').style.transform = `scale(${scale}) `;
+    }
+    window.addEventListener('resize', function () {
+      handleScreenAuto()
+    });
+    /*
+    方案1： vw,vh 
+        实现方式 
+          按照设计稿的尺寸，将px按比例计算为vw和vh
+        优点：
+          1.可以动态计算图表的宽高,字体等,灵活性较高
+          2.当屏幕比例跟ui稿不一致时,不会出现两边留白情况
+        缺点
+          1.需要编写公共转换函数,为每个图表都单独做字体、间距、位移的活配,比较麻烦
+    方案2： vw,vh 
+        实现方式 
+          通过scale属性,根据屏幕大小,对图表进行整体的等比缩放
+        优点：
+          1.代码量少,适配简单
+          2.一次处理后不需要在各个图表中再去单独活配
+        缺点 
+          1.因为是根据ui精等比缩放,当大屏跟ui稿的比例不一样时,会出现周边留白情况
+          2.当缩放比例过大时候,字体和图片会有一点点失真
+          3.当维放比例过大时候,事件热区会偏移。
+    方案3： rem + vw vh
+        实现方式 
+          1.获得rem的基准值
+          2.动态的计算html根元素的font-size
+          3.图表中通过vw vh动态计算字体、间距、位移等
+        优点：
+          1.布局的自适应代码量少,适配简单
+        缺点
+          1.因为是根据ui稿等比缩放。当大屏跟ui稿的比例不一样时,会出现周边留白情况
+          2.图表需要单个做字体、间距、位移的适配
+    */
+
+  </script>
+</body>
+
+</html>

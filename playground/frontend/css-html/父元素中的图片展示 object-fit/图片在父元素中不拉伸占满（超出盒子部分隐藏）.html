@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    /* 其实和object-fit: cover类似，cover是只展示图片中间的地方 */
+    div {
+      width: 400px;
+      height: 400px;
+      background: burlywood;
+      border: 5px solid #ccc;
+      overflow: hidden;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="box">
+    <img src="./宽图.jpg" id="img" alt="">
+  </div>
+  <script>
+    let box = document.querySelector('#box'),
+      img = document.querySelector('#img');
+    img.onload = function () {
+      if (this.offsetHeight < box.offsetHeight) {
+        this.style.height = '100%';
+        this.style.width = 'auto';
+      }
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Document</title>
+</head>
+
+<body>
+  <h2>number：</h2>
+  <input type="number" name="" step="1" id="ageInp" max="65" min="18" value="25" disabled />
+  <input type="range" name="" step="1" id="rangeInp" min="18" max="65" />
+  <script>
+    rangeInp.oninput = function () {
+      let val = this.value
+      console.log(val)
+      ageInp.value = val
+    }
+  </script>
+
+  <h2>color：</h2>
+  <input type="color" name="" id="colorInp" />
+  <script>
+    colorInp.onchange = function () {
+      console.log(this.value); //=> 16进制颜色值
+    }
+  </script>
+
+  <h2>email：</h2>
+  <input type="email" name="" id="">
+  <br />
+
+  <style>
+    #userEmail {
+      border: 1px solid #ddd;
+      outline: none;
+      /* 当文本框获取焦点后去除浏览器默认的边框选中颜色 */
+    }
+
+    #userEmail:valid {
+      /*通过验证：不输入或者输入正确*/
+      border-color: green;
+    }
+
+    #userEmail:invalid {
+      /*没通过验证*/
+      border-color: red;
+    }
+
+    #userEmail:valid+span:after {
+      content: '邮箱格式正确';
+    }
+
+    #userEmail:invalid+span:after {
+      content: '邮箱不符合格式';
+    }
+  </style>
+  <input type="email" id="userEmail" />
+  <span></span>
+
+  <br />
+
+  <input type="email" id="userEmail2" />
+  <span id="spanEmail1"></span>
+  <script>
+    userEmail2.onkeyup = function () {
+      //=> checkValidity: H5新提供的表单内容格式验证方法（新表单类型中有内置验证机制的，都可以基于这个方法验证）
+      if (this.checkValidity()) {
+        spanEmail1.innerHTML = 'OK'
+      } else {
+        spanEmail1.innerHTML = 'NO'
+      }
+    }
+  </script>
+
+  <br />
+  <input type="email" id="userEmail3" placeholder="请输入邮箱！" />
+  <span id="spanEmail2"></span>
+  <script>
+    userEmail3.onkeyup = userEmail3.onblur = function () {
+      let val = this.value.trim() // 去掉字符串的首位空格
+      let reg = /^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/
+      if (val.length === 0) {
+        spanEmail2.innerHTML = '必填'
+        return
+      }
+      if (!reg.test(val)) {
+        spanEmail2.innerHTML = 'NO'
+        return
+      }
+      spanEmail2.innerHTML = 'OK'
+    }
+  </script>
+
+  <h2>select：</h2>
+
+  地区：
+  <select name="">
+    <option value="">==请选择==</option>
+    <option value="北京">北京</option>
+    <option value="上海">上海</option>
+    <option value="广州">广州</option>
+    <option value="深圳">深圳</option>
+    <option value="杭州">杭州</option>
+    <option value="成都">成都</option>
+  </select>
+
+  <h2>datalist：</h2>
+
+  <input list="cars">
+  <datalist id="cars">
+    <option value="BMW"></option>
+    <option value="Ford"></option>
+    <option value="Volvo"></option>
+  </datalist>
+</body>
+
+</html>

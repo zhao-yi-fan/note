@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <!-- <style>
+    /* 第一种 需要知道子元素的宽高【定位+偏移】 */
+    .father {
+      width: 400px;
+      height: 400px;
+      background: burlywood;
+      position: relative;
+    }
+    .son {
+      width: 100px;
+      height: 100px;
+      background: #ccc;
+      /* 实现水平垂直居中 */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -50px;
+      margin-left: -50px;
+    }
+  </style> -->
+  <!-- <style>
+    /* 第二种 不需要知道子元素的宽高 【定位+transform】 */
+    .father {
+      width: 400px;
+      height: 400px;
+      background: burlywood;
+      position: relative;
+    }
+
+    .son {
+      width: 100px;
+      height: 100px;
+      background: #ccc;
+      /* 实现水平垂直居中 */
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%)
+    }
+  </style> -->
+  <!-- <style>
+    /* 第三种 不需要知道子元素的宽高 父盒子为flex容器 */
+    .father {
+      width: 400px;
+      height: 400px;
+      background: burlywood;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .son {
+      width: 100px;
+      height: 100px;
+      background: #ccc;
+    }
+  </style> -->
+  <style>
+    /* 第四种 不需要知道子元素的宽高【margin: auto】 */
+    .father {
+      height: 400px;
+      width: 400px;
+      background: burlywood;
+      position: relative;
+    }
+    .son {
+      height: 100px;
+      width: 100px;
+      background: #ccc;
+      /* 实现水平垂直居中 */
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="father">
+    <div class="son">
+
+    </div>
+  </div>
+</body>
+
+</html>

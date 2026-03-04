@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="//unpkg.com/ali-oss/dist/aliyun-oss-sdk.js"></script>
+</head>
+
+<body>
+  <input type="file" id="fileInp">
+  <script>
+    let fileInp = document.getElementById('fileInp');
+
+    /* const client = new OSS({
+      region: 'oss-cn-beijing',
+      accessKeyId: 'LTAI8ygujYgDvLJ9',
+      accessKeySecret: 'nLrO1bpn9IOpEu0tt0zyAaChc22j0c',
+      bucket: 'doutui'
+    }) */
+    async function put(client, fileName, fileBlob) {
+      try {
+        let result = await client.put(fileName, fileBlob)
+        console.log(result)
+      } catch (e) {
+        console.log(e)
+      }
+    }
+    fileInp.onchange = function (e) {
+      let file = e.target.files[0];
+      console.log(file)
+
+      let reader = new FileReader();
+
+      // 以Array Buffer读取文件
+      reader.readAsArrayBuffer(file)
+
+      reader.onload = function (event) {
+        console.log(event)
+        // 把Array Buffer转化为blob
+        let fileBlob = new Blob([event.target.result])
+        // put(client, file.name, fileBlob);
+      }
+    }
+    
+  </script>
+</body>
+
+</html>

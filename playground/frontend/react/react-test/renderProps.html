@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="//unpkg.com/react@17.0.2/umd/react.development.js" crossorigin></script>
+  <script src="//unpkg.com/react-dom@17.0.2/umd/react-dom.development.js" crossorigin></script>
+  <script src="//unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { Component } = React;
+    /**
+     * 如何向组件内部传入组件
+     * vue中使用的是插槽
+     * React中：
+     *    使用children props: 通过组件标签传入结构
+     *    使用render props: 通过组件标签传入结构 一般用render函数属性
+     */
+    class Parent extends Component {
+      render () {
+        return (
+          <div>
+            <hr />
+            <Common render={({ ...args }) => <A {...args} />} />
+          </div>
+        )
+      }
+    }
+
+    class Common extends Component {
+      state = {
+        carName: '奔驰'
+      }
+
+      replaceCar = () => {
+        this.setState({
+          carName: '奥拓'
+        })
+      }
+      render () {
+        const { carName } = this.state
+        return (
+          <div>
+            <button onClick={this.replaceCar}>改变车</button>
+            {this.props.render({ carName })}
+          </div>
+        )
+      }
+    }
+    class A extends Component {
+      render () {
+        return <div>{this.props.carName}</div>
+      }
+    }
+    ReactDOM.render(<Parent />, document.getElementById('root'));
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <p>1111</p>
+    <p>2222</p>
+    <script src="https://unpkg.com/jquery@1.12.4/dist/jquery.js"></script>
+    <script>
+        
+        $(function(){
+            var money = 100;
+            
+            //先预解析函数名,用的时候才会调用函数内容,此时的money已经变为0了.
+            // $("p").eq(0).on("click",function(){
+            //     alert("我有"+money+"元");//我有0元
+            // });
+
+            //on(types,selector,data,callback)
+            //第三个参数是传给事件对象e的参数data属性的,这样可以在不改变money值之前就保存起来值.
+            $("p").eq(0).on("click",money,function(e){
+                alert("我有"+e.data+"元");
+            });
+            money = 0;
+            $("p").eq(1).on("click",function(){
+                alert("我有"+money+"元");
+            });
+        });
+    </script>
+</body>
+</html>

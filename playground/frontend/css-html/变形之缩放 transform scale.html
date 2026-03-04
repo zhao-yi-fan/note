@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		div {
+		width: 200px;
+		height: 200px;
+		background-color: pink;
+	}
+	div:hover {
+		/*transform: scale(0.8, 1);  0 0%   1  100%   宽度变为了原来的 80%  高度不变 */
+		/*transform: scale(1, 0.8);  0 0%   1  100%   高度变为了原来的 80%  宽度不变 */
+		 transform: scale(0.8);/* 高度省略 默认  和 宽度一起缩放 都是 0.8 */
+	}
+
+	</style>
+</head>
+<body>
+	<div></div>
+</body>
+</html>

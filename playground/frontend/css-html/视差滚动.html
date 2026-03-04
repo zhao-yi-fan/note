@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+      
+      body {
+        margin: 0;
+        padding: 0;
+      }
+  
+      section {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 10rem;
+        font-weight: bold;
+        color: #fff;
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        background: url(https://source.unsplash.com/random/1920x1080) no-repeat center center;
+      }
+  
+      section:nth-child(2n) {
+        background-image: url(https://source.unsplash.com/random/1920x1080?a);
+      }
+  
+      section:nth-child(3n) {
+        background-image: url(https://source.unsplash.com/random/1920x1080?b);
+      }
+  
+      section:nth-child(4n) {
+        background-image: url(https://source.unsplash.com/random/1920x1080?c);
+      }
+  </style>
+</head>
+
+<body>
+  <section>
+    <h1>aaaa</h1>
+  </section>
+  <section>
+    <h1>bbb</h1>
+  </section>
+  <section>
+    <h1>ccc</h1>
+  </section>
+  <section>
+    <h1>ddd</h1>
+  </section>
+  <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/gsap-latest-beta.min.js"></script>
+  <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/ScrollTrigger.min.js"></script>
+  <script>
+    const sections = document.querySelectorAll('section');
+    gsap.registerPlugin(ScrollTrigger);
+
+    sections.forEach((section) => {
+      gsap.fromTo(
+        section,
+        { backgroundPositionY: `-${window.innerHeight / 2}px` },
+        {
+          backgroundPositionY: `${window.innerHeight / 2}px`,
+          // duration: 3,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: section,
+            scrub: true,
+          }
+
+        },
+
+      );
+    });
+
+  </script>
+</body>
+
+</html>

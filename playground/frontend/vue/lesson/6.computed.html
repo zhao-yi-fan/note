@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <!-- {{firstName + lastName}} -->
+        <!-- 如果在外部改变xx的值 会重新渲染视图 getName会重新执行一次 getName执行是多余的 所以才会用到computed -->
+        <!-- 标签中不允许{{xxx()}} 带()，如果带()，就把xxx变成计算属性或者过滤器 -->
+        {{fullName}} {{xx}}
+    </div>
+    <script src="//unpkg.com/vue@2.7.16/dist/vue.js"></script>
+    <script>
+        // computed 和 method的区别  method没缓存 computed有缓存
+        // computed 和 watch的区别 watch能异步 computed不能异步
+        // 什么时候用watch、computed 如果是简单的事件 数据变化发送调用接口就用watch。如果是计算一个值的结果 就用computed
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                firstName: '姜',
+                lastName: '文',
+                xx: '123',
+                fullName: ''
+            },
+            watch: { // vm.$watch
+                firstName: { // 写成对象的目的 为了可以传递参数 immediate deep {a:{a:'1'}}
+                    handler(newVal, oldVal) {
+                        setTimeout(() => {
+                            this.fullName = this.firstName + this.lastName;
+                        }, 1000)
+                    },
+                    immediate: true, // 视图渲染首先会立即执行一遍
+                    deep: true // 只要属性发生变化 就会触发此函数 默认只监控一层 使用递归消耗性能
+                },
+                lastName: {
+                    handler(newVal, oldVal) {
+                        this.fullName = this.firstName + this.lastName;
+                    },
+                    immediate: true
+
+                }
+                /* firstName(newVal, oldVal) {
+                    this.fullName = this.firstName + this.lastName;
+                },
+                lastName(newVal, oldVal) {
+                    this.fullName = this.firstName + this.lastName;
+                } */
+            },
+            // computed 他是基于 Object.defineProperty  getter / setter
+            // 计算属性，不是一个方法，被调用时不加()
+            // vuex 我们希望通过vuex来实现双向绑定 （全选，多选）
+            // computed: {// computed会有缓存 如果以来的数据不发生变化 不会重新执行方法
+            //     // computed对象下的属性也是vm下的属性，可以直接this.getName
+            //     getName: {
+            //         /* console.log('刷新了');
+            //         return this.firstName + this.lastName; */
+            //         get() {
+            //             console.log('刷新了');
+            //             return this.firstName + this.lastName;
+            //         },
+            //         set(val) {
+            //             this.xx = val;
+            //         }
+            //     }
+            // },
+            /* methods: {
+                getName() {
+                    console.log('刷新了');
+                    return this.firstName + this.lastName;
+                }
+            } */
+        })
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="//unpkg.com/react@17.0.2/umd/react.development.js" crossorigin></script>
+  <script src="//unpkg.com/react-dom@17.0.2/umd/react-dom.development.js" crossorigin></script>
+  <script src="//unpkg.com/prop-types@15.8.1/prop-types.js" crossorigin></script>
+  <script src="//unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type="text/babel">
+    function Person (props) {
+      const { name, sex, age, speak } = props;
+      return (
+        <div>
+          <p>姓名：{name}</p>
+          <p>性别：{sex}</p>
+          <p>年龄：{age}</p>
+          <button onClick={speak}>说话</button>
+        </div>
+      )
+    }
+
+    // 校验规则
+    Person.propTypes = {
+      // name: React.PropTypes.string, // 15版本的时候PropTypes是挂在React上，16版本之后拆出成prop-types了
+      name: PropTypes.string.isRequired,
+      sex: PropTypes.string,
+      age: PropTypes.number,
+      speak: PropTypes.func // 方法是func
+    }
+    // 默认值
+    Person.defaultProps = {
+      sex: '男',
+      age: 18,
+    }
+    const person = {
+      name: '张三',
+      // age: 18,,
+      // sex: '男'
+      speak: () => {
+        console.log('说话');
+      }
+    }
+
+    const domContainer = document.querySelector('#app');
+    ReactDOM.render(
+      <Person {...person} />,
+      domContainer);
+
+  </script>
+</body>
+
+</html>

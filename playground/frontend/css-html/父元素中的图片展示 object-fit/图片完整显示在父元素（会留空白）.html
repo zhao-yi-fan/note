@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    /* 使用 object-fit: contain; 自带垂直水平居中。 保持原有尺寸比例。保证替换内容尺寸一定可以在容器里面放得下。因此，此参数可能会在容器内留下空白。 */
+    div {
+      width: 400px;
+      height: 400px;
+      background: burlywood;
+      border: 5px solid #ccc;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  </style>
+  <!-- <style>
+    div {
+      width: 400px;
+      height: 400px;
+      background: burlywood;
+      border: 5px solid #ccc;
+      position: relative;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      /* 实现垂直水平居中 */
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%)
+    }
+  </style> -->
+</head>
+
+<body>
+  <div id="box">
+    <img src="./高图.jpg" alt="" id="img">
+  </div>
+  <!-- <script>
+    // 使用js
+    var img = document.getElementById("img");
+    var box = document.getElementById("box");
+    img.onload = function () {
+      // 图片加载完成后立即执行
+      if (this.offsetHeight > box.offsetHeight) {
+        this.style.height = "100%";
+        this.style.width = "auto";
+      }
+    }
+  </script> -->
+</body>
+
+</html>

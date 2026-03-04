@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+	* {
+		padding: 0;
+		margin: 0;
+	}
+	/*普通浏览器清除*/
+	.clearfix:after {
+		content: "";
+		display: block;
+		height: 0;
+		clear: both;
+		visibility: hidden;
+	}
+	/*普通浏览器清除*/
+
+	/*  IE6 .7专有 */
+	.clearfix {
+		*zoom: 1;
+	}
+	/*  IE6 .7专有 */
+	.father {
+		border: 1px solid red;
+		width: 300px;
+		/*overflow: hidden;     父级清除*/
+	}
+	.big {
+		width: 70px;
+		height: 200px;
+		background-color: pink;
+		float: left;
+	}
+	.small {
+		width: 100px;
+		height: 300px;
+		background-color: orange;
+		float: left;
+	}
+	/*.aaa {
+		clear: both;      儿子末尾加一个空标签,单独清除
+	}*/
+	.footer {
+		width: 300px;
+		height: 200px;
+		background-color: blue;
+	}
+	</style>
+</head>
+<body>
+	<div class="father clearfix">
+		<div class="big">
+			
+		</div>
+		<div class="small">
+			
+		</div>
+		<!-- <div class="aaa">    儿子末尾加一个空标签,单独清除
+			
+		</div> -->
+	</div>
+	<div class="footer">
+		
+	</div>
+</body>
+</html>

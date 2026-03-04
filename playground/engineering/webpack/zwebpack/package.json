@@ -1,0 +1,28 @@
+{
+  "name": "zwebpack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bin/index.js",
+  "bin": {
+    "zwebpack": "bin/zwebpack.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/generator": "^7.19.3",
+    "@babel/parser": "^7.19.3",
+    "@babel/traverse": "^7.19.3",
+    "@babel/types": "^7.19.3",
+    "babylon": "^6.18.0"
+  },
+  "devDependencies": {
+    "chalk": "^2.4.2",
+    "ejs": "^3.1.8",
+    "loader-runner": "^2.4.0",
+    "tapable": "^2.2.1"
+  }
+}

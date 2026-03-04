@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>对自己狠点</title>
+    <style>
+        ul {
+      list-style-type: none;
+    }
+
+    li {
+      float: left;
+      margin-left: 10px;
+    }
+
+    img {
+      width: 200px;
+      height: 180px;
+    }
+
+    input {
+      margin-left: 30%;
+    }
+  </style>
+    <script>
+    //$永远都是24k纯帅的十八岁的杨哥$
+    </script>
+</head>
+
+<body>
+    <ul>
+        <li><img src="images/ly.jpg" alt=""><br /><input type="button" value="赞(1)"></li>
+        <li><img src="images/lyml.jpg" alt=""><br /><input type="button" value="赞(1)"></li>
+        <li><img src="images/fj.jpg" alt=""><br /><input type="button" value="赞(1)"></li>
+        <li><img src="images/bd.jpg" alt=""><br /><input type="button" value="赞(1)"></li>
+    </ul>
+    <script>
+        // //错误,没有单独自增,需要用闭包
+        // //先弄一个获得自增值的函数
+
+        // var num = 2;
+        // //获取所有的input标签,循环注册点击事件
+        // var inputs = document.getElementsByTagName("input");
+
+        // for (var i = 0; i < inputs.length; i++) {
+        //     inputs[i].onclick = function () {
+        //         this.value = "赞(" + (num++) + ")";
+        //     };
+        // }
+
+
+
+        //1.单独为每个按钮添加一个属性,用来分别记各自按钮的数
+        // var inputs = document.getElementsByTagName("input");
+
+        // for (var i = 0; i < inputs.length; i++) {
+
+        //     inputs[i].num = 2;
+        //     inputs[i].onclick = function () {
+
+        //         this.value = "赞(" + (this.num++) + ")";
+        //     };
+        // }
+
+        //2.单独为每个按钮添加自增函数
+        // var inputs = document.getElementsByTagName("input");
+
+        // for (var i = 0; i < inputs.length; i++) {
+        //     inputs[i].getValue = function () {
+        //         var num = 2;
+        //         return function () {
+        //             return num++;
+        //         };
+        //     };
+        //     inputs[i].ff = inputs[i].getValue();
+        //     inputs[i].onclick = function () {
+
+        //         this.value = "赞(" + this.ff() + ")";
+        //     };
+        // }
+
+
+
+        //3.使用闭包
+        function getValue() {
+            var num = 2;
+            return function () {
+                this.value = "赞(" + (num++) + ")";
+            }
+        }
+        //获取所有的input标签,循环注册点击事件
+        var inputs = document.getElementsByTagName("input");
+        for (var i = 0; i < inputs.length; i++) {
+
+            inputs[i].onclick = getValue();
+        }
+    </script>
+</body>
+
+</html>

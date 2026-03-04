@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div {
+            height: 500px;
+            width: 500px;
+            background-color: pink;
+        }
+    </style>
+</head>
+<body>
+    <input type="button" value="增加" id="btn" />
+    <div>
+        <p>1111</p>
+        <p>1111</p>
+        <p>1111</p>
+        <p>1111</p>
+    </div>
+    <script src="https://unpkg.com/jquery@1.12.4/dist/jquery.js"></script>
+    <script>
+        $(function(){
+            //on有四个参数
+            //给自己注册的事件
+            $("p").on("click",function(){
+                alert("hehe");
+            });
+            //div的委托事件,由子元素p执行
+            $("div").on("click","p",function(){
+                alert("haha");
+                //$(this)    委托事件里面的this是p标签,不是div标签
+            });
+            //div简单事件
+            $("div").on("click",function(){
+                alert("div的简单事件");
+            });
+            //点p标签的时候,如果有三个事件:p标签的简单事件,div的简单事件,div的委托事件.有执行的顺序.
+            //先执行p的简单事件,再执行div的委托事件,最后执行div的简单事件.
+
+            $("#btn").on("click",function(){
+                $("<p>我是新的p元素</p>").appendTo("div");
+            });
+        });
+    </script>
+</body>
+</html>

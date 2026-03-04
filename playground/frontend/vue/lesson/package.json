@@ -1,0 +1,19 @@
+{
+  "name": "lesson",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vue/compiler-sfc": "^3.3.4",
+    "animate.css": "^3.7.1",
+    "chalk": "^2.4.2",
+    "velocity-animate": "^2.0.5",
+    "vue": "^2.6.10"
+  }
+}

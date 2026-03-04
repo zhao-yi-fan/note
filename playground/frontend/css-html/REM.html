@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script>
+      (function () {
+        // 动态获取屏幕宽度
+        let remComputed = function () {
+          let winWidth = document.documentElement.clientWidth; // 获取屏幕的宽度
+          console.log('winWidth',winWidth)
+          const desWidth = 640;
+          if (winWidth >= desWidth) {
+            document.documentElement.style.fontSize = '100px';
+          } else {
+            document.documentElement.style.fontSize = (winWidth / desWidth) * 100 + 'px';
+            console.log(document.documentElement.style.fontSize)
+          }
+        }
+        remComputed(); // 开始就要执行一次
+        window.addEventListener('resize', remComputed)
+      })()
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    html {
+      font-size: 100px;
+    }
+
+
+    div {
+      font-size: 0.16rem;
+      width: 6.4rem;
+      height: 100%;
+      margin: 0 auto;
+      background: pink;
+    }
+
+    p {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <p>REM移动端响应式布局</p>
+  </div>
+</body>
+
+</html>

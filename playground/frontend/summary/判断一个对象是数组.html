@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <iframe id="frame" frameborder="0"></iframe>
+  <script>
+    // 正确：要使用Array.isArray
+
+
+    /* 
+    // 1.Object.prototype.toString.call(obj) === "[object Array]" 【不推荐】
+    function isArray(obj) {
+      return Object.prototype.toString.call(obj) === "[object Array]";
+    }
+
+    // 反驳，es6 Symbol.toStringTag 可以指定Object.prototype.toString的调用行为，所以这种方法不准确
+    const obj = {
+      [Symbol.toStringTag]: "abc",
+    }
+    console.log(Object.prototype.toString.call(obj)); // [object abc]
+    */
+
+
+    // 2. instanceof 【不推荐】
+    function isArray (obj) {
+      return obj instanceof Array;
+    }
+
+    /* 
+    // 反驳1:通过Object.setPrototypeOf可以改变原型链
+    const obj = {}
+    Object.setPrototypeOf(obj, Array.prototype);
+
+    console.log(isArray(obj)); // true */
+
+    // 反驳2: 页面有iframe
+    /* const obj = [];
+    const iframe = document.getElementById('frame');
+    const Array2 = iframe.contentWindow.Array;
+    console.log(obj instanceof Array2); // false 虽然都是Array，但是不是同一个Array构造函数
+    console.log(isArray(obj)); // true */
+
+
+  </script>
+</body>
+
+</html>

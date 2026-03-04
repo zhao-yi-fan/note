@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <my-button/>
+    <!-- 上面这种是不符合 w3c规范的，如果多次使用只会出现第一次 hr img br才符合自闭合 -->
+    <my-button :info="xxx"></my-button>
+  </div>
+  <script src="//unpkg.com/vue@2.7.16/dist/vue.js"></script>
+  <!-- 组件的类型：全局组件 局部组件 函数式组件 异步组件 -->
+  <!-- 为什么要有组件：复用，方便维护，拆分方便，每个组件间作用域是隔离的，组件间互不干扰，组件间的数据传递，组件就是一个自定义的标签，可以代表一些特定的功能。主要封装 css html js .vue文件 -->
+  <script>
+    // 数据来源 data props
+    // 全局组件 在任何组件中可以直接使用，而且不需要引入，在组件的模板中用
+    Vue.component('my-button',{// 每个组件都有自己的生命周期
+      props:['info'],
+      data(){ // 组件的数据必须市函数类型
+        return {msg:'点我啊'} // 保证数据不会互相影响 所以通过一个函数返回一个唯一的对象
+      },
+      template:`<button>点我</button>`
+    })
+    let vm = new Vue({ // 根实例的数据必须是对象类型，但是自定义的组件必须是函数类型
+      el: '#app',
+      data: {
+        xxx:'试试'
+      }
+    })
+    // 父组件传递给子组件通过属性传递
+  </script>
+</body>
+
+</html>

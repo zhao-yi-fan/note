@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./index.js"></script>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script>
+    const state = {
+      count: 0
+    }
+    const vnode = {
+      tag: 'div',
+      porps: { style: { color: 'yellow' } },
+      children: [
+        {
+          tag: 'p',
+          props: { style: { color: 'blue' } },
+          children: `vue@3 - 计数器` + state.count
+        },
+        {
+          tag: 'button',
+          props: {
+            onClick: () => alert(state.count)
+          },
+          children: `点我啊`
+        }
+      ]
+    }
+    render(vnode, app)
+  </script>
+</body>
+
+</html>

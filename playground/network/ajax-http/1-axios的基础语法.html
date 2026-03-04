@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="//unpkg.com/axios/dist/axios.js"></script>
+</head>
+
+<body>
+    <script type="module">
+        // 发送一个get请求
+        // http://localhost:3000/?name=zhufeng&age=9
+        /* axios.get('http://localhost:3000/', {
+            params: {
+                name: 'zhufeng',
+                age: 9
+            }
+        }); */
+        /* axios.post('https://www.easy-mock.com/mock/5cb165067aab7f78650d2087/example/proxy', {
+            //=> 配置项中传递的内容都相当于基于请求主题传递给服务器, 但是传递给服务器的内容格式是RAW(也就是JSON格式的字符串), 不是X-WWW-FORM-URLENCODED
+            name: 'zhufeng',
+            age: 9 
+
+        }); */
+
+
+        /* let promise = axios.get('https://www.easy-mock.com/mock/5cb165067aab7f78650d2087/example/proxy',{
+            params: {
+                lx: 12
+            }
+        });
+        //实际写法
+
+        /* axios.get('https://www.easy-mock.com/mock/5cb165067aab7f78650d2087/example/proxy').then(result => {
+            let { data } = result;
+            console.log(data);
+            return axios.post('https://www.easy-mock.com/mock/5cb165067aab7f78650d2087/example/add');
+        }, error=>{
+          console.log(error,'error===');
+        }).then(result => {
+            let { data } = result;
+            console.log(data);
+
+        }) */
+
+
+
+    </script>
+</body>
+
+</html>

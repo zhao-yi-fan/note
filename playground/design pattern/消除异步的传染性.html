@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 很像react里面的Suspense组件
+    /* async function getUser () {
+      return await fetch('./消除异步传染性.json');
+    }
+
+    async function m1 () {
+      const user = await getUser();
+      return user;
+    }
+    async function m2 () {
+      const user = await m1();
+      return user;
+    }
+    async function main () {
+      const user = await m2();
+      console.log(user);
+      return user
+    }
+    main() */
+
+
+
+    function getUser () {
+      return fetch('./消除异步传染性.json');
+    }
+
+    function m1 () {
+      const user = getUser();
+      return user;
+    }
+    function m2 () {
+      const user = m1();
+      return user;
+    }
+    function main () {
+      console.log('begin');
+      const user = m2();
+      console.log(user);
+      return user
+    }
+
+    // run函数去掉async/await，消除异步传染性
+    function run (func) {
+      // 1.改动fetch
+      const oldFetch = window.fetch;
+      const cache = {
+        status: 'pending',
+        value: null,
+      }
+      function newFetch (...args) {
+        // fulfilled
+        if (cache.status === 'fulfilled') {
+          return cache.value
+        }
+        if (cache.status === 'rejected') {
+          throw cache.value
+        }
+        const p = oldFetch(...args).then(data => data.json()).then((data) => {
+          cache.status = 'fulfilled'
+          cache.value = data
+        }).catch((err) => {
+          cache.value = err
+          cache.status = 'rejected'
+        })
+        // 抛出错误
+        throw p
+      }
+      window.fetch = newFetch
+      // 2. 执行func 
+      try {
+        func()
+      } catch (err) {
+        // 请求完成后重新运行func
+        if (err instanceof Promise) {
+          err.finally((res) => {
+            window.fetch = newFetch;
+            func()
+            window.fetch = oldFetch;
+          })
+        }
+      }
+      // 3.改回fetch
+      window.fetch = oldFetch
+    }
+    run(main)
+  </script>
+</body>
+
+</html>

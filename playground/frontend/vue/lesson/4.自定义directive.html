@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 指令的作用 操作dom 有特定功能 -->
+    <!-- 自定义指令 -->
+    <style>
+        .content {
+            background-color: red;
+            height: 100px;
+            width: 100px;
+        }
+    </style>
+    <div id="app">
+        <div v-color="'red'">
+            xxx
+        </div>
+        <!-- popover -->
+        <div v-click-outside="hide">
+            <input type="text" @focus="show">
+            <div class="content" type="text" v-if="isShow">
+                content
+                <button>点我</button>
+            </div>
+        </div>
+        <!-- 获取焦点的指令 -->
+        <input type="text" v-focus="xxx">
+    </div>
+    <script src="//unpkg.com/vue@2.7.16/dist/vue.js"></script>
+    <script>
+        // 全局指令 不需要每个组件都引用 只需要全局引用下即可
+        Vue.directive('color', function (el, bingdings, vnode) { // context
+            el.style.border = `1px solid ${bingdings.value}`
+            // console.log(this);// window
+        });
+        let vm = new Vue({
+            el: '#app',
+            // 图片懒加载  v-scroll都是用指令实现
+            directives: {
+                // 指令也有生命周期，五个周期
+                focus: {// 默认调用的方法是bind和update
+                    bind(el) {
+                        console.log('el绑定到页面上执行');
+                    },
+                    inserted(el) { // 这个元素插入到了页面中 执行的钩子
+                        el.focus()
+                    },
+                    // 所有的数据发生变化 都会重新执行
+                    update(el) { // 依赖的数据发生变化 会触发此方法
+                        console.log(el)
+                    }
+                },
+                'click-outside'(el, bingdings, vnode) {
+                    // 绑定给document  捕获到事件发生在谁身上
+                    document.addEventListener('click', (e) => {
+                        // 如果当前元素内的不管的 点击外面就隐藏content标签
+
+                        if (!el.contains(e.target)) {// e.target 点哪个标签就是哪个标签
+                            vnode.context[bingdings.expression]();// vnode.context包含了所有的vue方法 bingdings.expression指令等于的变量hide  将hide方法执行
+                        }
+                    })
+                }
+            },
+            data: {
+                xxx: 'hello',
+                isShow: false,
+            },
+            methods: {
+                show() {
+                    this.isShow = true;
+                },
+                hide() {
+                    this.isShow = false;
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

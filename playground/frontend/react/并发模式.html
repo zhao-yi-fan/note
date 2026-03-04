@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>React18 Concurrent Mode</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <!-- 添加 Babel standalone 来转译 JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+  <h2>React18 并发模式 Demo（自动时间切片）</h2>
+  <div id="root"></div>
+
+  <!-- 将 script 标签的 type 改为 text/babel -->
+  <script type="text/babel">
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+
+    function App () {
+      const [items, setItems] = React.useState([]);
+
+      function handleClick () {
+        const arr = [];
+        for (let i = 0; i < 10000; i++) {
+          arr.push(i);
+        }
+        setItems(arr);
+      }
+
+      return (
+        <div>
+          <button onClick={handleClick}>渲染 10000 条数据</button>
+          <ul>
+            {items.map(i => <li key={i}>{i}</li>)}
+          </ul>
+        </div>
+      );
+    }
+
+    root.render(<App />);
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Document</title>
+  <script src="//unpkg.com/vue@2.7.16/dist/vue.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <div v-for="(item, index) in arr" :key="index">
+      <input type="text" name="" id="" v-model="item.name" @input="change">
+    </div>
+  </div>
+  <script>
+
+    new Vue({
+      el: "#app",
+      data() {
+        return {
+          arr: [
+            {
+              name: 'xiaoming',
+              age: 18
+            },
+            {
+              name: 'wang',
+              age: 19
+            },
+          ],
+          obj: {
+            aaa: 1,
+            bbb: 'nihao'
+          },
+          date: '2020',
+        }
+      },
+      watch: {
+        // 进行新旧值对比
+        newArr: {
+          handler(val, oldValue) {
+            console.log('arr-newValue', val);
+            console.log('arr-oldValue', oldValue);
+          },
+          deep: true,
+          // immediate: true,
+        },
+        obj: {
+          handler(val, oldValue) {
+            console.log('obj-newValue', val);
+            console.log('obj-oldValue', oldValue);
+          },
+          deep: true,
+          // immediate: true,
+        },
+        date: {
+          handler(val, oldValue) {
+            console.log('date-newValue', val);
+            console.log('date-oldValue', oldValue);
+          },
+        },
+      },
+      computed :{
+        // 进行新旧值对比
+        newArr (){
+          return JSON.parse(JSON.stringify(this.arr))
+        }
+      },
+      methods: {
+        change(){
+          console.log(this.arr,'this.arr====');
+        }
+      },
+      mounted() {
+        // 数组
+        setTimeout(() => {
+          this.arr.push({
+            age: 20,
+            name: 'zyf'+new Date().getTime()
+          }) 
+        }, 1000);
+
+
+        // 对象
+        // this.$set(this.obj, 'ccc', 123)
+        // this.obj.ccc = 123;
+
+        // 基本数据类型
+        // this.date = '2021'
+      }
+    })
+  </script>
+</body>
+
+</html>

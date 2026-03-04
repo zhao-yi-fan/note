@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		div {
+			width: 100px;
+			height: 100px;
+			background-color: red;
+			transition: all 2000ms ease 0.7s;  /* 最后一个时间是何时开始 过渡卸载本身上,谁做动画写在谁身上    单位有s   ms*/
+		}
+		div:hover {
+			background-color: blue;
+			/*transform: translate(20px,20px);
+			transform: scale(1.2);   层叠掉平移了 同一属性出现两次 */
+			transform: translate(200px,200px) scale(3.3) rotate(45deg);  /* 前后顺序有关系,放在前面的先操作,后面的后操作 */
+		}
+	</style>
+</head>
+<body>
+	<div></div>
+</body>
+</html>

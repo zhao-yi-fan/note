@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="//unpkg.com/axios/dist/axios.js"></script>
+</head>
+
+<body>
+    <script>
+        // A和B同时成功才进行下一步
+        //初始写法
+        /* let result = null;
+        axios.get('A').then(resultA => {
+            return axios.get('B');
+        }).then(resultB => {
+            //=> A和B都成功执行: RESULT-B是B成功后的结果
+            //=> 全局RESULT是 A的结果
+        }) */
+
+
+        //axios提供了all方法
+        // sendAry存放三个AJAX请求的PROMISE实例
+        let sendAry = [
+            axios.get('https://www.easy-mock.com/mock/5cb165067aab7f78650d2087/example/proxy'),
+            axios.get('https://www.easy-mock.com/mock/5cb165067aab7f78650d2087/example/query'),
+            axios.post('https://www.easy-mock.com/mock/5cb165067aab7f78650d2087/example/add')
+        ];
+        //=> 三个请求都完成才做一些事情(可以基于all方法实现)
+        /* axios.all(sendAry).then(result => {
+            console.log(result);//=> 是一个数组, 分别存储每一个请求的结果
+            
+        }); */
+
+        // axios还提供了spread方法
+        // 源码
+        /* function spread(callback) {
+            return function wrap(arr) {
+                return callback.apply(null, arr);
+            }
+        }
+        let wrap = axios.spread(() => { }); */
+
+        /* axios.all(sendAry).then(axios.spread((resA, resB, resC) => {
+            //=> RES-A/-B/-C分别代表三次请求的结果
+            //=> 原理是JS中的柯理化函数
+        })); */
+
+
+
+
+        //=> 初始化一些常用的配置项
+        axios.defaults.baseURL = 'https://www.easy-mock.com/mock/5cb165067aab7f78650d2087/example';
+        //=> 自定义成功失败规则: RESOLVE / REJECT (默认规则: 状态码以2开头算作成功)
+        axios.defaults.validateStatus = function validateStatus(status) {
+            return /^(2|3)\d{2}$/.test(status);
+        };
+
+        //=> 设置在POST请求中基于请求主体向服务器发送内容的格式, 默认是RAW, 项目中常用的是URL-ENCODED格式
+        /* axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+        axios.defaults.transformRequest = data => {
+            //=> data: 就是请求主体中需要传递给服务器的内容
+            let str = ``;
+            for (let attr in data) {
+                if (data.hasOwnProperty(attr)) {
+                    str += `${attr}=${data[attr]}&`;
+                }
+            }
+            str = str.substring(0, str.length - 1);
+            return str;
+        } */
+
+        //=> 自定义请求头
+        // axios.defaults.headers = {
+        //     name: 'iiicici'
+        // }
+
+        //设置响应拦截器: 分别在响应成功和失败的时候做一些拦截处理(在执行成功后设定的方法之前, 先会执行拦截器中的方法)
+        axios.interceptors.response.use(function success(result) {
+            return result;
+        }, function error(err) {
+
+        })
+
+        //=> 使用
+        /* axios.post('/mock', {
+            name: 'iiicici'
+        },
+            {
+                headers: {
+                    xxx: 'xxx'
+                }
+            }).then((result) => {
+                console.log(JSON.parse(result.config.data));
+            }); */
+
+        axios.post('/mock', {
+            lx: 12,
+            sex: 1
+        }).then((result) => {
+            console.log(result);
+        })
+
+
+
+    </script>
+</body>
+
+</html>

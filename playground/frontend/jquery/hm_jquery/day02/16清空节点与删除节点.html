@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div {
+            height: 300px;
+            width: 300px;
+            background-color: pink;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <p>1</p>
+        <p>2</p>
+    </div>
+    <p class="des">我是外面的p标签</p>
+    <script src="https://unpkg.com/jquery@1.12.4/dist/jquery.js">
+        
+    </script>
+    <script>
+        $(function(){
+            //清除一个元素的内容
+            //$("div").html("");//会造成内存泄露
+            //$("div").empty();//不会造成内存泄漏
+
+            //删除节点
+            //$("div").remove();
+
+            
+            //clone()中有参数,true和false
+            //true和false都是深度复制(会克隆标签里面的内容就是深度复制),false不会复制事件,true会复制事件
+            $(".des").click(function(){
+                alert("hh");
+            });
+            $(".des").clone(true).appendTo("div");//clone()默认参数是false
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="//unpkg.com/react@17.0.2/umd/react.development.js" crossorigin></script>
+  <script src="//unpkg.com/react-dom@17.0.2/umd/react-dom.development.js" crossorigin></script>
+  <script src="//unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type="text/babel">
+    class Father extends React.Component {
+
+      constructor(props) {
+        console.log('constructor');
+        super(props)
+
+        this.state = {
+          timer: null,
+          opacity: 1,
+          count: 1
+        }
+      }
+
+      add = () => {
+        this.setState({
+          count: this.state.count + 1
+        })
+      }
+
+      clickHandle = () => {
+        ReactDOM.unmountComponentAtNode(document.querySelector('#app'))
+      }
+
+      force = () => { // 不判断 shouldComponentUpdate true false，都会继续走钩子
+        this.forceUpdate()
+      }
+
+      componentWillMount () {
+        console.log('Father--componentWillMount');
+      }
+
+      componentDidMount () {
+        console.log('Father--componentDidMount');
+
+        // let { opacity } = this.state
+        // this.timer = setInterval(() => {
+        //   opacity -= 0.1;
+        //   if (opacity <= 0) opacity = 1;
+        //   this.setState({
+        //     opacity
+        //   })
+        // }, 200);
+      }
+
+      // 组件更新时的“阀门”
+      shouldComponentUpdate () {
+        console.log('Father--shouldComponentUpdate');
+        return true
+      }
+
+      componentWillUpdate () {
+        console.log('Father--componentWillUpdate');
+      }
+
+      componentDidUpdate () {
+        console.log('Father--componentDidUpdate');
+      }
+
+      componentWillUnmount () {
+        console.log('Father--componentWillUnmount');
+        clearInterval(this.timer)
+      }
+
+
+      render () {
+        console.log('Father--render');
+        const { opacity, count } = this.state
+        return (
+          <div>
+            <span
+              style={{
+                opacity
+              }}
+            >渐变</span>
+            <button onClick={this.add}>点我+1</button>
+            <br />
+            <button onClick={this.clickHandle}>组件卸载</button>
+            <br />
+            <button onClick={this.force}>不更改状态强制更新</button>
+            <Son count={this.state.count} />
+          </div>
+        )
+      }
+    }
+    class Son extends React.Component {
+      // 组件将要接受参数，在第一次渲染时不执行
+      componentWillReceiveProps (props) {
+        console.log('Son--componentUpdateReceiveProps', props);
+      }
+
+      shouldComponentUpdate () {
+        console.log('Son--shouldComponentUpdate');
+        return true
+      }
+
+      componentWillMount () {
+        console.log('Son--componentWillMount');
+      }
+
+      componentDidMount () {
+        console.log('Son--componentDidMount');
+      }
+
+      componentWillUpdate () {
+        console.log('Son--componentWillUpdate');
+      }
+
+      componentDidUpdate () {
+        console.log('Son--componentDidUpdate');
+      }
+
+      render () {
+        console.log('Son--render');
+        return (
+          <div>
+
+            <p>子组件</p>
+            <p>数量:{this.props.count}</p>
+          </div >
+        )
+      }
+    }
+    const domContainer = document.querySelector('#app');
+    ReactDOM.render(
+      <Father />,
+      domContainer);
+
+  </script>
+</body>
+
+</html>

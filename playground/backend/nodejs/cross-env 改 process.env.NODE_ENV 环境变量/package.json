@@ -1,0 +1,17 @@
+{
+  "name": "23-process",
+  "version": "1.0.0",
+  "description": "",
+  "main": "4-async-process.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=dev node index.js",
+    "pro": "cross-env NODE_ENV=pro node index.js",
+    "test": "cross-env NODE_ENV=test node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cross-env": "^6.0.3"
+  }
+}

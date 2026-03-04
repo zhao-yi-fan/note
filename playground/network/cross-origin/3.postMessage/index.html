@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>father</div>
+  <iframe src="./other.html"></iframe>
+  <iframe src="http://localhost:4000/other.html"></iframe>
+  <script>
+    window.addEventListener('message', function (res) {
+      console.log(res)
+      if (res.origin === 'http://localhost:4000') {
+        console.log('来自子页面的消息', res.data)
+      }
+      if (res.origin === 'http://localhost:3000') {
+        console.log('来自其他页面的消息', res.data)
+      }
+    })
+  </script>
+</body>
+
+</html>

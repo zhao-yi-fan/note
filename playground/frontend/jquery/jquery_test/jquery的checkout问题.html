@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://unpkg.com/jquery@3.4.1/dist/jquery.min.js"></script>
+</head>
+
+<body>
+  <input type="checkbox" id="aaa" name="aaa">
+  <input type="checkbox" id="bbb" name="bbb">
+  <input type="checkbox" id="ccc" name="ccc">
+  <button type="submit" id="btn">确定</button>
+  <script>
+    // 如果使用jquery,应使用prop方法来获取和设置checked属性，不应使用attr.
+
+    // 如果使用jquery,应使用prop方法来获取和设置checked属性
+    // 1.通过prop方法获取checked属性，获取的checked返回值为boolean，选中为true,否则为flase
+    /* $('#btn').click(function(){
+      $('input[type="checkbox"]').each(function(){
+        // console.log($(this).prop('checked'))
+        if($(this).prop('checked') == true){
+          console.log($(this)[0].name, $(this).prop('checked'))
+        }
+      })
+    }) */
+
+    /* attr */
+    // 2.如果使用attr方法获取时，如果当前input中初始化未定义checked属性，则不管当前是否选中，$("#selectAll").attr("checked")都会返回undefined； 
+    // 3.如果当前input中初始化已定义checked属性，则不管是否选中，$("#selectAll").attr("checked")都会返回checked. 
+    /* $('#btn').click(function(){
+      $('input[type="checkbox"]').each(function(){
+        // console.log($(this).prop('checked'))
+        console.log($(this).attr('checked'))
+        
+      })
+    }) */
+
+    /* $(ele)[0].checked */
+    $('#btn').click(function () {
+      console.log($('input[type="checkbox"]').prop('checked'))
+      // console.log($(this).prop('checked'))
+      // console.log($(this)[0].checked)
+    })
+
+    /* $('#btn').click(function () {
+      $("input[type='checkbox']").prop("checked", function (i, val) {
+        console.log($(this))
+        // return !val;
+      });
+    }) */
+  </script>
+</body>
+
+</html>

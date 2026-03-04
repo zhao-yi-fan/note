@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="//unpkg.com/animate.css/animate.css">
+</head>
+
+<body>
+    <style>
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            transform: rotate3d(1, 1, 1, 360deg)
+            /* opacity: 0.2 */
+        }
+
+        .fade-enter .father .box{
+          transform: rotate3d(1, 1, 1, 350deg)
+        }
+
+        /* .fade-enter-to {
+          background-color: black;
+        } */
+
+        .fade-enter-active .father .box{
+          transition: transform 2s linear;
+            /* transition: background-color 2s linear; */
+            /* background: yellow; */
+        }
+        
+
+        .fade-leave-active {
+            transition: opacity 3s linear;
+        }
+
+        .fade-leave {
+            opacity: 0.3
+        }
+
+        /* 默认从当前状态变化 */
+        /* .v-leave {
+            opacity: 1
+        } */
+        /* .fade-leave-to {
+            opacity: 0
+        } */
+
+    </style>
+    <div id="app">
+        <input type="text" v-model="filter">
+        <button @click="isShow = !isShow">v-if</button>
+        <transition-group name="fade" appear type="transition">
+            <div class="father" :key="1">
+              <div class="box" v-if="isShow" v-for="(d,index) in computedData" :key="d.title">{{d.title}}</div>
+            </div>
+        </transition-group>
+
+    </div>
+    <script src="//unpkg.com/vue@2.7.16/dist/vue.js"></script>
+    <script src="//unpkg.com/velocity-animate/velocity.js"></script>
+    <script>
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                isShow: true,
+                filter:'',
+                dataList: [
+                ]
+            },
+            methods: {
+            },
+            computed: {
+                computedData() {
+                    return this.dataList.filter(item=>{
+                        // item 当前循环的每一项，看一下是否包含filter属性 如果包含就留下
+                        return item.title.includes(this.filter)
+                    });
+                }
+            },
+            mounted(){
+              setInterval(()=>{
+                this.dataList.push({
+                  title: '标题' + new Date().getTime()
+                })
+              },1000)
+            }
+        })
+    </script>
+</body>
+
+</html>

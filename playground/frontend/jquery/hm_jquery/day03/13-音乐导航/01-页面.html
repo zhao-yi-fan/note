@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .nav {
+      width: 900px;
+      height: 60px;
+      background-color: black;
+      margin: 0 auto;
+    }
+
+    .nav li {
+      width: 100px;
+      height: 60px;
+      /*border: 1px solid yellow;*/
+      float: left;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav a {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      font-size: 24px;
+      color: blue;
+      text-align: center;
+      line-height: 60px;
+      text-decoration: none;
+      z-index: 2;
+    }
+
+    .nav span {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: yellow;
+      top: 60px;
+    }
+  </style>
+  <script src="https://unpkg.com/jquery@1.12.4/dist/jquery.js"></script>
+  <script>
+    $(function () {
+      $(".nav li").mouseenter(function () {
+        $(this).children("span").stop().animate({ top: 0 });
+
+        var idx = $(this).index();
+        //让对应的音乐播放, 音乐播放的方法时DOM对象。
+        $("audio").get(idx).load();
+        $("audio").get(idx).play();
+      }).mouseleave(function () {
+        $(this).children("span").stop().animate({ top: 60 });
+      });
+
+      //按下事件
+      //节流阀:按下的时候触发,如果没有弹起,不让触发下一次
+      var flag = true;//节流阀=================
+      $(document).on("keydown", function (e) {
+        console.log("hehe");
+        if (flag) {
+          flag = false;//节流阀=================
+          //console.log(e.keyCode);    获得按下键的code码 1是49 2是50 9是57
+          var code = e.keyCode;
+          if (code >= 49 && code <= 57) {
+            // $(".nav li").eq(code - 49).trigger("mouseenter");//code-49就是li的下标
+            $(".nav li").eq(code - 49).mouseenter();//这样触发也可以,就这两种触发方式
+          }
+
+          console.log(flag);//节流阀====================只会输出一次
+        }
+
+
+      });
+      $(document).on("keyup", function (e) {
+        flag = true;//==================节流阀重置
+        var code = e.keyCode;
+        if (code >= 49 && code <= 57) {
+          $(".nav li").eq(code - 49).trigger("mouseleave");
+        }
+      });
+
+
+
+
+    });
+  </script>
+</head>
+
+<body>
+  <div class="nav">
+    <ul>
+      <li>
+        <a href="javascript:void(0);">导航1</a>
+        <span></span>
+      </li>
+      <li><a href="javascript:void(0);">导航2</a><span></span></li>
+      <li><a href="javascript:void(0);">导航3</a><span></span></li>
+      <li><a href="javascript:void(0);">导航4</a><span></span></li>
+      <li><a href="javascript:void(0);">导航5</a><span></span></li>
+      <li><a href="javascript:void(0);">导航6</a><span></span></li>
+      <li><a href="javascript:void(0);">导航7</a><span></span></li>
+      <li><a href="javascript:void(0);">导航8</a><span></span></li>
+      <li><a href="javascript:void(0);">导航9</a><span></span></li>
+    </ul>
+
+    <!--音频标签-->
+    <div>
+      <audio src="./mp3/1.ogg"></audio>
+      <audio src="./mp3/2.ogg"></audio>
+      <audio src="./mp3/3.ogg"></audio>
+      <audio src="./mp3/4.ogg"></audio>
+      <audio src="./mp3/5.ogg"></audio>
+      <audio src="./mp3/6.ogg"></audio>
+      <audio src="./mp3/7.ogg"></audio>
+      <audio src="./mp3/8.ogg"></audio>
+      <audio src="./mp3/9.ogg"></audio>
+    </div>
+
+  </div>
+</body>
+
+</html>

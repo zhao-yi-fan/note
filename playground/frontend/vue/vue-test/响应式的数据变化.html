@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    let obj = {
+      text: '1111',
+      name: 'dtt',
+      age: 18
+    }
+
+    function render(key) {
+      console.log(key, '模拟视图渲染');
+    }
+    console.log(Object.values(obj));
+    console.log(Object.keys(obj));
+    Object.keys(obj).forEach(function (key) {
+      console.log('key=', key)
+      definedReative(obj, key, obj[key])
+    })
+
+    function definedReative(data, key, value) {
+      // IE 8
+      Object.defineProperty(data, key, {
+        get: function () {
+          return value;
+        },
+        set: function (newValue) {
+          value = newValue;
+          render(key)
+        }
+      })
+    }
+    console.log(obj, 'obj====');
+    // obj.name = 'zyf'
+
+  </script>
+</body>
+
+</html>

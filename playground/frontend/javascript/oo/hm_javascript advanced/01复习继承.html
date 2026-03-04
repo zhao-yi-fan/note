@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		function Animal(name,age){
+			this.name = name;
+			this.age = age;
+		}
+		Animal.prototype.color = "黄色";
+		Animal.prototype.eat = function(){
+			console.log("吃东西");
+		};
+
+		function Dog(name,age,sex){
+			Animal.call(this,name,age);
+			this.sex = sex;
+
+		}
+		Dog.prototype = new Animal();
+		var dog = new Dog("张三",18,"男");
+		console.log(dog.name);
+		console.log(dog.age);
+		console.log(dog.sex);
+		console.log(dog.color);
+		dog.eat();
+
+	</script>
+</body>
+</html>

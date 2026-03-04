@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <label for="debounceInpt">debounce</label>
+  <input type="text" id="debounceInpt">
+
+  <br>
+
+  <label for="throttleInpt">throttle</label>
+  <input type="text" id="throttleInpt">
+
+  <script>
+
+    // 在事件被触发n秒后再执行回调，如果在这n秒内又被触发，则重新计时。
+    function debounce (fun, delay) {
+      let timer;
+      return function () {
+        clearTimeout(timer)
+        // 使用箭头函数可以直接获取 上下文中的this, arguments
+        timer = setTimeout(() => {
+          fun.apply(this, arguments) // apply中需要传数组
+        }, delay)
+      }
+    }
+
+    // 规定在一个单位时间内，只能触发一次函数。如果这个单位时间内触发多次函数，只有一次生效。
+    function throttle (fn, delay) {
+      let last = 0;
+      let timer = null;
+
+      return function (...args) {
+        const now = Date.now();
+        const remaining = delay - (now - last);
+
+        if (remaining <= 0) {
+          clearTimeout(timer);
+          timer = null;
+          last = now;
+          fn.apply(this, args);
+        } else if (!timer) {
+          timer = setTimeout(() => {
+            last = Date.now();
+            timer = null;
+            fn.apply(this, args);
+          }, remaining);
+        }
+      };
+    }
+
+    function changeDEInput (e) {
+      console.log(this, 'this内');
+      console.log(e.target.value, new Date());
+    }
+
+    debounceInpt.onkeyup = debounce(changeDEInput, 1000)
+
+
+
+    function changeTHInput (e) {
+      console.log(this, 'this内');
+      console.log(e.target.value, new Date());
+    }
+
+    throttleInpt.onkeyup = throttle(changeTHInput, 2000)
+
+
+  </script>
+</body>
+
+</html>

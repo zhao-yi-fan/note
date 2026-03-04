@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- v-for 指令：v-开头 有特定功能的 操作DOM元素-->
+    <!-- 数据都需要循环来操作 {} string 最主要：[] 5  -->
+    <!-- for(let a of arr) -->
+    <!-- vue 2.5+ 版本要求循环的时候 必须增加key属性 为了做domdiff -->
+    <!-- v-bind动态绑定属性 所有的指令中的值 都是我们的变量，如果要是字符串需要加双引号-->
+    <!-- template vue自带的标签 无意义的标签 template上不能增加key属性 需要给真实的元素添加key-->
+    <!-- v-if / v-else / v-show -->
+    <!-- v-on 绑定事件 可以简写成@符号 并且事件参数是$event -->
+    <div id="app">
+        <!-- 对象 -->
+        <template v-for="(a,index) in arr">
+            <!-- 多个元素 需要区分名称 而且可以使用模板字符串 -->
+            <li :key="index+'_1'" :a="index+'_1'">
+                {{a}} {{index}}
+            </li>
+            <li :key=`${index}_2` :a=`${index}_2`>
+                {{a}} {{index}}
+            </li>
+        </template>
+
+        <!-- 数组 -->
+        <template v-for="(value, key) in {a:1}">
+            <!-- 多个元素 需要区分名称 而且可以使用模板字符串 -->
+            <li>
+                {{value}} {{key}}
+            </li>
+        </template>
+        <!-- 数字 -->
+        <template v-for="(value, key) in 5">
+            <!-- 多个元素 需要区分名称 而且可以使用模板字符串 -->
+            <li>
+                {{value}} {{key}}
+            </li>
+        </template>
+        <!-- v-if v-show区别 if处理DOM是否增加到页面上 show是style的操作 (show 不支持template写法) -->
+
+        <div v-if="false">
+            你好
+        </div>
+        <div v-else>
+            不好
+        </div>
+
+        <div v-show="false">你好</div>
+        <div v-show="true">不好</div>
+        {{flag}}<button v-on:click="fn($event)">切换</button>
+        <!-- 尽量不要给动态的数据 不要用key来渲染 可能会导致浪费性能-->
+        <!-- [香蕉,苹果,橘子] 点击 翻转 -->
+        <!-- 循环的时候最好给一个唯一标识 更改数据以后 索引一样 内容不一样 会重新渲染-->
+        <!-- 
+        <li x>香蕉</li> <li j>橘子</li>
+        <li p>苹果</li> <li p>苹果</li>
+        <li j>橘子</li> <li x>香蕉</li> 
+        -->
+
+        <!-- 输入框复用 加入不同的key就会重新渲染 -->
+        <div v-if="flag">
+            <label>珠峰</label>
+            <input type="text" key="1">
+        </div>
+        <div v-else="flag">
+            <label>姜文</label>
+            <input type="text" key="2">
+        </div>
+        <button @click="fn">切换</button>
+
+        <!-- 只渲染一次 渲染后会产生缓存 下次更新时 会直接从缓存中获取 v-once 可以有效的防止重新渲染-->
+        <div v-once>{{flag}}</div>
+        <!-- innerHTML 会导致 xss攻击 防止xss攻击 就不要把用户输入的内容直接显示出来-->
+        <!-- 比如输入<img src="a" onerror="alert()"> 找不到图片报错会弹框-->
+        <input type="text" :value="element" @input="(e)=>{element=e.target.value}">
+        <!-- 语法糖 -->
+        <input type="text" v-model="element">
+        <div v-html="element"></div>
+    </div>
+    <script src="//unpkg.com/vue@2.7.16/dist/vue.js"></script>
+    <script>
+        // 所有的数据 都会合并到vm的实例上 但是会被data覆盖掉 不要声明相同的名字
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                arr: [1, 2, 3],
+                flag: true,
+                // fn: 123,
+                element: '<h1>hello</h1>'
+            },
+            methods: {
+                fn(e) {
+                    console.log(this);
+                    this.flag = !this.flag;
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

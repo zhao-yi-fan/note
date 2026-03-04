@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- 
+        注意:在浏览器中需要引用lib/template-web.js
+        强调: 模板引擎不关心你的字符串内容, 只关心自己能认识的模板标记语法, 例如{{}}
+        {{}} 语法被称之为 mustache 语法,八字胡
+    
+    -->
+  <!-- 
+        art-template 中的 each 是模板语法,专属的
+        {{each 遍历项}}
+        <li>{{ $value }}</li>
+        {{/each}} 这是 art-template 模板引擎支持的语法, 只能在模板字符串中使用
+
+
+        jquery中的each
+        $.each(数组, function) 
+        $('div').each(function) 一般用于遍历 jQuery选择器选择道德维数组实例对象
+        forEach 是 EcmaScript 5 中的一个数组遍历函数,是 JavaScript 原生支持的遍历方法 可以遍历任何可以被遍历的成员
+        jQuery 的 each 方法和 forEach 几乎一致
+        由于 forEach  是 EcmaScript 5 中的, 所以低版本浏览器不支持
+     -->
+  <script src="//unpkg.com/art-template/lib/template-web.js"></script>
+  <script type="text/template" id="tpl">
+    <p>大家好,我叫:{{ name }}</p>
+    <p>我今年{{ age }}岁了</p>
+    <p>我来自{{ province }}</p>
+    <p>我喜欢:{{ each hobbies }} {{ $value }} {{ /each }}</p>
+         
+  </script>
+  <div id="content"></div>
+  <script>
+    var ret = template('tpl', {
+      name: 'Jack',
+      age: 18,
+      province: '北京市',
+      hobbies: [
+        '写代码',
+        '唱歌',
+        '打游戏'
+      ]
+    })
+    console.log(ret);
+    document.getElementById('content').innerHTML = ret;
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="//unpkg.com/animate.css/animate.css">
+</head>
+
+<body>
+    <style>
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            /* opacity: 0.2 */
+        }
+
+        /* 1.transition标签 vue自带的动画 */
+        /* 改名：在transition标签中加name v-就变成了 name属性值- */
+        .fade-enter {
+            opacity: 0
+        }
+
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity 1s linear;
+        }
+
+        /* 默认从当前状态变化 */
+        /* .v-leave {
+            opacity: 1
+        } */
+        .fade-leave-to {
+            opacity: 0
+        }
+
+        /* 2. animate.css库 */
+        /* .bounce-enter-active {
+            animation: bounceIn 1s ease-in
+        }
+
+        .bounce-leave-active {
+            animation: bounceOut 1s ease-out
+        } */
+    </style>
+    <div id="app">
+        <button @click="isShow=!isShow">点击</button>
+        <!-- 1. -->
+        <!-- 
+        <transition name="fade">
+            <div class="box" v-show="isShow">content</div>
+        </transition> 
+        -->
+        <!-- 2.animate.css库 name="bounce" 可以指定动画名字 -->
+        <!-- 
+        <transition name="bounce">
+            <div class="box animated" v-show="isShow">content</div>
+        </transition> 
+        -->
+        <!-- 3.animate.css库 可以指定进入和离开的动画类名 -->
+        <!-- 
+        <transition 
+            enter-active-class="bounceIn"
+            leave-active-class="bounceOut"
+        >
+            <div class="box animated" v-show="isShow">content</div>
+        </transition>
+        -->
+        <!-- 4.使用js写动画 -->
+        <!-- 
+        <transition @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
+            <div class="box animated" v-show="isShow">content</div>
+        </transition> 
+        -->
+        <!-- 5.使用velocity.js -->
+        <transition @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter" @leave="leave">
+            <div class="box animated" v-show="isShow">content</div>
+        </transition>
+    </div>
+    <script src="//unpkg.com/vue@2.7.16/dist/vue.js"></script>
+    <script src="//unpkg.com/velocity-animate/velocity.js"></script>
+    <script>
+        // 常见能触发动画的操作 v-if v-show v-for 路由切换
+        // css 添加动画 animation transition
+        // js 添加动画 自带的钩子 velocity库
+        // 动画分为 单个动画和多个动画
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                isShow: false,
+            },
+            methods: {
+                // 4.
+                /* beforeEnter(el) {
+                    el.style.color = "purple"
+                },
+                enter(el, done) {
+                    setTimeout(() => {
+                        el.style.color = "yellow";
+                    }, 1000)
+                    setTimeout(() => {
+                        done();
+                    }, 2000)
+                },
+                afterEnter(el) {
+                    el.style.color = "blue"
+                } */
+                // 5.使用velocity.js
+                beforeEnter(el) {
+                    el.style.opacity = 0;
+                    el.style.color = "purple"
+                },
+                enter(el, done) {
+                    Velocity(el, { opacity: 1 }, { duration: 1000, complete: done });
+                },
+                afterEnter(el) {
+                    el.style.color = "blue"
+                },
+                leave(el, done) {
+                    // 在离开的时候 还需要自己手动重置回去
+                    Velocity(el, { opacity: 0 }, { duration: 1000, complete: done })
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

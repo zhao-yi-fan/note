@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>聊天室</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+      crossorigin="anonymous"
+    />
+    <style>
+      .user {
+        color: green;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container" style="margin-top:30px;">
+      <div class="row">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h2 class="text-center">欢迎光临聊天室</h2>
+            <div class="row">
+              <div class="col-xs-6 text-center">
+                <button
+                  class="btn btn-danger"
+                  id="joinRed"
+                  onclick="join('Red')"
+                >
+                  进入红房间
+                </button>
+                <button
+                  style="display:none;"
+                  class="btn btn-danger"
+                  id="leaveRed"
+                  onclick="leave('Red')"
+                >
+                  离开红房间
+                </button>
+              </div>
+              <div class="col-xs-6 text-center">
+                <button
+                  class="btn btn-success"
+                  id="joinGreen"
+                  onclick="join('Green')"
+                >
+                  进入绿房间
+                </button>
+                <button
+                  style="display:none;"
+                  class="btn btn-success"
+                  id="leaveGreen"
+                  onclick="leave('Green')"
+                >
+                  离开绿房间
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="panel-body">
+            <ul
+              style="height:300px;overflow-y: scroll;"
+              onclick="clickUser(event)"
+              class="list-group"
+              id="messageList"
+            ></ul>
+          </div>
+          <div class="panel-footer">
+            <div class="row">
+              <div class="col-md-10">
+                <input
+                  id="textMsg"
+                  onkeyup="handleKeyUp(event)"
+                  type="text"
+                  class="form-control"
+                />
+              </div>
+              <div class="col-md-2">
+                <button
+                  onclick="sendMsg()"
+                  id="sendBtn"
+                  class="btn btn-primary"
+                >
+                  发言
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.bootcss.com/moment.js/2.24.0/moment.js"></script>
+    <script src="https://cdn.bootcss.com/moment.js/2.24.0/locale/zh-cn.js"></script>
+    <script>
+      let textMsg = document.querySelector("#textMsg")
+      let sendBtn = document.querySelector("#sendBtn")
+      let messageList = document.querySelector("#messageList")
+
+      // let socket = io("/"); 这样也可以
+      let socket = io.connect("/")
+      /* 监听服务器connect连接事件 */
+      socket.on("connect", function() {
+        /* 连接成功之后，给服务器发送一个getAllMessages事件，用于获取历史记录 */
+        socket.emit("getAllMessages")
+      })
+      
+      socket.on("allMessages", function(messages) {
+        let html = messages
+          .map(
+            msgObj => `<li class="list-group-item">${getMessage(msgObj)}</li>`
+          )
+          .join("")
+        messageList.innerHTML = html
+        messageList.scrollTop =
+          messageList.scrollHeight - messageList.clientHeight // 聊天内容在底端(ul元素的高度-ul可视区域的高就是顶部翻去的高度)
+      })
+      function getMessage(msgObj) {
+        return `<span class="user">${msgObj.username}</span>:${
+          msgObj.content
+        }<span class="pull-right">${moment(msgObj.createAt).fromNow()}</span>`
+      }
+      socket.on("message", function(msgObj) {
+        let li = document.createElement("li")
+        li.innerHTML = getMessage(msgObj)
+        li.className = "list-group-item"
+        messageList.appendChild(li)
+        messageList.scrollTop =
+          messageList.scrollHeight - messageList.clientHeight
+      })
+      /* socket.on("disconnect", function () {
+      console.log('断开连接')
+    }) */
+      function handleKeyUp(event) {
+        if (event.keyCode == 13) {
+          sendMsg()
+        }
+      }
+      // 点击发送或者回车发送消息
+      function sendMsg() {
+        let content = textMsg.value
+        if (content.trim()) {
+          // send也相当于emit('message',content)
+          /* 给服务器监听的message事件发送消息内容 */
+          socket.send(content)
+          textMsg.value = ""
+        } else {
+          alert("消息不能为空")
+        }
+      }
+      // 点击人名可以发起私聊
+      function clickUser(event) {
+        // 事件委托 从外向内
+        if (event.target.className == "user") {
+          // 把@[人名] 写入输入框中，发送消息会带入@[人名]，服务器进行判断解析，进行私聊
+          textMsg.value = `@${event.target.innerText} `
+        }
+      }
+
+      // 加入房间点击事件
+      function join(roomName) {
+        /* 发送给服务器join事件，让我的服务器端的socket进入到某个房间内 */
+        socket.emit("join", roomName)
+      }
+
+      /* 监听服务器joined事件，加入房间，切换按钮变化 */
+      socket.on("joined", function(roomName) {
+        let joinBtn = document.querySelector("#join" + roomName)
+        let leaveBtn = document.querySelector("#leave" + roomName)
+        joinBtn.style.display = "none"
+        leaveBtn.style.display = "inline-block"
+      })
+
+      // 离开房间点击事件
+      function leave(roomName) {
+        /* 发送给服务器leave事件，在服务器中把房间名删除，并且把用户的socket退出某个房间 */
+        socket.emit("leave", roomName)
+      }
+      /* 监听服务器leaved事件，离开房间。要把按钮切换回来 */
+      socket.on('leaved',function(roomName){
+        let joinBtn = document.querySelector("#join" + roomName)
+        let leaveBtn = document.querySelector("#leave" + roomName)
+        joinBtn.style.display = "inline-block"
+        leaveBtn.style.display = "none"
+      })
+    </script>
+  </body>
+</html>

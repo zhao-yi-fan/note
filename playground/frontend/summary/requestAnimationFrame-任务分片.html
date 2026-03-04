@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>requestAnimationFrame 任务分片性能优化</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .description {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .description h2 {
+      color: #42b983;
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    .description p {
+      line-height: 1.6;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .description code {
+      background: #f0f0f0;
+      padding: 2px 6px;
+      border-radius: 3px;
+      color: #e83e8c;
+    }
+
+    .demo-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .demo-box {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .demo-box h3 {
+      margin-bottom: 15px;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .badge {
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: normal;
+    }
+
+    .badge.bad {
+      background: #fee;
+      color: #c00;
+    }
+
+    .badge.good {
+      background: #efe;
+      color: #0a0;
+    }
+
+    .list {
+      max-height: 600px;
+      overflow-y: auto;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+    }
+
+    .item {
+      padding: 12px 15px;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .item:last-child {
+      border-bottom: none;
+    }
+
+    .item:nth-child(even) {
+      background: #fafafa;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    .item-content {
+      flex: 1;
+    }
+
+    .item-title {
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    .item-desc {
+      font-size: 12px;
+      color: #999;
+    }
+
+    .controls {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #42b983;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #35a372;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .performance-info {
+      flex: 1;
+      display: flex;
+      gap: 20px;
+      font-size: 14px;
+    }
+
+    .perf-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .perf-label {
+      color: #999;
+      font-size: 12px;
+    }
+
+    .perf-value {
+      color: #333;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #999;
+    }
+
+    @media (max-width: 768px) {
+      .demo-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="container">
+      <h1>🚀 requestAnimationFrame 任务分片性能优化</h1>
+      
+      <div class="description">
+        <h2>💡 核心原理</h2>
+        <p>
+          当需要渲染大量数据时（如 10000 条列表），一次性渲染会造成页面卡顿。
+          通过 <code>requestAnimationFrame</code> 实现任务分片，让数据在每一帧逐步渲染，避免阻塞主线程。
+        </p>
+        <p>
+          <strong>useDeferredDisplay Hook：</strong>利用 RAF 创建一个计数器，每帧递增 step 个（默认 100），
+          组件通过 <code>shouldShow(n)</code> 判断当前是否应该渲染第 n 个元素，从而实现渐进式渲染。
+          <br>
+          <strong>渲染速度：</strong>60 帧/秒 × 100 个/帧 = 6000 个/秒，10000 条数据约 1.6 秒完成。
+        </p>
+        <p>
+          <strong>优点：</strong>页面不会卡顿，用户可以立即看到首屏内容并进行交互。<br>
+          <strong>缺点：</strong>完整内容需要分帧加载完成。
+        </p>
+      </div>
+
+      <div class="controls">
+        <button @click="reload">🔄 重新加载数据</button>
+        <div class="performance-info">
+          <div class="perf-item">
+            <span class="perf-label">数据量</span>
+            <span class="perf-value">{{ total }}</span>
+          </div>
+          <div class="perf-item">
+            <span class="perf-label">优化版渲染进度</span>
+            <span class="perf-value">{{ renderProgress }}%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-container">
+        <!-- 未优化版本 -->
+        <div class="demo-box">
+          <h3>
+            ❌ 未优化（一次性渲染）
+            <span class="badge bad">会卡顿</span>
+          </h3>
+          <div class="list">
+            <div v-if="loading" class="loading">加载中...</div>
+            <div v-else>
+              <div class="item" v-for="item in listData" :key="item.id">
+                <div class="avatar">{{ item.id }}</div>
+                <div class="item-content">
+                  <div class="item-title">{{ item.title }}</div>
+                  <div class="item-desc">{{ item.desc }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 优化版本 -->
+        <div class="demo-box">
+          <h3>
+            ✅ 已优化（任务分片）
+            <span class="badge good">流畅</span>
+          </h3>
+          <div class="list">
+            <div v-if="loading" class="loading">加载中...</div>
+            <div v-else>
+              <div class="item" v-for="item in listData" :key="'defer-' + item.id" v-show="shouldShow(item.id)">
+                <div class="avatar">{{ item.id }}</div>
+                <div class="item-content">
+                  <div class="item-title">{{ item.title }}</div>
+                  <div class="item-desc">{{ item.desc }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script>
+    const { createApp, ref, computed, onBeforeUnmount } = Vue;
+
+    // 核心 Hook：useDeferredDisplay
+    // step: 每帧渲染的数量，默认 100（即每秒渲染 6000 个，10000 个数据约 1.6 秒完成）
+    function useDeferredDisplay(step = 100) {
+      const count = ref(0);
+      let rafId = null;
+
+      function update() {
+        count.value += step;
+        rafId = requestAnimationFrame(update);
+      }
+
+      update();
+
+      // 组件卸载时清理
+      onBeforeUnmount(() => {
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+        }
+      });
+
+      // 返回一个函数，判断是否应该渲染第 n 个元素
+      return function (n) {
+        return count.value >= n;
+      };
+    }
+
+    createApp({
+      setup() {
+        const total = 10000;
+        const listData = ref([]);
+        const loading = ref(false);
+        const shouldShow = useDeferredDisplay();
+
+        // 计算渲染进度
+        const renderProgress = computed(() => {
+          const rendered = listData.value.filter(item => shouldShow(item.id)).length;
+          return Math.floor((rendered / total) * 100);
+        });
+
+        // 生成模拟数据
+        function generateData() {
+          return Array.from({ length: total }, (_, index) => ({
+            id: index + 1,
+            title: `数据项 #${index + 1}`,
+            desc: `这是第 ${index + 1} 条数据的描述信息`
+          }));
+        }
+
+        // 模拟数据加载
+        function reload() {
+          loading.value = true;
+          listData.value = [];
+          
+          // 模拟网络延迟
+          setTimeout(() => {
+            listData.value = generateData();
+            loading.value = false;
+          }, 300);
+        }
+
+        // 初始化加载
+        reload();
+
+        return {
+          total,
+          listData,
+          loading,
+          shouldShow,
+          reload,
+          renderProgress
+        };
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
+

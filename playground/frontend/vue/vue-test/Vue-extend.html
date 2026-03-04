@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="//unpkg.com/vue@2.7.10/dist/vue.js"></script>
+  </head>
+
+  <body>
+    <div id="mount-point">
+      <aaa />
+    </div>
+    <script>
+      
+      Vue.component("aaa", {
+        data() {
+          return {
+            count: 0,
+          }
+        },
+        mounted(){
+          console.log(this.$listeners)
+        },
+        methods:{
+          clickHandle(){
+            this.count++;
+            let countFather = this.count
+            let component = Vue.extend({
+              template: `<div>{{firstName}}{{lastName}}{{countSon}}</div>`,
+              data() {
+                return {
+                  firstName: "赵",
+                  lastName: "一凡",
+                  countSon: countFather
+                }
+              }
+            })
+            let vm = new component().$mount()
+            console.log(vm,'vm===');
+            document.body.appendChild(vm.$el)
+          }
+        },
+        template: `<button v-on="$listeners"  @click="clickHandle">点击了{{ count }}次.</button>`
+      })
+      console.dir(Vue.component('aaa'));
+      new Vue({
+        el: "#mount-point",
+      })
+    </script>
+  </body>
+</html>

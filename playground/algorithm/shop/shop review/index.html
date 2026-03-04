@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- import less(development [DEV] 开发环境) -->
+    <!-- <link rel="stylesheet/less" href="css/index.less">
+    <script src="js/less-2.5.3.min.js"></script> -->
+    
+    <!-- import css (product [PRO] 生产环境)-->
+    <link rel="stylesheet" href="css/index.min.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <header class="headerBox">
+            <span>排序:</span>
+            <a href="javascript:;">上架时间</a>
+            <a href="javascript:;">价格</a>
+            <a href="javascript:;">热销</a>
+        </header>
+        <ul class="productBox clearfix">
+            <!-- <li>
+                <a href="#">
+                    <img src="img/1.jpg" alt="">
+                    <p title="华为畅享7 Plus 4GB+64GB 全网通高配版（香槟金）">华为畅享7 Plus 4GB+64GB 全网通高配版（香槟金）</p>
+                    <span>￥1699</span>
+                    <span>2018-01-01</span>
+                    <span>2</span>
+                </a>
+            </li> -->
+            
+        </ul>
+    </div>
+    <!-- 
+    真实项目中我们经常使用a标签做一些点击的按钮
+        1. 因为a标签: hover伪类兼容所有的浏览器
+    a标签的href属性存储的是点击需要跳转的页面, 或者是#xxx, 这个是hash定位, 如果只想让其作为一个普通的按钮, 我们需要阻止a标签点击跳转的默认行为 <a href="javascript:;"></a>
+    -->
+    <!-- <a href="javascript:;"></a> -->
+
+    <!-- IMPORT JS -->
+    <script src="js/index.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script src="itcast.js"></script>
+    <script src="https://unpkg.com/jquery@1.12.4/dist/jquery.js"></script>
+    <script>
+        //如果引入的jq和别的js库冲突,jq在引入别的库下面,就可以先把$符号释放掉换成别的名字,先使$供别的库使用.
+        //在jq中的$一直就有一个备胎的名字jQuery,改不改别的名字,jQuery一直都可以使用
+        //入口函数也可以写成 jQuery(function(){});
+
+        //如果引入的jq在别的库上面,那此时的$已经是别的库中的$了.就不能调用noConflict改名或者释放$了.
+        console.log($);//未改名之前$是jq的
+        var $$ = $.noConflict();//把jq的$改名为$$
+        console.log($);//输出此时的$,现在是itcast库的$
+    </script>
+</body>
+</html>

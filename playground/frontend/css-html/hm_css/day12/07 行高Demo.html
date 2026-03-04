@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+	* {
+		padding: 0;
+		margin: 0;
+	}
+		div {
+			
+			height: 200px;
+			font-size: 16px;
+			line-height: 0px;
+			background-color: pink;
+		}
+		/*  为什么当行高变成0的时候，文字会落在上边框一半位置？
+			行高:基线和基线的距离
+			行间距=行高-字体大小
+			行间距=(line-height)-(font-size)
+			当字体大小为16px,行高也为16px时,
+			行间距=16px-16px=0px,上下两行紧挨
+
+			当字体大小为16px,行高为0px时,
+			行间距=0px-16px=-16px,第一行文字是以盒子上边框为第一行的上一行的基线,
+			第一行文字的上一行是虚拟的,假如有一行,上边框是这个虚拟行的基线.
+			行间距为0,第一行和它的上一行基线0距离,也就是两行文字重叠.从整体看起来,所有行都在向上移动.
+		 */
+	</style>
+</head>
+<body>
+	<div>行高的小例子 how old are you<br />
+	行高变成0的时候 my english is good<br />
+	测试 my english is good</div>
+	
+</body>
+</html>

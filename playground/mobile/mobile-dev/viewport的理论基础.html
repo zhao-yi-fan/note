@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <!-- 
+    响应式布局：
+    一、viewport 视口
+      layout viewport: 布局（页面）视口 和开发css等相关
+        在PC端，我们开发的HTML页面运行在浏览器中，浏览器有多宽（一般浏览器代表设备的宽度），HTML就有多宽，也就是在浏览器宽度的视口中渲染和呈现我们的页面
+        移动端和PC端有区别：不管移动端设备（代指打开的浏览器）的宽度是多少，HTML页面的宽度是980（或者1024） =>导致的问题：如果在设备窗口中想把整个页面完全呈现出来（小窗口中完全展示大页面），我们只能把大页面进行缩放，HTML页面缩放了，那么页面中所有内容都缩放了
+
+          【解决方案】
+            只要让H5页面的宽度和手机设备的宽度保持一致即可，就不会出现手机渲染页面的时候把页面缩放的事情了
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            此meta标签就是在设置VP（视口）的规则
+              width=device-width: 让HTML页面的宽度等于设备的宽度
+              height=: 设置HTML页面的高度（一般不用）
+              initial-scale=1.0: 初始缩放比例是1：1（也就是既不放大也不缩小）
+              user-scalable=no: 禁止用户手动缩放
+              maximum-scale=1.0
+              minimum-scale=1.0: 设置最大最小的缩放比例1：1（既不放大也不缩小=>部分安卓机中只设置user-scalable是不起作用的，需要同这两个一起使用）
+              ...
+          
+        
+        visual viewport: 手机视口
+        ideal viewport: 理想视口 想把布局视口和手机视口一样宽
+   -->
+   <!-- 
+     js中动态设置viewport
+    let metaV = document.createElement('meta');
+    metaV.name='viewport';
+    metaV.content='width=device-width, initial-scale=1.0';
+    document.head.appendChild(metaV);
+  -->
+  <!-- 
+    - HTML宽度通过设置viewport和手机视口宽度一样，但是HTML中的内容呢？
+
+    **HTML的宽度>手机宽度**
+
+    解决方案：把页面整体缩放
+
+    **页面内容宽度>HTML页面的宽度**
+
+    待解决：会出现横向滚动条
+
+    ​	真实移动端项目开发中，一般是不会出现横向滚动条的，想让它不出现横向滚动条就要保证内容的宽度不会超过HTML页面的宽度
+
+    ​	移动端开发手机宽度不一定=>HTML页面的宽度也不一定=>所以内容的宽度一般也是不固定的（也就是所谓的百分比宽度）
+
+    如何解决？
+
+    ​	移动端开发：外层盒子的宽度一般都是百分比设定的，很少有固定值的（里面具体的小元素宽度可以固定，里面的小元素出现横向滚动条没事，可以隐藏小元素的内容。但是整体页面是不能出现横向滚动条的）
+
+    解决方案：`流式响应式布局方案`
+   -->
+</body>
+</html>

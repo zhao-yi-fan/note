@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="//unpkg.com/react@17.0.2/umd/react.development.js" crossorigin></script>
+  <script src="//unpkg.com/react-dom@17.0.2/umd/react-dom.development.js" crossorigin></script>
+  <script src="//unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <title>Document</title>
+  <style>
+    .list {
+      height: 200px;
+      overflow: auto;
+      background-color: burlywood;
+    }
+
+    .item {
+      height: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type="text/babel">
+
+    class NewsList extends React.Component {
+      state = {
+        newsList: [],
+      }
+
+      listRef = React.createRef(null)
+
+      componentDidMount () {
+        setInterval(() => {
+          const { newsList } = this.state
+          const news = `新闻${(newsList.length + 1)}`
+          this.setState({
+            newsList: [news, ...newsList]
+          })
+        }, 1000)
+      }
+
+      getSnapshotBeforeUpdate (props, state) {
+        console.log('getSnapshotBeforeUpdate', props, state, this.listRef.current.scrollHeight);
+        return this.listRef.current.scrollHeight
+      }
+
+      // props state都是旧的
+      componentDidUpdate (preProps, preState, height) {
+        console.log('componentDidUpdate', preProps, preState, height);
+        const x = this.listRef.current.scrollHeight - height
+        this.listRef.current.scrollTop += x
+      }
+      render () {
+
+        return (<div className="list" ref={this.listRef}>
+          {
+            this.state.newsList.map((n, index) => {
+              return <p className="item" key={index}>{n}</p>
+            })
+          }
+        </div>)
+      }
+    }
+
+    ReactDOM.render(<NewsList name={'test'}/>, document.getElementById("app"))
+  </script>
+</body>
+
+</html>

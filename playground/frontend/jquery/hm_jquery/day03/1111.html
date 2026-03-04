@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <div id="dv">123123</div>
+  <script>
+    function jQuery(obj){
+      this.obj = obj;
+    }
+    jQuery.prototype.css = function(){
+      if(arguments.length === 2){
+        this.obj.style[arguments[0]] = arguments[1];
+      }else if(arguments.length === 1){
+        if(typeof arguments[0] === 'string'){
+          return this.obj.style[arguments[0]];
+        }
+        if(typeof arguments[0] === 'object'){
+          // {background: "red", color: "white"}
+          for(var key in arguments[0]){
+            this.obj.style[key] = arguments[0][key];
+          }
+        }
+      }
+      return this;
+    }
+    jQuery.prototype.html = function(value){
+      this.obj.innerHTML = value;
+      return this;
+    }
+    function $(attr){
+      return new jQuery(document.querySelector(attr));
+    }
+    $('#dv').css('background', 'green').css('color','white').html('asdasdsadasd').css('fontSize','35px');
+    // console.log($('#dv').css('background'))
+    // $('#dv').css({
+    //   background: 'red',
+    //   color: 'white',
+    //   fontSize: '35px'
+    // });
+  </script>
+</body>
+</html>

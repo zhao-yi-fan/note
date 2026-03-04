@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./reset.min.css" />
+    <!-- SCALE等比缩放布局【transform属性】 -->
+    <!-- <style>
+      .container {
+        margin: 0 auto;
+        width: 750px;
+        transform-origin: left top;/* 控制最终缩放的时候：不是从中心点缩放，而实从左上角缩放 */
+      }
+      .headerBox {
+        height: 200px;
+        border: 2px solid lightcoral;
+      }
+      .headerBox h1 {
+        float: left;
+        width: 300px;
+        height: 100%;
+        line-height: 200px;
+        font-size: 36px;
+      }
+      .headerBox ul {
+        float: right;
+      }
+      .headerBox ul li {
+        float: left;
+        padding: 0 20px;
+        height: 200px;
+        line-height: 200px;
+        font-size: 28px;
+      }
+    </style>
+    <script>
+      window.addEventListener('load', () => {
+        let container = document.querySelector('.container'),
+          winW = document.documentElement.clientWidth
+        container.style.transform = `scale(${winW / 750})`
+      })
+    </script> -->
+    <!-- REM等比缩放 -->
+    <style>
+      /* REM是相对单位，相对于根元素（HTML标签）的字体大小设定的单位 */
+      html {
+        /*font-size: 10px; 1rem=10px 浏览器都有自己默认的最小字体，例如谷歌是12px,所以准确来说，此处这样写相当于1rem=12px */
+        /*font-size: 14px;  1rem=14px 这个比例计算转换的时候太麻烦 */
+        font-size: 100px; /* 1rem=100px => 设计稿 */
+      }
+      .headerBox {
+        height: 2rem;
+        border: 0.02rem solid lightcoral;
+      }
+      .headerBox h1 {
+        float: left;
+        width: 3rem;
+        height: 100%;
+        line-height: 2rem;
+        font-size: 0.36rem;
+      }
+      .headerBox ul {
+        float: right;
+      }
+      .headerBox ul li {
+        float: left;
+        padding: 0 0.2rem;
+        height: 2rem;
+        line-height: 2rem;
+        font-size: 0.28rem;
+      }
+    </style>
+    <script>
+      window.addEventListener('load', () => {
+        let computedREM = function computedREM() {
+          let HTML = document.documentElement,
+            winW = HTML.clientWidth
+          HTML.style.fontSize = `${(winW / 750) * 100}px` //=> 重新调整HTML字体大小（重新调整REM的转换比例），这样以前所有以REM为单位的样式值都会按照最新的比例中心渲染
+        }
+        computedREM()
+        window.addEventListener('resize', computedREM)
+      })
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <header class="headerBox">
+        <h1>珠峰培训</h1>
+        <ul class="menu clear">
+          <li>首页</li>
+          <li>团购</li>
+          <li>海外</li>
+        </ul>
+      </header>
+    </div>
+    <!-- 
+二、平时处理的移动端项目
+1.PC端和移动端共用一套项目的（结构相对简单的：一般都是展示类的企业站）
+【设计师一般只给一套设计稿】
+A:先做PC端（设计给设计稿一般都是给PC端的）
+  一般宽度都是自适应的（具体情况有所不同）
+B:切换到手机端，使用@media(媒体查询)把不同设备上不合适的样式进行修改
+
+2.PC端和移动端是分开的两套不同项目
+【设计师一般会给两套设计稿（PC+移动）】
+=>PC端单独做（做它的时候不需要考虑移动端响应式）
+  固定布局
+=>移动端单独做（只需要考虑移动端的响应式适配即可）
+  响应式布局
+    A:依然可以基于@media来处理(麻烦一些)
+    B:固定布局(viewport => width=320px):按照设计稿把320尺寸的写好即可（所有的尺寸都可以固定，而且都是设计稿的一半[因为设计稿是大一倍的]），在其他的设备上，让320的页面剧中展示即可
+    C:SCALE等比缩放布局【transform属性】（严格按照设计稿的尺寸来写样式[没有啥自适应宽度，都是固定值]，在其它设备上，首先获取设备的宽度，让其除以设计稿的宽度，然后让原始写好的页面按照这个比例整体缩小即可） => 会导致一些问题例如字体变模糊，有缩放卡顿...
+    D:REM等比缩放，它是参考的SCALE，只是用的REM单位来实现的等比缩放（严格按照设计稿的尺寸编写[但是一般宽度让他自适应]，其余的值可以写成固定值 -> 在编写CSS样式的时候，我们把所有的PX单位都换算成REM单位 -> 当加载页面的时候，根据当前设备的尺寸除以设计稿，根据比例动态调整REM和PX的换算比例）
+    E:CSS3中提供了flex-box伸缩盒子模型，基于这个属性，可以让某些效果处理起来更加方便
+
+    A、D、E是目前最常用的响应式布局方案
+  --></body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // GET
+        /* let xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://www.easy-mock.com/mock/5b0412beda8a195fb0978627/temp/list?id=1000&lx=2000');
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState ===4 && xhr.status === 200){
+                console.log(JSON.parse(xhr.responseText));
+                
+            }
+        } */
+        
+        // POST
+        /* let xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://www.easy-mock.com/mock/5b0412beda8a195fb0978627/temp/list');
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState ===4 && xhr.status === 200){
+                console.log(JSON.parse(xhr.responseText));
+            }
+        }
+        xhr.send(JSON.stringify({id: 1000, lx: 2000}));//=> 请求主体中传递给服务的是JSON格式的字符串, 但是真实项目中常用的是URL-ENCODE格式的字符串"id=1000&lx=2000" */
+
+
+
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', 'temp.json');
+        xhr.setRequestHeader('zhufeng', '@@@');
+        /* xhr.timeout = 200;// 设置请求的时间
+        // 设置请求超时后提示
+        xhr.ontimeout = () => {
+            console.log('请求超时, 请稍后重试');
+            xhr.onabort();
+        }
+        xhr.onabort = () => {
+            console.log('当前请求已经被强制中断')
+            
+        } */
+        xhr.onreadystatechange = () => {
+            if(!/^(2|3)\d{2}$/.test(xhr.status)) return;// 证明服务器已经返回内容了(HTTP请求成功)
+            if(xhr.readyState === 2) {
+                // 响应头信息已经回来了
+                let time = xhr.getResponseHeader('date');// 获取的结果是格林尼治时间, 而且是字符串
+                console.log(time, new Date(time));
+                // new Date()获取当前客户端时间
+                // new Date(时间字符串) 把指定的时间字符串格式化为标准的北京时间(不在是字符串了, 而是DATE类的实例, 也是标准的时间格式数据)
+            }
+            if (xhr.readyState === 4) {
+                console.log(xhr.responseText);
+            }
+        }
+        xhr.send(null);
+
+        // setTimeout(() => {
+        //     xhr.onabort();
+        // }, 1000);
+
+
+
+
+        
+    </script>
+</body>
+</html>

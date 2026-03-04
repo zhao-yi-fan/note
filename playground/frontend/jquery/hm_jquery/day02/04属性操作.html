@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <img src="04.gif" alt="tupole" title="对对对" />
+    <script src="https://unpkg.com/jquery@1.12.4/dist/jquery.js">
+        
+    </script>
+    <script>
+        $(function(){
+            //设置单个属性值
+            // $("img").attr("alt","ttttt");
+            // $("img").attr("title","错错错");
+            //用对象修改多个属性值
+            $("img").attr({
+                alt: "tttt",
+                title: "错错错"
+            });
+            //获取属性
+            console.log($("img").attr("alt"));
+        });
+    </script>
+</body>
+</html>

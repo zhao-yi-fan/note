@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="//unpkg.com/react@17.0.2/umd/react.development.js" crossorigin></script>
+  <script src="//unpkg.com/react-dom@17.0.2/umd/react-dom.development.js" crossorigin></script>
+  <script src="//unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useEffect, useMemo, useState } = React;
+
+    /**
+     * 把数据和动作抽离成一个函数组件ChildN， ChildN中的动作不会触发父元素render
+     */
+    function App () {
+      const [m, setM] = useState(0);
+      const addChild = () => {
+        setM(i => i + 1);
+      };
+      const onClickChild = () => {
+        console.log(m);
+      }
+
+      return (
+        <div>
+          <div>
+            <ChildN />
+            <hr />
+            <button onClick={addChild}>m+1</button>
+          </div>
+          <hr />
+          <Child data={m} onClick={onClickChild} />
+        </div>
+      )
+    }
+    function ChildN (props) {
+      console.log('ChildN执行了')
+      const [n, setN] = useState(0)
+      const add = () => {
+        setN(i => i + 1);
+      };
+      return <div>
+        n:{n}
+        <button onClick={add}>n+1</button>
+      </div>
+
+    }
+    function Child (props) {
+      console.log('child执行了')
+      return (
+        <div onClick={props.onClick}>
+          child:{props.data}
+        </div>
+      )
+    }
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+
+</html>

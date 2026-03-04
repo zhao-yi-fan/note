@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div {
+            width: 400px;
+            height: 400px;
+            background-color: pink;
+        }
+    </style>
+</head>
+<body>
+    <div>我是内容</div>
+    <p>我是外部p标签</p>
+</body>
+<script src="https://unpkg.com/jquery@1.12.4/dist/jquery.js">
+    
+</script>
+<script>
+    $(function(){
+        //创建jq对象
+        //$("div").append('<a href="http://web.itcast.com" target="_blank" >传智播客</a>');
+
+        //添加到子元素的最后面
+        //$("div").append($("p"));
+        //$("p").appendTo($("div"));
+
+        //$("div").after($("p"));
+        $("div").before($("p"));//div标签前面是p标签
+    });
+</script>   
+</html>

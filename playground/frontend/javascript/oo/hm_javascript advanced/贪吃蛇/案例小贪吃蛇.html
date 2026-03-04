@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		.map {
+			width: 800px;
+			height: 600px;
+			background-color: #ccc;
+			position: relative;
+		}
+	</style>
+</head>
+<body>
+	<div class="map"></div>
+	<script src="Food.js"></script>
+	<script src="Snake.js"></script>
+	<script src="Game.js"></script>
+	<script>
+
+		var gm = new Game(document.querySelector(".map"));
+		gm.init();
+
+		//测试
+		// var fd = new Food();
+		// fd.init(document.querySelector(".map"));
+
+		// var snake = new Snake();
+		// snake.init(document.querySelector(".map"));
+		// fd.init(document.querySelector(".map"));
+		// fd.init(document.querySelector(".map"));
+		// fd.init(document.querySelector(".map"));
+		// fd.init(document.querySelector(".map"));
+	</script>
+</body>
+</html>

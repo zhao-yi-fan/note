@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<script>
+
+    var str = "javascript高级程序设计";
+    (function () {
+        var str = "小明喜欢小红";
+        str = str.substr(2);
+        console.log(str);
+    }());
+
+    (function () {
+        var str = "小白喜欢小黑";
+        str = str.substr(2);
+        console.log(str);
+    }());
+    str = str.substr(3);
+    console.log(str);
+
+</script>
+
+<body>
+    <input type="button" id="btn" value="按钮" />
+    <script>
+
+
+        (function () {
+            var btn = document.getElementById("btn");
+            btn.onclick = function () {
+                console.log("sss");
+            }
+        }());
+    </script>
+</body>
+
+</html>

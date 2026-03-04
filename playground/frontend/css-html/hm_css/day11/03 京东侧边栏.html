@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      list-style: none;
+    }
+
+    .subnav {
+      width: 20px;
+      margin: 100px auto;
+    }
+
+    .subnav li {
+      height: 20px;
+      width: 20px;
+      position: relative;
+      margin-top: 10px;
+      background-color: pink;
+    }
+
+    .subnav li div {
+      height: 20px;
+      width: 0px;
+      position: absolute;
+      background-color: purple;
+      top: 0;
+      right: 0;
+      /*  从左往右是left,从右往左是right */
+      transition: all 0.4s;
+      z-index: -1;
+
+    }
+
+    .subnav li:hover div {
+      width: 100px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="subnav">
+    <ul>
+      <li>
+        <div></div>
+      </li>
+      <li>
+        <div></div>
+      </li>
+      <li>
+        <div></div>
+      </li>
+      <li>
+        <div></div>
+      </li>
+      <li>
+        <div></div>
+      </li>
+      <li>
+        <div></div>
+      </li>
+
+    </ul>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div {
+            position: absolute;
+            height: 200px;
+            width: 200px;
+        }
+
+        #box1 {
+            background-color: yellowgreen;
+            
+        }
+        #box2 {
+            background-color: pink;
+            margin-top:300px;
+        }
+        #box3 {
+            background-color: cyan;
+            margin-top:600px;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="button" id="btn1" value="开始" />
+    <input type="button" id="btn2" value="结束" />
+    <div id="box1"></div>
+    <div id="box2"></div>
+    <div id="box3"></div>
+    <script src="https://unpkg.com/jquery@1.12.4/dist/jquery.js">
+
+    </script>
+    <script>
+        $(function(){
+            $("#btn1").click(function(){
+                //animate();第一个参数:对象,第二个参数:持续时间,第三个参数:动画的执行效果,第四个参数:回调函数
+                $("#box1").animate({left:1000},5000);
+                $("#box2").animate({left:1000},5000,"swing");
+                $("#box3").animate({left:1000},5000,"linear",function(){
+                    console.log("1111");
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

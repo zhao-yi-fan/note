@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>微前端沙箱测试</title>
+</head>
+<body>
+  <style>
+    .main-app { padding: 20px; background: #f0f0f0; }
+    .main-title { color: blue; font-size: 20px; }
+    .sub-app-container { margin-top: 20px; border: 2px solid #ccc; }
+  </style>
+
+  <div class="main-app">
+    <h3 class="main-title">微前端沙箱 + CSS 隔离测试</h3>
+    <p>打开控制台查看输出结果</p>
+    
+    <div style="margin: 20px 0; padding: 10px; background: white;">
+      <h4>主应用样式（蓝色标题）</h4>
+      <p class="main-title">这是主应用的标题样式</p>
+    </div>
+
+    <!-- 子应用容器 -->
+    <div id="subapp" class="sub-app-container"></div>
+    
+    <button onclick="loadSubApp()">加载子应用（Shadow DOM 隔离）</button>
+    <button onclick="loadSubAppScoped()">加载子应用（Scoped CSS 隔离）</button>
+  </div>
+
+  <script>
+    /**
+     * 极简微前端沙箱（JS 隔离）
+     * Proxy + fakeWindow + with 注入作用域
+     */
+    class Sandbox {
+      constructor() {
+        this.fakeWindow = {};
+        this.proxy = new Proxy(this.fakeWindow, {
+          get: (target, key) => {
+            if (key in target) return target[key];
+            return window[key];
+          },
+          set: (target, key, value) => {
+            target[key] = value;
+            return true;
+          }
+        });
+      }
+
+      run(code) {
+        const fn = new Function('window', `
+          with(window) {
+            ${code}
+          }
+        `);
+        fn(this.proxy);
+      }
+    }
+
+    /**
+     * CSS 隔离方案 1: Shadow DOM
+     * 利用 Web Components 的 Shadow DOM 实现真正的样式隔离
+     */
+    class ShadowDOMIsolation {
+      constructor(container) {
+        this.container = container;
+        this.shadowRoot = null;
+      }
+
+      mount(html, css) {
+        // 创建 shadow root
+        this.shadowRoot = this.container.attachShadow({ mode: 'open' });
+        
+        // 注入样式
+        const style = document.createElement('style');
+        style.textContent = css;
+        
+        // 注入 HTML
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = html;
+        
+        this.shadowRoot.appendChild(style);
+        this.shadowRoot.appendChild(wrapper);
+        
+        console.log('✅ Shadow DOM 隔离已生效，子应用样式不会影响外部');
+      }
+
+      unmount() {
+        if (this.shadowRoot) {
+          this.container.shadowRoot.innerHTML = '';
+        }
+      }
+    }
+
+    /**
+     * CSS 隔离方案 2: Scoped CSS
+     * 给所有 CSS 选择器添加特定前缀（命名空间）
+     */
+    class ScopedCSSIsolation {
+      constructor(container, appName) {
+        this.container = container;
+        this.appName = appName;
+        this.styleElement = null;
+      }
+
+      // 给 CSS 添加作用域前缀
+      scopeCSS(css) {
+        const prefix = `[data-qiankun="${this.appName}"]`;
+        
+        // 简单实现：给每个选择器添加前缀
+        return css.replace(/([^\r\n,{}]+)(,(?=[^}]*{)|\s*{)/g, (match, selector, separator) => {
+          // 跳过 @规则
+          if (selector.trim().startsWith('@')) return match;
+          
+          // 添加前缀
+          return `${prefix} ${selector.trim()}${separator}`;
+        });
+      }
+
+      mount(html, css) {
+        // 添加作用域属性
+        this.container.setAttribute('data-qiankun', this.appName);
+        this.container.innerHTML = html;
+        
+        // 注入带作用域的样式
+        this.styleElement = document.createElement('style');
+        this.styleElement.textContent = this.scopeCSS(css);
+        document.head.appendChild(this.styleElement);
+        
+        console.log('✅ Scoped CSS 隔离已生效，所有选择器已添加前缀:', `[data-qiankun="${this.appName}"]`);
+      }
+
+      unmount() {
+        this.container.innerHTML = '';
+        if (this.styleElement) {
+          this.styleElement.remove();
+        }
+      }
+    }
+
+    // -----------------------
+    // 测试 JS 沙箱隔离
+    // -----------------------
+    console.log("=== JS 沙箱隔离测试 ===");
+    console.log("主应用初始 window.a =", window.a);
+
+    const sandbox = new Sandbox();
+    sandbox.run(`
+      window.a = 123;
+      window.b = "来自子应用的数据";
+      console.log("子应用内部 window.a =", window.a);
+      console.log("子应用内部 window.b =", window.b);
+    `);
+
+    console.log("执行后主应用 window.a =", window.a);
+    console.log("执行后主应用 window.b =", window.b);
+
+    // -----------------------
+    // 加载子应用函数
+    // -----------------------
+    async function loadSubApp() {
+      console.log("\n=== 加载子应用（Shadow DOM 隔离）===");
+      
+      const container = document.getElementById('subapp');
+      container.innerHTML = ''; // 清空
+      
+      // 模拟加载子应用 HTML 和 CSS
+      const subAppHTML = `
+        <div style="padding: 20px;">
+          <h4 class="main-title">子应用标题（应该是红色，不受主应用影响）</h4>
+          <p>这是通过 Shadow DOM 隔离的子应用</p>
+          <button onclick="alert('子应用按钮点击')">子应用按钮</button>
+        </div>
+      `;
+      
+      const subAppCSS = `
+        .main-title {
+          color: red !important;
+          font-size: 24px;
+        }
+        button {
+          background: green;
+          color: white;
+          padding: 8px 16px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+      `;
+      
+      const isolation = new ShadowDOMIsolation(container);
+      isolation.mount(subAppHTML, subAppCSS);
+    }
+
+    async function loadSubAppScoped() {
+      console.log("\n=== 加载子应用（Scoped CSS 隔离）===");
+      
+      const container = document.getElementById('subapp');
+      container.innerHTML = ''; // 清空
+      
+      const subAppHTML = `
+        <div style="padding: 20px;">
+          <h4 class="main-title">子应用标题（应该是橙色）</h4>
+          <p>这是通过 Scoped CSS 隔离的子应用</p>
+          <button>子应用按钮</button>
+        </div>
+      `;
+      
+      const subAppCSS = `
+        .main-title {
+          color: orange;
+          font-size: 24px;
+        }
+        button {
+          background: purple;
+          color: white;
+          padding: 8px 16px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+      `;
+      
+      const isolation = new ScopedCSSIsolation(container, 'subapp-1');
+      isolation.mount(subAppHTML, subAppCSS);
+    }
+  </script>
+</body>
+</html>

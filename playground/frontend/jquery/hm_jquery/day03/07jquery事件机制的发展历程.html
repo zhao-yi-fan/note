@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div {
+            height: 300px;
+            width: 300px;
+            background-color:pink;
+        }
+    </style>
+</head>
+<body>
+    <input type="button" id="btn" value="增加p标签" /> 
+    <div>
+        <p>111111</p>
+        <p>222222</p>
+        <p>333333</p>
+        <p>444444</p>
+    </div>
+    
+    <script src="https://unpkg.com/jquery@1.12.4/dist/jquery.js">
+        
+    </script>
+    <script>
+        
+        $(function(){
+            $("div").delegate("p","click",function(){
+                alert("hehe");
+            })
+            $("#btn").click(function(){
+                $("<p>我是一个p标签</p>").appendTo("div");
+            });
+        });
+    </script>
+</body>
+</html>

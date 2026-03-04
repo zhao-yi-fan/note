@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // function f1() {
+        //     console.log("我是函数的开始");
+        //     return function () {
+        //         console.log("我是函数的返回值");
+        //     };
+        //     console.log("我是函数的结束");
+        // }
+        // var ff = f1();
+        // ff();
+
+        function getFunc(type) {
+            return function (obj) {
+                return Object.prototype.toString.call(obj) === type;
+            };
+        }
+        // var f1 = getFunc("[object Array]");
+        // var result = f1([10, 20, 30]);
+        // console.log(result);
+        var f2 = getFunc("[object Date]");
+        var dt = new Date();
+        var result1 = f2(dt);
+        console.log(result1);
+    </script>
+
+</body>
+
+</html>

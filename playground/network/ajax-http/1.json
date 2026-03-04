@@ -1,0 +1,25 @@
+{
+    "success": true,
+    "data": [
+        {
+            "userId": 0,
+            "userName": "cici0"
+        },
+        {
+            "userId": 1,
+            "userName": "cici2"
+        },
+        {
+            "userId": 2,
+            "userName": "cici3"
+        },
+        {
+            "userId": 3,
+            "userName": "cici4"
+        },
+        {
+            "userId": 4,
+            "userName": "cici5"
+        }
+    ]
+}

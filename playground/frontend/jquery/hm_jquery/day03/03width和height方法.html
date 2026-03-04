@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div {
+            width: 200px;
+            height: 200px;
+            background-color: red;
+            padding: 10px;
+            border: 10px solid #000;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+    <script src="https://unpkg.com/jquery@1.12.4/dist/jquery.js">
+        
+    </script>
+    <script>
+        $(function(){
+            // //获取
+            // console.log($("div").css("width"));
+            // //设置
+            // $("div").css("width",400);
+            // console.log($("div").css("width"));
+            
+            //获取width(得到的值都是数值,不含px)
+            // console.log($("div").width());//width
+            // console.log($("div").innerWidth());//width+padding
+            // console.log($("div").outerWidth());//width+padding+border
+            // console.log($("div").outerWidth(true));//width+padding+border+margin
+            
+            //设置width
+            $("div").width("400");
+            console.log($("div").width());//width
+
+
+            //需要获取页面可视区域的宽度和高度
+            $(window).resize(function(){
+                console.log($(window).width());
+                console.log($(window).height());
+                
+            });
+        });
+    </script>
+</body>
+</html>

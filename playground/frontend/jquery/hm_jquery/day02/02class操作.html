@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .bigger{
+            color:aqua;
+            border:1px solid #ccc;
+            background-color: rosybrown;
+        }
+        .red{
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <input type="button" value="添加bigger类" />
+    <input type="button" value="添加red类" />
+    <input type="button" value="移除bigger类" />
+    <input type="button" value="判断bigger类" />
+    <input type="button" value="切换bigger类" />
+    <li class="aa bb cc dd">1</li>
+    <li class="aa bb cc dd">2</li>
+    <li class="aa bb cc dd">3</li>
+    <li class="aa bb cc dd">4</li>
+    
+    <script src="https://unpkg.com/jquery@1.12.4/dist/jquery.js">
+        
+    </script>
+    <script>
+        //添加类 移除类 判断类 切换类
+        $(function(){
+            //添加
+            $("input").eq(0).click(function(){
+                $("li").addClass("bigger");
+            });
+            $("input").eq(1).click(function(){
+                $("li").addClass("red");
+            });
+            //移除
+            $("input").eq(2).click(function(){
+                $("li").removeClass("bigger");
+            });
+            //判断
+            $("input").eq(3).click(function(){
+                console.log($("li").hasClass("bigger"));
+            });
+            //替换
+            $("input").eq(4).click(function(){
+                $("li").toggleClass("bigger");
+            });
+        });
+    </script>
+</body>
+</html>

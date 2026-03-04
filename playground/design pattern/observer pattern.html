@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <input type="text" id="app" oninput="handleInput(event)">
+  <p id="box1"></p>
+  <p id="box2"></p>
+  
+  <script>
+  /**
+   * 观察者模式
+   * 发布订阅模式包含观察者模式，发布订阅中添加了中心调度，消除了发布者和观察者的依赖
+   * */
+    class Sub {
+      constructor() {
+        this.state = undefined
+        this.observers = []
+      }
+      // 设置状态
+      setState(state) {
+        this.state = state
+        // 通知每个观察者
+        this.observers.forEach(observer => {
+          observer.update(this.state)
+        })
+      }
+      // 新增观察者
+      attach(observer) {
+        this.observers.push(observer)
+      }
+    }
+
+    // 观察者，等待被通知
+    class Observe {
+      constructor(sub, callback) {
+        this.callback = callback
+        this.sub = sub
+        this.sub.attach(this)
+      }
+
+      update(state) {
+        this.callback(state);
+      }
+    }
+
+    // 实例化一个主题
+    let s = new Sub()
+    // 添加观察者实例
+    let o1 = new Observe(s, function (state) {
+      document.querySelector('#box1').innerHTML = state
+    })
+    // 添加观察者实例
+    let o2 = new Observe(s, function (state) {
+      document.querySelector('#box2').innerHTML = state
+    })
+    
+    function handleInput(e) {
+      let event = e || event
+      s.setState(event.target.value)
+      // s2.setState(event.target.value)
+    }
+
+
+    
+  </script>
+</body>
+
+</html>

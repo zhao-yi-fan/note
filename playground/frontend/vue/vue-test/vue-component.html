@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Document</title>
+  <script src="//unpkg.com/vue@2.7.16/dist/vue.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <aaa @dianji="dianjifuqin($event)" />
+  </div>
+  <script>
+    let AAA = {
+      name: 'aaa',
+      data: function () {
+        return {
+          count: 0,
+          name: 'zhaoyifan'
+        }
+      },
+      mounted() {
+        console.log(this.$listeners)
+      },
+      methods: {
+        clickHandle() {
+          this.count++;
+          this.$emit('dianji', this.count)
+        }
+      },
+      template: `<button @click="clickHandle">点击了{{ count }}次</button>`
+    }
+    AAA.install = function (Vue, options) {
+      Vue.component(this.name, this)
+    }
+
+
+
+    Vue.use(AAA)
+
+    new Vue({
+      methods: {
+        dianjifuqin(count) {
+          console.log(count)
+        },
+      },
+    }).$mount('#app')
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>五角星评分案例</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    
+    .comment {
+      font-size: 40px;
+      color: #ff16cf;
+    }
+    
+    .comment li {
+      float: left;
+    }
+    
+    ul {
+      list-style: none;
+    }
+  </style>
+  <script src="https://unpkg.com/jquery@1.12.4/dist/jquery.js"></script>
+  <script>
+    $(function(){
+      var wjx_k = "☆";
+      var wjx_s = "★";
+      //鼠标移入事件
+      $(".comment>li").on("mouseenter",function(){
+        //移入的和移入之前的都变实心
+        $(this).text(wjx_s).prevAll().text(wjx_s);
+        //移入的后面的变空心
+        $(this).nextAll().text(wjx_k);
+
+        //$(this).text(wjx_s).prevAll().text(wjx_s)加入移入的是第三个五角星,现在的jq对象变成了前两个五角星的集合了,如果再nextAll()
+        //的话,会分别求第一个五角星的nextAll()是后四个五角星集合的对象,第二个五角星的nextAll()是后三个五角星集合的对象,加起来是后四个五角星集合的对象.
+        //并不是最后两个.
+
+        //end()可以把jq对象回退到上一个.
+        //$(this).text(wjx_s).prevAll().text(wjx_s).end().nextAll().text(wjx_k);
+
+      });
+      
+
+      //鼠标移出事件
+      $(".comment").on("mouseleave",function(){
+        //所有的五角星变空心
+        $("li").children().text(wjx_k);
+        //找到current,把current属性的li和之前的li都变成实心
+        $("li.current").text(wjx_s).prevAll().text(wjx_s);
+
+      });
+      //鼠标点击事件,当前点击的li加一个class或者属性,排除其他的class或者属性
+      $(".comment>li").on("click",function(){
+        $(this).addClass("current").siblings().removeClass("current");
+      });
+    });
+  </script>
+  
+  
+</head>
+
+<body>
+<ul class="comment">
+  <li>☆</li>
+  <li>☆</li>
+  <li>☆</li>
+  <li>☆</li>
+  <li>☆</li>
+</ul>
+</body>
+
+</html>

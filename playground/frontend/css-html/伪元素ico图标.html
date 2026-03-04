@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		@font-face {
+		  font-family: 'icomoon';
+		  src:  url('fonts/icomoon.eot?anmo5z');
+		  src:  url('fonts/icomoon.eot?anmo5z#iefix') format('embedded-opentype'),
+		    url('fonts/icomoon.ttf?anmo5z') format('truetype'),
+		    url('fonts/icomoon.woff?anmo5z') format('woff'),
+		    url('fonts/icomoon.svg?anmo5z#icomoon') format('svg');
+		  font-weight: normal;
+		  font-style: normal;
+		}
+		span, div {
+			font-family: "icomoon";
+		}
+		div::after {   /*  before或者after都可以 */
+			content: "\e90d";
+		}
+	</style>
+</head>
+<body>
+	<span></span>
+	<div></div>
+</body>
+</html>

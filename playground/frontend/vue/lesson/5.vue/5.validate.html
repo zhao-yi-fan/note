@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="app">
+      <my-button :msg="1" :arr="[1,2,3]" username="zhufeng"></my-button>
+    </div>
+    <script src="//unpkg.com/vue@2.7.16/dist/vue.js"></script>
+    <script>
+      Vue.component('my-button', {
+        props: {
+          msg: {
+            // required和default冲突，必填就没有默认值
+            type: Number, // 校验类型
+            default: 100
+            // required:true
+          },
+          arr: {
+            // 对象和数组默认值必须通过函数返回
+            type: Array,
+            default: () => [1, 2, 3]
+          },
+          username: {
+            type: String,
+            validator(value) { // 参数是自己的值，如果不符合验证会报错
+              return value.length == 7
+            }
+          }
+        },
+        template: `<div><button>{{msg}}{{arr}}</button></div>`
+      })
+      let vm = new Vue({
+        el: '#app',
+        methods: {}
+      })
+    </script>
+  </body>
+</html>

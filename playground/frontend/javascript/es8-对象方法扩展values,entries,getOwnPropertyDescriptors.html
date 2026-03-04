@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    const obj = {
+      name: '张三',
+      hobby: ['打球', '游泳']
+    }
+    // 对象所有的键数组
+    console.log(Object.keys(obj));
+    // 对象所有的值数组
+    console.log(Object.values(obj));
+    // entries 用来创建Map格式
+    console.log(Object.entries(obj));
+
+    const m = new Map(Object.entries(obj))
+    console.log(m);
+    console.log(m.get('name'));
+
+    // 对象属性的描述对象 一般用于深层次拷贝对象，可以细化到对象属性的特性
+    console.log(Object.getOwnPropertyDescriptors(obj));
+
+
+    const obj1 = Object.create(null, {
+      name: {
+        value: '李四',
+        configurable: true, // 可删除
+        writable: true, // 可修改
+        enumerable: true, // 可枚举
+      }
+    })
+    
+    console.log(obj1);
+    console.log(Object.getOwnPropertyDescriptors(obj1));
+  </script>
+</body>
+
+</html>

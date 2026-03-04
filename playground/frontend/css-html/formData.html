@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="//unpkg.com/jquery/dist/jquery.js"></script>
+  </head>
+  <body>
+    <form action="http://localhost:8080/get" id="form" method="get">
+      <div>
+        <label for="name">用户名：</label>
+        <input type="text" name="user_name" />
+      </div>
+      <div>
+        <label for="passwd">密码：</label>
+        <input type="password" name="user_passwd" />
+      </div>
+      <div>
+        <input type="submit" id="submit" name="submit_button" value="提交" />
+      </div>
+    </form>
+    <!-- <button id="btn">点击</button> -->
+    <script>
+      let formData = new FormData()
+      formData.append("username", "zhoayifan")
+      formData.append("password", "123456")
+      for (var pair of formData.entries()) {
+        console.log(pair[0] + ": " + pair[1])
+      }
+      console.log('111')
+      // console.log(formData.get("user_name"))
+      /* $('#btn').on('click', () => {
+        $.ajax({
+          type: 'post',
+          url: 'http://127.0.0.1:3000/test',
+          data: { userName: 'aaa', pass: '123' },
+          success: res => {
+            console.log(res)
+          },
+          error: err => {
+            console.log(err)
+          }
+        })
+      })
+
+      $('#submit').click(() => {
+        let myForm = document.getElementById('form')
+        let formData = new FormData(myForm)
+        console.log(formData.keys())
+        // console.log(formData.getAll('user_name'))
+        // formData.set('user_name','222')
+        // console.log(formData.get('user_name'))
+        return false
+      }) */
+    </script>
+  </body>
+</html>

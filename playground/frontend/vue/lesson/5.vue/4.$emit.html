@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <!-- .native 修饰符 相当于给组件的模板最外层添加事件 -->
+    <!-- <my-button @click.native="show2"></my-button> -->
+    <my-button @click="show2" @mouseup="show1" name="xx" :age="18">
+      <template #default>default</template>
+      <template #title>title</template>
+      <template #prepend>prepend</template>
+      <template #append>append</template>
+    </my-button>
+  </div>
+  <script src="//unpkg.com/vue@2.7.16/dist/vue.js"></script>
+  <script>
+    Vue.component('my-button',{
+      inheritAttrs: false, // false: 不挂载到真实DOM上
+      props: {
+        name: String,
+      },
+      data(){
+        return {msg:'点我啊'}
+      },
+      // this.$attrs (v-bind) this.$listeners (v-on)
+      // 一个个传递方法
+      // template:`<div><button @mouseup="$listeners.mouseup" @click="$listeners.click">{{msg}}</button></div>`,
+      // 把事件整体传入 事件必须是存在的事件
+      // template: `<div><button v-on="$listeners">{{msg}}</button></div>`,
+      // 触发自己身上的click事件
+      template: `<div>
+        <slot name="prepend"></slot><button @click="$emit('click')">{{msg}}<slot /></button>
+        <slot name="append"></slot>
+        </div>`,
+      mounted(){
+        console.log(this);
+        console.log(this.$attrs); // 将props的数据排除了
+        console.log(this.$listeners);
+      }
+    })
+    let vm = new Vue({
+      el: '#app',
+      methods:{
+        show1(){
+          console.log('父亲111')
+        },
+        show2(){
+          console.log('父亲222')
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
