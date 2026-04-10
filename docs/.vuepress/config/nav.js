@@ -280,7 +280,7 @@ module.exports = [
   },
   {
     text: '泡漫平台',
-    link: 'http://popreels.zhaoyifan.top/',
+    link: 'http://8.152.208.234:8081/',
   },
   {
     text: '个人项目汇总',
