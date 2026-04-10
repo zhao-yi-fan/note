@@ -279,6 +279,10 @@ module.exports = [
     ]
   },
   {
+    text: '泡漫平台',
+    link: 'http://popreels.zhaoyifan.top/',
+  },
+  {
     text: '个人项目汇总',
     link: 'https://zhao-yi-fan.github.io/',
   },
