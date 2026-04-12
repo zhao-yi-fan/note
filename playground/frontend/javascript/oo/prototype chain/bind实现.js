@@ -1,16 +1,14 @@
-Function.prototype.myBind = function (context) {
+Function.prototype.myBind = function (context, ...args) {
   if (typeof this !== "function") {
     throw new Error("Type error");
   }
-  const args = [...arguments].slice(1);
   const fn = this;
-  return function Fn() {
+  return function Fn(...restArgs) {
     console.log(this instanceof Fn);
-    return fn.apply(
-      this instanceof Fn ? this : context,
-      // 当前的这个 arguments 是指 Fn 的参数
-      args.concat(...arguments)
-    );
+    return fn.apply(this instanceof Fn ? this : context, [
+      ...args,
+      ...restArgs,
+    ]);
   };
 };
 
@@ -20,7 +18,7 @@ const obj = {
 
 function fn(a, b, c, d) {
   console.log(arguments);
-  
+
   return this.sum + a + b;
 }
 

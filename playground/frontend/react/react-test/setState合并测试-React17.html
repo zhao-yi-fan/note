@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://unpkg.com;">
+  <title>setState合并测试 - React 17</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      color: #333;
+      border-bottom: 3px solid #ff6b6b;
+      padding-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-bottom: 15px;
+      margin-right: 10px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .result {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+      margin: 20px 0;
+      padding: 15px;
+      background-color: #f0f8ff;
+      border-left: 4px solid #007bff;
+    }
+    .log {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 15px;
+      margin-top: 15px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+    .log-item {
+      padding: 5px 0;
+      border-bottom: 1px solid #eee;
+      color: #555;
+    }
+    .log-item:last-child {
+      border-bottom: none;
+    }
+    .log-item.render {
+      color: #28a745;
+      font-weight: bold;
+    }
+    .log-item.action {
+      color: #ff6b6b;
+    }
+    .warning {
+      background-color: #fff3cd;
+      border: 1px solid #ffc107;
+      color: #856404;
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+    .version-note {
+      font-size: 12px;
+      color: #666;
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f0f0f0;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>React 17 setState 合并测试</h1>
+  
+  <div class="warning">
+    ⚠️ <strong>React 17 特性说明：</strong>
+    <ul style="margin: 10px 0; padding-left: 20px;">
+      <li>事件处理器内的 setState 会被合并（只 render 1次）</li>
+      <li>setTimeout/Promise 内的 setState <strong>不会被合并</strong>（render 多次）</li>
+    </ul>
+  </div>
+
+  <!-- 场景1：事件处理器中的 setState -->
+  <div class="container">
+    <h2>场景1：事件处理器中的 setState（合并）</h2>
+    <div id="root1"></div>
+    <div class="log" id="log1">
+      <div><strong>Console Log:</strong></div>
+      <div id="console-log1"></div>
+    </div>
+    <div class="version-note">预期：render 1次，最终值为 3</div>
+  </div>
+
+  <!-- 场景2：setTimeout 中的 setState -->
+  <div class="container">
+    <h2>场景2：setTimeout 中的 setState（不合并）</h2>
+    <div id="root2"></div>
+    <div class="log" id="log2">
+      <div><strong>Console Log:</strong></div>
+      <div id="console-log2"></div>
+    </div>
+    <div class="version-note">预期：render 3次，最终值为 3（React 17 特性）</div>
+  </div>
+
+  <!-- React 17 库 -->
+  <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+  <!-- Babel 用于 JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    // ===== 场景1：事件处理器 =====
+    let logs1 = [];
+    let renderCount1 = 0;
+
+    function App1() {
+      const [n, setNumber] = useState(0);
+      renderCount1++;
+      logs1.push(`✅ render 第${renderCount1}次`);
+
+      return (
+        <>
+          <div className="result">当前值: {n}</div>
+          <button onClick={() => {
+            logs1.push('--- 点击开始 ---');
+            setNumber(n + 1);
+            logs1.push('已调用 setNumber(n + 1)');
+            setNumber(n + 2);
+            logs1.push('已调用 setNumber(n + 2)');
+            setNumber(n + 3);
+            logs1.push('已调用 setNumber(n + 3)');
+            logs1.push('--- 点击结束 ---');
+            updateLog1();
+          }}>
+            点击（事件处理器）
+          </button>
+        </>
+      );
+    }
+
+    ReactDOM.render(<App1 />, document.getElementById('root1'));
+
+    function updateLog1() {
+      const logDiv = document.getElementById('console-log1');
+      logDiv.innerHTML = logs1.map(log => {
+        const className = log.includes('render') ? 'render' : log.includes('点击') ? 'action' : '';
+        return `<div class="log-item ${className}">${log}</div>`;
+      }).join('');
+      document.getElementById('log1').scrollTop = document.getElementById('log1').scrollHeight;
+    }
+
+    updateLog1();
+
+    // ===== 场景2：setTimeout =====
+    let logs2 = [];
+    let renderCount2 = 0;
+
+    function App2() {
+      const [n, setNumber] = useState(0);
+      renderCount2++;
+      logs2.push(`✅ render 第${renderCount2}次`);
+
+      return (
+        <>
+          <div className="result">当前值: {n}</div>
+          <button onClick={() => {
+            logs2.push('--- setTimeout 开始 ---');
+            setTimeout(() => {
+              logs2.push('⏱️ 执行 setNumber(n + 1)');
+              setNumber(n + 1);
+              updateLog2();
+              
+              setTimeout(() => {
+                logs2.push('⏱️ 执行 setNumber(n + 2)');
+                setNumber(n + 2);
+                updateLog2();
+                
+                setTimeout(() => {
+                  logs2.push('⏱️ 执行 setNumber(n + 3)');
+                  setNumber(n + 3);
+                  logs2.push('--- setTimeout 结束 ---');
+                  updateLog2();
+                }, 0);
+              }, 0);
+            }, 0);
+          }}>
+            点击（setTimeout）
+          </button>
+        </>
+      );
+    }
+
+    ReactDOM.render(<App2 />, document.getElementById('root2'));
+
+    function updateLog2() {
+      const logDiv = document.getElementById('console-log2');
+      logDiv.innerHTML = logs2.map(log => {
+        const className = log.includes('render') ? 'render' : log.includes('执行') ? 'action' : '';
+        return `<div class="log-item ${className}">${log}</div>`;
+      }).join('');
+      document.getElementById('log2').scrollTop = document.getElementById('log2').scrollHeight;
+    }
+
+    updateLog2();
+  </script>
+</body>
+</html>

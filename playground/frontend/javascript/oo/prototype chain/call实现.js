@@ -1,9 +1,9 @@
-Function.prototype.myCall = function (context) {
-  const restArgs = [...arguments].slice(1)
+Function.prototype.myCall = function (context, ...args) {
   context = context || globalThis
-  context.fn = this
-  const result = context.fn(...restArgs)
-  delete context.fn
+  const key = Symbol();
+  context[key] = this;
+  const result = context.fn(...args)
+  delete context[key];
   return result;
 }
 
