@@ -9,16 +9,20 @@ I eat Apple
 等待 5 s
 I eat Pear */
 
-
 /**
  * 1.不使用promise的方式
  *  */
-/* class Monkey {
+class Monkey {
   constructor(name) {
-    console.log(`my name is ${name}`);
-    this.name = name;
     this.stack = [];
     this.blocking = false;
+
+    this.stack.push((next) => {
+      console.log(`my name is ${name}`);
+      next();
+    });
+
+    setTimeout(() => this.execute(), 0);
   }
   eat(foodName) {
     this.stack.push((next) => {
@@ -30,8 +34,8 @@ I eat Pear */
   }
   sleep(time) {
     this.stack.push((next) => {
+      console.log(`等待 ${time} s`);
       setTimeout(() => {
-        console.log(`等待 ${time} s`);
         next();
       }, time * 1000);
     });
@@ -44,7 +48,7 @@ I eat Pear */
     this.blocking = true;
     const next = () => {
       const fn = this.stack.shift();
-      console.log(fn,'fn====');
+      console.log(fn, "fn====");
       if (fn) {
         fn(next);
       } else {
@@ -53,24 +57,28 @@ I eat Pear */
     };
     next();
   }
-} */
+}
 
 /**
  * 2.使用promise的方式
- * 
+ *
  *  */
 class Monkey {
   constructor(name) {
-    this.name = name;
     this.stack = [];
-    this.result = null;
+
+    this.stack.push(() => {
+      console.log(`my name is ${name}`);
+      return Promise.resolve();
+    });
+
+    Promise.resolve().then(() => this.run());
   }
   eat(foodName) {
-    this.stack.push(async () => {
+    this.stack.push(() => {
       console.log(`I eat ${foodName}`);
       return Promise.resolve();
     });
-    this.run();
     return this;
   }
 
@@ -78,38 +86,21 @@ class Monkey {
     this.stack.push(() => {
       console.log(`等待 ${time}s`);
       return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve();
-        }, time * 1000);
+        setTimeout(resolve, time * 1000);
       });
     });
-    this.run();
     return this;
   }
 
-  async run() {
-    const fn = () => {
-      const first = this.stack.shift();
-      if (first) {
-        return first();
-      }
-    };
-    // @TODO 不能顺序执行promise
-    if (this.result) {
-      await this.result;
-    }
-    this.result = fn();
-    console.log(this.result);
-    await this.result;
+  run() {
+    this.stack.reduce((acc, currStack) => {
+      return acc.then(currStack);
+    }, Promise.resolve());
   }
 }
 
-new Monkey("Alan")
-  .sleep(4)
-  .eat("Banana1")
-  .sleep(5)
-  .eat("Banana2")
-  // .eat("Banana3")
-  // .eat("Banana4")
-  // .eat("Pear")
-  // .eat("Apple");
+new Monkey("Alan").sleep(4).eat("Banana1").sleep(5).eat("Banana2");
+// .eat("Banana3")
+// .eat("Banana4")
+// .eat("Pear")
+// .eat("Apple");
