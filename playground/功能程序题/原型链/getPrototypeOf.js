@@ -1,17 +1,60 @@
-// q: 为什么{}.__proto__会报错
-// a: {}.__proto__是一个语法错误，因为{}是一个字面量，不是一个对象，所以不能访问它的原型
+/**
+ * Object.getPrototypeOf 的常见问题整理
+ *
+ * 1. 为什么直接写 {}.__proto__ 有时会报错？
+ *    因为在语句开头，{} 可能会被当成代码块解析，不是对象字面量。
+ *
+ *    下面两种写法是安全的：
+ *    - ({}).__proto__
+ *    - Object.getPrototypeOf({})
+ *
+ * 2. 为什么更推荐 Object.getPrototypeOf？
+ *    - 它是标准 API
+ *    - 语义更明确
+ *    - 比直接写 __proto__ 更稳妥
+ *
+ * 3. 什么时候会用到它？
+ *    - 想确认一个对象的原型是谁
+ *    - 手写 instanceof / new / 继承相关逻辑
+ *    - 调试原型链问题
+ *
+ * 4. Object.create(null) 有什么特点？
+ *    - 创建一个“没有原型”的对象
+ *    - Object.getPrototypeOf(obj) 会返回 null
+ *    - 不是“禁止别人读取原型”，而是这个对象本身就没有原型
+ *
+ * 5. 如果不想让原型对象被改动怎么办？
+ *    - 可以冻结原型对象本身：Object.freeze(Constructor.prototype)
+ *    - 这只能阻止原型对象被修改，不会阻止别人读取原型
+ *
+ * 6. 如果想拦截“读取原型”这件事怎么办？
+ *    - 不能靠 defineProperty
+ *    - 要用 Proxy 的 getPrototypeOf trap
+ */
 
-// q: 那怎么访问{}的原型呢
-// a: Object.getPrototypeOf({})
+const obj = { name: "zs" };
+const arr = [];
+const noProtoObj = Object.create(null);
 
-// q: getPrototypeOf什么时候用呢
-// a: 当你想要访问一个对象的原型，但是这个对象不是你自己创建的，而是别人创建的，比如你想要访问一个DOM节点的原型，那么你就可以使用getPrototypeOf
+function Person() {}
 
-// q: 那如果我不想让别人调用getPrototypeOf访问我的原型，怎么办
-// a: 你可以使用Object.create(null)创建一个没有原型的对象，这样别人就无法访问你的原型了
+console.log(Object.getPrototypeOf(obj) === Object.prototype); // true
+console.log(Object.getPrototypeOf(arr) === Array.prototype); // true
+console.log(Object.getPrototypeOf(noProtoObj)); // null
+console.log(Object.getPrototypeOf(new Person()) === Person.prototype); // true
 
-// q: 那如果我想要让别人访问我的原型，但是我又不想让别人修改我的原型，怎么办
-// a: 你可以使用Object.freeze()冻结你的原型，这样别人就无法修改你的原型了
+// 语句开头要注意解析歧义
+console.log(({}).__proto__ === Object.prototype); // true
+console.log(Object.getPrototypeOf({}) === Object.prototype); // true
 
-// q: 那如果我想要让别人访问我的原型，但是我又不想让别人修改我的原型，而且我还想让别人访问我的原型的时候，能够自动执行一些代码，怎么办
-// a: 你可以使用Object.defineProperty()定义一个属性，这个属性的get方法就是你想要执行的代码，这样别人就可以访问你的原型了，而且你的原型也是不可修改的
+Object.freeze(Person.prototype);
+console.log(Object.isFrozen(Person.prototype)); // true
+
+const proxy = new Proxy(obj, {
+  getPrototypeOf(target) {
+    console.log("读取了原型");
+    return Object.getPrototypeOf(target);
+  },
+});
+
+console.log(Object.getPrototypeOf(proxy) === Object.prototype); // true
