@@ -1,66 +1,49 @@
-const timeout = (ms) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
-
-const createDeferer = () => {
-  const obj = {
-    resolve: null,
-    promise: null,
-  };
-  obj.promise = new Promise((resolve, reject) => {
-    obj.resolve = resolve;
-    obj.reject = reject;
-  });
-
-  return obj;
-};
+const timeout = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 class SuperTask {
-  constructor() {
-    this.maxCount = 2;
-    this.currCount = 0;
-    this.tasks = [];
-    this.promise = null;
+  constructor(maxCount = 2) {
+    this.maxCount = maxCount;
+    this.runningCount = 0;
+    this.queue = [];
   }
 
-  add(fn) {
-    const defer = createDeferer();
-    this.tasks.push({
-      fn,
-      defer,
-    });
-    this.run();
+  setMaxCount(size) {
+    if (!Number.isInteger(size) || size < 1) {
+      throw new Error("maxCount must be a positive integer");
+    }
 
-    return defer.promise;
+    this.maxCount = size;
+    this.run();
+  }
+
+  add(task) {
+    return new Promise((resolve, reject) => {
+      this.queue.push({ task, resolve, reject });
+      this.run();
+    });
   }
 
   run() {
-    if (this.currCount < this.maxCount && this.tasks.length) {
-      this.currCount++;
-      const currObj = this.tasks.shift();
-      currObj
-        .fn()
-        .then(() => {
-          currObj.defer.resolve();
-          this.run();
-        })
-        .catch((err) => currObj.defer.reject(err))
+    while (this.runningCount < this.maxCount && this.queue.length > 0) {
+      const { task, resolve, reject } = this.queue.shift();
+      this.runningCount++;
+
+      task()
+        .then(resolve, reject)
         .finally(() => {
-          this.currCount--;
+          this.runningCount--;
           this.run();
         });
     }
   }
 }
 
-const task = new SuperTask();
+const superTask = new SuperTask(2);
 
 function addTask(time, name) {
-  task
-    .add(() => timeout(time))
-    .then(() => {
-      console.log(`任务${name}完成`);
-    });
+  superTask.add(() => timeout(time)).then(() => {
+    console.log(`任务${name}完成`);
+  });
 }
 
 addTask(10000, 1); // 10秒后输出 任务1完成
