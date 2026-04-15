@@ -23,7 +23,7 @@ const app = new KoaLike();
 
 app.use(async (next) => {
   console.log(1);
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   await next();
   console.log(4);
 });

@@ -1,14 +1,14 @@
 // 判断数据类型
 // typeof 不能判断对象或者数组
 // instanceof
-// contructor  
+// constructor  
 // Object.prototype.toString.call
 
 function isType (content, type) {
   return Object.prototype.toString.call(content) == `[object ${type}]`
 
 }
-// isTring isArray isBoolean
+// isString isArray isBoolean
 let types = ['String', 'Boolean', 'Number', 'Null', 'Undefined']
 let utils = {}
 for (let i = 0; i < types.length; i++) {
