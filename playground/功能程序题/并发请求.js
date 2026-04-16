@@ -41,9 +41,13 @@ class SuperTask {
 const superTask = new SuperTask(2);
 
 function addTask(time, name) {
-  superTask.add(() => timeout(time)).then(() => {
-    console.log(`任务${name}完成`);
-  });
+  const label = `任务${name}完成`;
+  console.time(label);
+  superTask
+    .add(() => timeout(time))
+    .then(() => {
+      console.timeEnd(label);
+    });
 }
 
 addTask(10000, 1); // 10秒后输出 任务1完成
@@ -51,3 +55,14 @@ addTask(5000, 2); // 5秒后输出 任务2完成
 addTask(3000, 3); // 8秒后输出 任务3完成
 addTask(2000, 4); // 10秒后输出 任务4完成
 addTask(5000, 5); // 15秒后输出 任务5完成
+
+// 如果在第七秒变成了并发数3
+/* setTimeout(() => {
+  superTask.setMaxCount(3);
+
+  // 任务2完成: 5.004s
+  // 任务3完成: 8.016s
+  // 任务4完成: 9.004s
+  // 任务1完成: 10.002s
+  // 任务5完成: 13.019s
+}, 7000); */
