@@ -1,5 +1,5 @@
 let timerId = null;
-let running = true;  // 控制是否继续循环
+let running = true; // 控制是否继续循环
 
 function light(color, duration) {
   return new Promise(resolve => {

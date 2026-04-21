@@ -1,18 +1,47 @@
-function deepClone(obj, cache = new WeakMap()) {
-  
+/**
+ * 循环引用：对象的属性最终又引用回这个对象本身，形成环
+ * 例如：
+ * const obj = {};
+ * obj.self = obj;
+ *
+ * 深拷贝时如果不做处理，递归会一直沿着 self 往下走，导致无限递归
+ *
+ * 这里用 WeakMap 记录“原对象 => 克隆对象”的映射
+ * 如果递归过程中再次遇到同一个对象，说明它之前已经处理过了
+ * 这时直接返回缓存里的克隆结果
+ *
+ * 并且要先缓存，再递归子属性
+ * 这样即使子属性又引用回当前对象，也能拿到已经创建好的克隆对象
+ */
+/* function deepClone(obj, cache = new WeakMap()) {
   if (obj === null || typeof obj !== "object") return obj;
 
-  // 1. 如果已有缓存，直接返回
   if (cache.has(obj)) return cache.get(obj);
 
   const clone = Array.isArray(obj) ? [] : {};
 
-  // 2. 加入缓存
   cache.set(obj, clone);
 
-  // 3. 深拷贝子属性
   for (const key in obj) {
     clone[key] = deepClone(obj[key], cache);
+  }
+
+  return clone;
+} */
+
+function deepClone(target, cache = new WeakMap()) {
+  if (target === null || typeof target !== "object") {
+    return target;
+  }
+
+  if (cache.has(target)) return cache.get(target);
+
+  const clone = Array.isArray(target) ? [] : {};
+
+  cache.set(target, clone);
+
+  for (const key in target) {
+    clone[key] = deepClone(target[key], cache);
   }
 
   return clone;
@@ -22,9 +51,8 @@ console.log(
   deepClone({
     a: 1,
     b: {},
-  })
+  }),
 );
-
 
 /* function deepClone(obj, cache = new WeakMap()) {
   // 1. 基础类型
