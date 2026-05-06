@@ -28,18 +28,9 @@ import { onMounted } from "vue";
 // }
 
 export default defineClientConfig({
-  enhance({ app, router, siteData }) {
-    console.log(app, router, siteData);
+  enhance({ app }) {
     // app.use(ElementPlus);
     // app.use(BunnyUi)
-
-    router.beforeEach((to) => {
-      console.log("before navigation");
-    });
-
-    router.afterEach((to) => {
-      console.log("after navigation");
-    });
   },
   setup() {
     // 添加导航栏下拉菜单滚动功能
