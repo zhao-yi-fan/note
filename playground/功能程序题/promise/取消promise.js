@@ -13,6 +13,7 @@ function wrap(p) {
   return obj; // 里面放了可控制的promise对象
 }
 
+
 let promise = new Promise((resolve, reject) => {
   setTimeout(() => {
     resolve(123);
@@ -26,4 +27,7 @@ obj.promise
   .catch((err) => {
     console.log("catch", err);
   });
-// obj.reject("主动错误"); // 调用就回立刻结束promise
+
+setTimeout(() => {
+  obj.reject("主动错误"); // 调用就回立刻结束promise
+}, 500);

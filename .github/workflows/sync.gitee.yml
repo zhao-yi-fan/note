@@ -2,7 +2,7 @@ name: Sync to Gitee
 
 on:
   push:
-    branches: [master, gh-pages]
+    branches: [master]
 
 jobs:
   repo-sync:
