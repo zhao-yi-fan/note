@@ -32,12 +32,11 @@
     "node": ">=14.18.0",
     "npm": ">=6.14.0"
   },
-  "devDependencies": {},
   "dependencies": {
     "bunny-ui": "^0.1.7",
     "element-plus": "^2.2.6",
     "highlight.js": "^11.2.0",
-    "vuepress": "2.0.0-beta.61",
-    "vuepress-theme-reco": "2.0.0-beta.62"
+    "vuepress": "2.0.0-rc.14",
+    "vuepress-theme-reco": "2.0.0-rc.22"
   }
 }
