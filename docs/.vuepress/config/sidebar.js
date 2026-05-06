@@ -196,7 +196,7 @@ module.exports = {
     {
       text: 'TypeScript',
       children: [
-        '/docs/TypeScript/README.md',
+        '/docs/typescript/README.md',
       ]
     },
     {

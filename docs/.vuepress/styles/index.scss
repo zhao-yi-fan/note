@@ -2,6 +2,60 @@
   // text colors
 }
 
+// 修复窄视口下站点标题和搜索框重叠
+.navbar-container {
+  .navbar-inner {
+    gap: 0.75rem;
+  }
+
+  .site-brand {
+    min-width: 0;
+    max-width: calc(100% - 4.5rem);
+
+    .site-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .navbar-links-wrapper {
+    flex-shrink: 0;
+
+    > div:first-child {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
+  .search-box {
+    input {
+      box-sizing: border-box;
+      width: 2rem;
+      transition: width 0.2s ease;
+    }
+
+    input:focus {
+      width: min(10rem, calc(100vw - 7.5rem));
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .navbar-container {
+    .site-brand {
+      max-width: min(42vw, 20rem);
+    }
+
+    .search-box {
+      input,
+      input:focus {
+        width: 10rem;
+      }
+    }
+  }
+}
+
 // 让导航栏下拉菜单更紧凑
 .navbar-dropdown {
   .navbar-dropdown-item {
