@@ -1,38 +1,60 @@
-## Welcome to GitHub Pages
+# Blog
 
-You can use the [editor on GitHub](https://github.com/zhao-yi-fan/note/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+个人技术博客与学习笔记，基于 VuePress 2 和 vuepress-theme-reco 构建，当前通过 Netlify 从 GitHub 仓库自动构建并发布。
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## 技术栈
 
-### Markdown
+- VuePress `2.0.0-rc.14`
+- vuepress-theme-reco `2.0.0-rc.22`
+- Node.js `22`
+- Netlify
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## 本地开发
 
-```markdown
-Syntax highlighted code block
+安装依赖：
 
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+```bash
+npm install
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+启动开发服务：
 
-### Jekyll Themes
+```bash
+npm run docs:dev
+```
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/zhao-yi-fan/note/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+构建静态文件：
 
-### Support or Contact
+```bash
+npm run docs:build
+```
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we'll help you sort it out.
+构建产物会输出到：
 
+```text
+docs/.vuepress/dist
+```
+
+## 部署
+
+项目使用 Netlify 部署，配置文件是 `netlify.toml`：
+
+```toml
+[build]
+  command = "npm run docs:build"
+  publish = "docs/.vuepress/dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+```
+
+推送到 `master` 分支后，Netlify 会自动拉取仓库并执行构建。
+
+## 目录说明
+
+```text
+docs/                    博客内容
+docs/.vuepress/          VuePress 配置、主题配置、样式
+docs/.vuepress/config/   导航栏和侧边栏配置
+docs/.vuepress/public/   静态资源
+```
