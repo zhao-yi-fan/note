@@ -8,8 +8,9 @@
     "doc": "docs"
   },
   "scripts": {
-    "docs:dev": "vuepress dev docs --temp .temp",
-    "docs:build": "vuepress build docs"
+    "docs:prebuild": "node scripts/sync-playground.js",
+    "docs:dev": "npm run docs:prebuild && vuepress dev docs --temp .temp",
+    "docs:build": "npm run docs:prebuild && vuepress build docs"
   },
   "keywords": [
     "blog",

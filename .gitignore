@@ -30,6 +30,7 @@ yarn-error.log*
 
 # VuePress build output
 docs/.vuepress/dist
+docs/.vuepress/public/playground
 
 # playground
 playground/**/node_modules
