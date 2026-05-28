@@ -7,7 +7,7 @@ export default defineUserConfig({
   title: 'Blog',
   description: 'zhaoyifan Blog',
   head: [
-    ['link', { rel: 'icon', href: '/favicon.ico' }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
     ['meta', { name: 'viewport', content: 'width=device-width,initial-scale=1,user-scalable=no' }],
     ['meta', { name: 'baidu-site-verification', content: 'codeva-35wm7P5Tff' }],
   ],

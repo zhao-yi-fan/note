@@ -2,9 +2,9 @@ import navBar from './nav'
 import sideBar from './sidebar'
 export default {
   style: '@vuepress-reco/style-default',
-  logo: '/logo.png',
+  logo: '/logo.svg',
   author: 'zhaoyifan',
-  authorAvatar: '/logo.png',
+  authorAvatar: '/logo.svg',
   docsRepo: 'https://github.com/vuepress-reco/vuepress-theme-reco-next',
   docsBranch: 'main',
   docsDir: 'example',
