@@ -80,4 +80,9 @@ useRef在保存变量时，在重新渲染方法后，可以`保留`住初始值
 
 
 ## 示例
-<iframe src="/playground/frontend/react/react-test/useEffect卸载旧值问题.html" width="100%" height="500px"></iframe>
+<PlaygroundFrame
+  title="useEffect 卸载旧值问题示例"
+  src="/playground/frontend/react/react-test/useEffect卸载旧值问题.html"
+  source="playground/frontend/react/react-test/useEffect卸载旧值问题.html"
+  :height="500"
+/>

@@ -88,4 +88,9 @@
 
 ## 示例
 
-<iframe src="/playground/frontend/react/react-test/diff.html" width="100%" height="500px"></iframe>
+<PlaygroundFrame
+  title="diff key 的作用示例"
+  src="/playground/frontend/react/react-test/diff.html"
+  source="playground/frontend/react/react-test/diff.html"
+  :height="500"
+/>

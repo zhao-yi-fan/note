@@ -1,5 +1,6 @@
 import { defineClientConfig } from "@vuepress/client";
 import { onMounted } from "vue";
+import PlaygroundFrame from "./components/PlaygroundFrame.vue";
 // import ElementPlus from 'element-plus'
 // import 'element-plus/dist/index.css'
 
@@ -29,6 +30,7 @@ import { onMounted } from "vue";
 
 export default defineClientConfig({
   enhance({ app }) {
+    app.component("PlaygroundFrame", PlaygroundFrame);
     // app.use(ElementPlus);
     // app.use(BunnyUi)
   },
