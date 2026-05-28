@@ -1,0 +1,4 @@
+interface:
+  display_name: "VuePress Playground Frame"
+  short_description: "封装 PlaygroundFrame 组件与 playground 构建发布逻辑"
+  default_prompt: "Use this skill to add or maintain a VuePress PlaygroundFrame component, migrate markdown iframe embeds, and wire playground static publishing into the build flow."
