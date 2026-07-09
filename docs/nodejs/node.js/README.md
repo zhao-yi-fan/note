@@ -56,10 +56,10 @@ node.js是技术, 不是后台的语言
 
 - 代码只是具有特定个数的字符串而已
 - 引擎可以认识它,引擎可以帮你去解析和执行
-- Google Chrome的V8引擎室目前公认的解析执行Javascript代码最快的
+- Google Chrome的V8引擎是目前公认的解析执行JavaScript代码最快的
 - Node.js的作者把Google Chrome中的V8引擎移植了出来,开发了一个独立的JavaScript运行时环境.
 
-2.Node.js uses an event-driven,non-blacking I/O model that makes It lightweight and efficient.
+2.Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient.
 
 翻译:
 
@@ -847,7 +847,7 @@ require('a')
 //          node_modules/art-template/package.json/main
 //          index.js 备选项
 //          进入上一级目录找 node_modules
-//          按照这个规则一次往上找, 知道磁盘根目录还找不到, 最后报错: Can not find module xxx
+//          按照这个规则一次往上找, 直到磁盘根目录还找不到, 最后报错: Can not find module xxx
 //      一个项目有且仅有一个 node_modules 而且是存放到目录的根目录
 ```
 

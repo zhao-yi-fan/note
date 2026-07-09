@@ -59,5 +59,5 @@ require('a')
 //          node_modules/art-template/package.json/main
 //          index.js 备选项
 //          进入上一级目录找 node_modules
-//          按照这个规则一次往上找, 知道磁盘根目录还找不到, 最后报错: Can not find moudle xxx
+//          按照这个规则一次往上找, 直到磁盘根目录还找不到, 最后报错: Can not find module xxx
 //      一个项目有且仅有一个 node_modules 而且是存放到目录的根目录
