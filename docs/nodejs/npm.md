@@ -154,7 +154,6 @@ Is this OK? (yes) yes
 
 - `npm i --save jquery` i 和 install都可以,还有加了--save会在package.json文件有记录
 - 建议执行 `npm install 包名`的时候都加上`--save`这个选项, 目的是用来保存依赖项信息
-- 如果`node_modules`删除了也不用担心,只需要:`npm install`就会自动把`package,.json`中的`dependencies`中所有的依赖项都下载回来
+- 如果`node_modules`删除了也不用担心,只需要:`npm install`就会自动把`package.json`中的`dependencies`中所有的依赖项都下载回来
 
 对于目前来讲,最有用的是那个`dependencies`选项, 可以用来帮我们保存第三方包的依赖信息
-

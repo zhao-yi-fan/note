@@ -210,7 +210,7 @@ app.listen(8686, function () {
 app.use(express.static('./static'))
 
 // api处理
-app.get('/getUset',(req,res)=>{
+app.get('/getUser',(req,res)=>{
   res.send({
     message:'ok'
   });
@@ -230,8 +230,8 @@ app.get('/getUset',(req,res)=>{
 - express中的req:不是原生的req，是二次处理过的
   - `req.params`存储的是路径参数信息
   - `req.path`请求的路径名称
-  - `req.query`请求的问好参数信息（GET请求都是这样传递的信息）（对象）
-  - `req.body`当请求的方式是POST，我们基于`body-parse`中间件处理后，会把客户端请求主体中传递的内容存放到body属性上
+  - `req.query`请求的问号参数信息（GET请求都是这样传递的信息）（对象）
+  - `req.body`当请求的方式是POST，我们基于`body-parser`中间件处理后，会把客户端请求主体中传递的内容存放到body属性上
   - `req.session`当我们基于`express-session`中间件处理后，会把session操作放到这个属性上，基于这个属性可以操作session信息
   - `req.cookies`当我们基于`cookie-parser`中间件处理后，会把客户端传递的cookie信息存放到这个属性上
   - `req.get()`获取指定的请求头信息
