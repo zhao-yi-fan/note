@@ -17,7 +17,7 @@ var server = http.createServer()
 //给个反馈(发送响应)
 
 //注册 request 请求事件
-//当客户端请求过来,会自动触发服务器的request请求时间,然后执行第二个参数,回调处理
+//当客户端请求过来,会自动触发服务器的request请求事件,然后执行第二个参数,回调处理
 server.on('request', function(){
     console.log('收到客户端的请求了');
 
