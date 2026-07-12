@@ -15,7 +15,7 @@ function add(x, y) {
 // module.exports = 'hello'
 
 // //以这个为准, 后者会覆盖前者
-// module.exports = fuction () {
+// module.exports = function () {
 //     return x + y
 // }
 
