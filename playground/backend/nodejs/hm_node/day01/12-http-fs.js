@@ -21,7 +21,7 @@ server.on('request', function (req, res) {
         //一个url最终其实是要对应到一个资源的
 
         // 肯定不这么干
-        // res.end('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Document</title></head><body><h1>首页</h1></body>/html>')
+        // res.end('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Document</title></head><body><h1>首页</h1></body></html>')
 
         //我们要发送的还是在文件中的内容
         fs.readFile('./resource/index.html', function (err, data) {

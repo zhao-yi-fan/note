@@ -783,7 +783,7 @@ readdir('less').then(result => {
 }).then(result => {
     let arg = [];
     result.forEach(item => {
-        arg.push(readFile(`less/${item}`));//=> 分别调取READ-FILE方法, 读取捕捉到的CSS文件, 向数组中一次增加读取各个文件的PROMISE实例
+        arg.push(readFile(`less/${item}`));//=> 分别调取READ-FILE方法, 读取捕捉到的CSS文件, 向数组中依次增加读取各个文件的PROMISE实例
     });
     //arg=[promise1,promise2...]; 
     // Promise.all():等待数组中所有的PROMISE实例都执行成功才算成功
