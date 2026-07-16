@@ -244,12 +244,12 @@ function resolvePromise(promise2, x, resolve, reject) {
 
 有三种状态，`pending（进行中）`、`fulfilled（已成功）`、`rejected（已失败）`
 
-`new promise(resolve,reject)`会声明一个promise实例，执行resolve会走then方法中的第一个回调（成功），执行reject会执行then方法中的第二个回调（失败）。then方法中不论第一个回调还是第二个回调执行成功了会接着走下一个then中的第一个回调，如果报错了会走下一个then中的第二个回调。
+`new Promise(resolve,reject)`会声明一个promise实例，执行resolve会走then方法中的第一个回调（成功），执行reject会执行then方法中的第二个回调（失败）。then方法中不论第一个回调还是第二个回调执行成功了会接着走下一个then中的第一个回调，如果报错了会走下一个then中的第二个回调。
 
 ```javascript
 // 非管控异步操作
 new Promise((resolve, reject) => {
-  // resolve 和 reject是自己任意执行的，但是一般情况下，大家够约定成功执行resolve，失败执行reject
+  // resolve 和 reject是自己任意执行的，但是一般情况下，大家约定成功执行resolve，失败执行reject
   // excutor函数（执行函数）中可以不管控异步操作（但是不管控异步没什么意义）
   resolve(100);
 }).then(result => {
