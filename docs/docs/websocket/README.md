@@ -208,7 +208,7 @@ app.listen(8000, function () {
 
 - 支持双向通信，实时性更强。
 - 更好的二进制支持。
-- 较少的控制开销。连接创建后，ws客户端、服务端进行交换数据交换时，协议控制的数据包头部比较小。
+- 较少的控制开销。连接创建后，ws客户端、服务端交换数据时，协议控制的数据包头部比较小。
 - **可以跨域**
 
 ### 简单实现：利用`ws`启动一个websocket服务器
@@ -222,9 +222,9 @@ app.use(express.static(__dirname))
 
 app.listen(3000)
 
-let WebSockerServer = require('ws').Server;
+let WebSocketServer = require('ws').Server;
 // 起服务的端口号和websocket的端口号不能一样。跨域是肯定的，websocket本身也是支持跨域的。
-let server = new WebSockerServer({ port: 8888 })
+let server = new WebSocketServer({ port: 8888 })
 // socket 插座
 // 监听连接
 server.on('connection', function (socket) {
@@ -436,7 +436,7 @@ io.on('connection', function (socket) {
     console.log('客户端已经连接');
     socket.on('message', function (msg) {
         console.log(msg);
-        socket.send('sever:' + msg);
+        socket.send('server:' + msg);
     });
 });
 server.listen(80);
@@ -486,7 +486,7 @@ socket.on('message',function(message){
 修改app.js
 
 ```javascript
-var io = require('scoket.io')(server);
+var io = require('socket.io')(server);
 io.on('connection',function(socket){
   //向客户端发送消息
   socket.send('欢迎光临');
