@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script src="tiny-require.js" ></script>
+  <script>
+    // 运行我们的 require
+    require(['math'], function (math) {
+      console.log(math)
+      console.log('2 + 3 = ', math.add(2, 3)); // 控制台会打印出 5
+    });
+  </script>
+</body>
+
+</html>
