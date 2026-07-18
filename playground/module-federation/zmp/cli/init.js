@@ -25,7 +25,7 @@ class Init {
       {
         type: 'input',
         name: 'name',
-        message：'请输入项目名'，
+        message: '请输入项目名',
         default: function () {
           return 'zmp-project';
         }
@@ -33,7 +33,7 @@ class Init {
       {
         type: 'list',
         name: 'template',
-        message: '请选择模板'，
+        message: '请选择模板',
         choices: Object.keys(templates)
       }
     ])
@@ -46,7 +46,7 @@ class Init {
     await git(`clone ${repoPath} ./${localPath}`);
     spinner.success({
       text: `cd ${localPath} & npm install & npm run dev`
-    })；
+    });
   }
 }
 module.exports = new Init();
