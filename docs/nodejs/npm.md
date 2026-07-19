@@ -88,7 +88,7 @@ npm install jquery
 cnpm install jquery
 ```
 
-如果不想安装`cnpm`又想使用淘宝的的服务器来下载:
+如果不想安装`cnpm`又想使用淘宝的服务器来下载:
 
 ```shell
 npm install jquery --registry=http://registry.npm.taobao.org

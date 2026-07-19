@@ -20,7 +20,7 @@ let arrayProto = Array.prototype;
 let proto = Object.create(arrayProto);
 
 methods.forEach(method => {
-    proto[method] = function () { // AOP 面向切片编程
+    proto[method] = function () { // AOP 面向切面编程
         render();
         arrayProto[method].call(this, ...arguments);
     }
@@ -79,4 +79,3 @@ function $set(data, key, value) {
 
 $set(obj,0,100);// 不支持数组的长度变化，也不支持数组的内容发生变化，必须通过上面的方法来触发更新，或者替换成一个新的数组
 console.log(obj);
-
