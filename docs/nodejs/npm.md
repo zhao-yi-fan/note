@@ -65,9 +65,9 @@ npm install  --save  esri-loader@1.0.0
 
 npm 存储包文件的服务器在国外, 有时候会被墙, 速度很慢
 
-http://npm.taobao.org/ 淘宝的开发团队把 npm 在国内做了一个备份
+https://npmmirror.com/ 是 npm 在国内的镜像站点
 
-安装淘宝的 cnpm:
+安装 cnpm:
 
 ```shell
 # 在任意目录执行都可以
@@ -84,26 +84,26 @@ npm install --global cnpm
 # 这里还是走国外的 npm 服务器,速度比较慢
 npm install jquery
 
-# .使用 cnpm 就会通过淘宝的服务器来下载 jquery
+# 使用 cnpm 就会通过国内镜像来下载 jquery
 cnpm install jquery
 ```
 
-如果不想安装`cnpm`又想使用淘宝的服务器来下载:
+如果不想安装`cnpm`又想使用国内镜像来下载:
 
 ```shell
-npm install jquery --registry=http://registry.npm.taobao.org
+npm install jquery --registry=https://registry.npmmirror.com
 ```
 
 但是每一次手动这样加参数很麻烦,所以我们可以把这个选项加入配置文件中:
 
 ```shell
-npm config set registry http://registry.npm.taobao.org
+npm config set registry https://registry.npmmirror.com
 
 # 查看 npm 配置信息
 npm config list
 ```
 
-只要经过了上面命令的配置,则你以后所有的`npm install`都会默认通过淘宝的服务器来下载.
+只要经过了上面命令的配置,则你以后所有的`npm install`都会默认通过国内镜像来下载.
 
 # package.json
 
