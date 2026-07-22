@@ -1,4 +1,6 @@
-// promisify 主要在node环境中使用
+const fs = require("fs");
+
+// promisify 主要在 Node 环境中使用，用于转换 error-first callback 风格的 API
 function promisify(fn) {
   return function (...args) {
     return new Promise((resolve, reject) => {
@@ -10,7 +12,8 @@ function promisify(fn) {
   };
 }
 
-const sleep = promisify(setTimeout);
+const readFile = promisify(fs.readFile);
 
-sleep(1000).then(() => console.log("1秒后执行"));
-
+readFile(__filename, "utf8").then((content) => {
+  console.log(content.length);
+});
