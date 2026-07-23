@@ -36,7 +36,7 @@
 // 如果上一级还没有,则继续往上上一级查找
 // ...
 // 如果直到当前磁盘根目录还找不到, 最后报错:
-//   can not find module xxx
+//   Cannot find module 'xxx'
 
 // var template = require('art-template')
 
@@ -45,8 +45,9 @@
 //指向了foo.js,最终还是会加载到foo.js,虽然一开始加载的是创建的包a
 require('a')
 
-// 注意: 我们一个项目有且只有一个 node_modules, 放在项目根目录中,这样的话项目中所有的子目录中的代码都可以加载到第三方包
-// 不会出现有多个 node_modules
+// 注意: Node 会从当前模块所在目录开始逐级向上查找 node_modules
+// 通常会把依赖安装在项目根目录的 node_modules 中,这样项目子目录里的代码都可以加载到这些第三方包
+// 但一个项目中并不是只能有一个 node_modules
 
 
 // 模块查找机制
@@ -59,5 +60,5 @@ require('a')
 //          node_modules/art-template/package.json/main
 //          index.js 备选项
 //          进入上一级目录找 node_modules
-//          按照这个规则一次往上找, 直到磁盘根目录还找不到, 最后报错: Can not find module xxx
-//      一个项目有且仅有一个 node_modules 而且是存放到目录的根目录
+//          按照这个规则依次往上找, 直到磁盘根目录还找不到, 最后报错: Cannot find module 'xxx'
+//      通常把 node_modules 放在项目根目录,但 Node 的解析规则允许逐级查找多个 node_modules
