@@ -82,7 +82,7 @@ class Compiler {
         console.log(err)
         console.log(res, 'res===');
         if (err) {
-          reject(reject)
+          reject(err)
         }
         resolve(res.result[0])
       })

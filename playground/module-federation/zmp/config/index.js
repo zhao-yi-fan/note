@@ -1,5 +1,4 @@
 const path = require('path');
-const wepback = require('webpack');
 const WebpackChain = require('webpack-chain');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
