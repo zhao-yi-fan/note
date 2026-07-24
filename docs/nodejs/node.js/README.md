@@ -54,7 +54,7 @@ node.js是技术, 不是后台的语言
 
 构建在Chrome的V8引擎执行
 
-- 代码只是具有特定个数的字符串而已
+- 代码只是具有特定格式的字符串而已
 - 引擎可以认识它,引擎可以帮你去解析和执行
 - Google Chrome的V8引擎是目前公认的解析执行JavaScript代码最快的
 - Node.js的作者把Google Chrome中的V8引擎移植了出来,开发了一个独立的JavaScript运行时环境.
@@ -96,11 +96,11 @@ node.js是技术, 不是后台的语言
 
 ### 能学到什么:
 
-- B/S变成模型
+- B/S编程模型
   - Browser - Server
   - back-end
   - 任何服务端技术这种BS编程模型都是一样,和语言无关
-  - Node知识作为我们学习BS变成模型的一个工具而已
+  - Node知识作为我们学习BS编程模型的一个工具而已
 - 模块化编程
   - `@import(文件路径)`
   - 以前认知的JavaScript只能通过`script`标签来加载
