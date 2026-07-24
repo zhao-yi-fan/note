@@ -13,7 +13,7 @@ function processDefault (empConfig) {
     ...empConfig.empShare
   }
   delete empConfig.empShare;
-  // 我们现在写的是webpack-chain的配置文件,不是真正的webpack置文件,所以说写法跟webpack不太一样
+  // 我们现在写的是webpack-chain的配置文件,不是真正的webpack配置文件,所以说写法跟webpack不太一样
   return {
     context: process.cwd(), // 项目根目录
     mode: 'development', // 指定开发模式
