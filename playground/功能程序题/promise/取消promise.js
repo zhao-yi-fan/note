@@ -29,5 +29,5 @@ obj.promise
   });
 
 setTimeout(() => {
-  obj.reject("主动错误"); // 调用就回立刻结束promise
+  obj.reject("主动错误"); // 调用就会立刻结束 promise
 }, 500);
