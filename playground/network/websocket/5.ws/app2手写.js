@@ -35,7 +35,7 @@ let server = net.createServer(function (socket) {
           let fin = buffers[0] & 0b10000000 == 0b10000000; // 结束位是true还是false
           let opcode = buffers[0] & 0b00001111; // 操作码
           let isMask = buffers[1] & 010000000 == 0b10000000; // 是否进行了掩码
-          let payloadLength = buffers[1] & 0b0111111; // 后七位全是1
+          let payloadLength = buffers[1] & 0b01111111; // 后七位全是1
           let mask = buffers.slice(2, 6); // 掩码键
           let payload = buffers.slice(6); // 携带的真实数据
           unmask(payload, mask); // 对数据进行反掩码
@@ -79,4 +79,3 @@ Connection: Upgrade\r\n
 Sec-WebSocket-Accept: knnYRiRuQnwyP6A12QAMUeE1Pvc=\r\n
 【无响应体】
 */
-
