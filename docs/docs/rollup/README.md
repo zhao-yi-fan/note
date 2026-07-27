@@ -26,6 +26,6 @@ external: ['@sentry/browser', '@sentry/integrations', 'js-cookie']
 ![1563094729353](./media/demo11.png)
 ::: info
 被引入作为第三方依赖时，
-devDependencies：npm install 不会安装在项目中
-dependencies：npm install 会安装在项目中
+devDependencies：不会随库一起安装到使用方项目中；但在库项目本身开发时执行 npm install 会安装
+dependencies：会随库一起安装到使用方项目中
 :::
