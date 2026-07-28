@@ -1,6 +1,6 @@
 function runMicroTask(fn) {
   // node
-  if (process && typeof process.nextTick === "function") {
+  if (typeof process !== "undefined" && typeof process.nextTick === "function") {
     process.nextTick(fn);
   } else if (typeof MutationObserver === "function") {
     // 浏览器
