@@ -10,13 +10,13 @@ Promise.myAllSettled = function (promises) {
       Promise.resolve(p)
         .then((value) => {
           result[i] = {
-            state: "fulfilled",
+            status: "fulfilled",
             value,
           };
         })
         .catch((reason) => {
           result[i] = {
-            state: "rejected",
+            status: "rejected",
             reason,
           };
         })
