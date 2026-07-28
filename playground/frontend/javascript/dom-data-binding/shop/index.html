@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>商品排序练习</title>
+    <link rel="stylesheet" href="css/reset.min.css" />
+    <link rel="stylesheet" href="css/index.css" />
+  </head>
+  <body>
+    <main class="container">
+      <div class="header clear" id="header">
+        <span>排序：</span>
+        <a href="javascript:;" data-field="time">
+          上架时间<i class="up"></i><i class="down"></i>
+        </a>
+        <a href="javascript:;" data-field="price">
+          价格<i class="up"></i><i class="down"></i>
+        </a>
+        <a href="javascript:;" data-field="hot">
+          热度<i class="up"></i><i class="down"></i>
+        </a>
+      </div>
+      <ul class="list clear" id="list"></ul>
+    </main>
+
+    <script src="js/index.js"></script>
+  </body>
+</html>
