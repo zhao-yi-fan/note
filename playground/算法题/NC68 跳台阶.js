@@ -10,7 +10,7 @@ function jumpFloor(n) {
   return b;
 }
 
-console.log(jumpFloor(3)); // 55
+console.log(jumpFloor(3)); // 3
 
 
 /* 
