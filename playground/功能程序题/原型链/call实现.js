@@ -2,7 +2,7 @@ Function.prototype.myCall = function (context, ...args) {
   context = context || globalThis
   const key = Symbol();
   context[key] = this;
-  const result = context.fn(...args)
+  const result = context[key](...args)
   delete context[key];
   return result;
 }
