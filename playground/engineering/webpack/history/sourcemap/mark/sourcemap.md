@@ -106,7 +106,7 @@ dist\main.js
 ### 1.2.5 module
 
 - Webpack会利用loader将所有非js模块转化为webpack可处理的js模块,而增加上面的cheap配置后也不会有loader模块之间对应的sourceMap
-- 什么是模块之间的sourceMap呢？比如jsx文件会经历loader处理成js文件再混淆压缩， 如果没有loader之间的sourceMap，那么在debug的时候定义到上图中的压缩前的js处，而不能追踪到jsx中
+- 什么是模块之间的sourceMap呢？比如jsx文件会经历loader处理成js文件再混淆压缩， 如果没有loader之间的sourceMap，那么在debug的时候定位到上图中的压缩前的js处，而不能追踪到jsx中
 - 所以为了映射到loader处理前的代码，我们一般也会加上module配置
 - `cheap-module-source-map`
 
@@ -120,7 +120,7 @@ dist\main.js
 - inline-source-map 以base64格式内联在打包后的文件中，内联构建速度更快，也能提示错误代码的准确原始位置
 - hidden-source-map 会在外部生成sourcemap文件，但是在目标文件里没有建立关联，不能提示错误代码的准确原始位置
 - eval-source-map 会为每一个模块生成一个单独的sourcemap文件进行内联，并使用`eval`执行
-- nosource-source-map 也会在外部生成sourcemap文件，能够找到原始代码位置，但源代码内容为空
+- nosources-source-map 也会在外部生成sourcemap文件，能够找到原始代码位置，但源代码内容为空
 - cheap-source-map 外部生成sourcemap文件，不包含列和loader的map
 - cheap-module-source-map 外部生成sourcemap文件，不包含列的信息但包含loader的map
 
@@ -610,6 +610,5 @@ module.exports = {
 [javascript_source_map算法](http://www.ruanyifeng.com/blog/2013/01/javascript_source_map.html)
 
 [devtool](https://www.webpackjs.com/configuration/devtool/)
-
 
 
