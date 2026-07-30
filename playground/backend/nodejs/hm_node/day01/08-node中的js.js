@@ -5,7 +5,7 @@ var os = require('os')
 //用来操作路径的
 var path = require('path')
 
-//获取当前及其的CPU信息
+//获取当前机器的CPU信息
 console.log(os.cpus());
 
 //memory  内存
