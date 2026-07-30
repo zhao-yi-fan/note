@@ -3,7 +3,7 @@ Function.prototype.myApply = function (context) {
     throw new Error("Type error");
   }
   let result = null;
-  context = context || window;
+  context = context == null ? globalThis : Object(context);
   // 与上面代码相比，我们使用 Symbol 来保证属性唯一
   // 也就是保证不会重写用户自己原来定义在 context 中的同名属性
   const fnSymbol = Symbol();
