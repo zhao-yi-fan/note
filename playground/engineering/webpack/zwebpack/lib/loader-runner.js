@@ -59,14 +59,18 @@ function iteratePitchingLoaders (processOptions, loaderContext, finalCallback) {
 
   // 以同步或者异步的方式运行
   runSyncOrAsync(pitchFunction, loaderContext,
-    [loaderContext.remainingRequest, previousRequest.remainingRequest, previousRequest.remainingRequest], (err, ...args) => {
+    [
+      loaderContext.remainingRequest,
+      loaderContext.previousRequest,
+      loaderContext.data,
+    ], (err, ...args) => {
+      if (err) return finalCallback(err);
       // 看看这个数组有没有一项不为undefined
-      const hasArg = args.some(() => {
-        return value !== undefined
-      })
+      const hasArg = args.some((value) => value !== undefined);
       if (hasArg) {
         loaderContext.loaderIndex--;
-        iterateNormalLoaders(processOptions, loaderContext, finalCallback);
+        // pitch 返回值会跳过后续 pitch 和资源读取，直接进入前一个 normal loader。
+        iterateNormalLoaders(processOptions, loaderContext, args, finalCallback);
       } else {
         iteratePitchingLoaders(processOptions, loaderContext, finalCallback);
       }
