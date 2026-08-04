@@ -1,4 +1,4 @@
-const Koa = require('Koa');
+const Koa = require('koa');
 const route = require('koa-route');
 
 const app = new Koa();

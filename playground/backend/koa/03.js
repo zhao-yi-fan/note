@@ -1,4 +1,4 @@
-const Koa = require("Koa");
+const Koa = require("koa");
 const app = new Koa();
 app.use((ctx) => {
   if (ctx.request.accepts("xml")) {
