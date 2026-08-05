@@ -9,9 +9,9 @@
 
 console.log(Boolean(null)) // false
 console.log(Boolean(undefined)) // false
-console.log(Boolean('')) // flase
-console.log(Boolean(NaN)) // flase
-console.log(Boolean(0)) // flase
+console.log(Boolean('')) // false
+console.log(Boolean(NaN)) // false
+console.log(Boolean(0)) // false
 console.log(Boolean([])) // true
 console.log(Boolean({})) // true
 console.log(Boolean(Infinity)) // true
@@ -72,4 +72,3 @@ console.log(Boolean(Infinity)) // true
  console.log(String([null])) // ''
  console.log(String([1, undefined, 3])) // '1,,3'
  console.log(String({})) // '[object Object]'
-

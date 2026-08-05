@@ -691,13 +691,13 @@ position属性的常用值
 
 不同浏览器所支持的字体格式是不一样的，我们有必要了解一下有关字体格式的知识。
 
-1、TureType(.ttf)格式
+1、TrueType(.ttf)格式
 
 .ttf字体是Windows和Mac的最常见的字体，是一种RAW格式，支持这种字体的浏览器有IE9+、Firefox3.5+、Chrome4+、Safari3+、Opera10+、iOS Mobile、Safari4.2+；
 
 2、OpenType(.otf)格式
 
-.otf字体被认为是一种原始的字体格式，其内置在TureType的基础上，支持这种字体的浏览器有Firefox3.5+、Chrome4.0+、Safari3.1+、Opera10.0+、iOS Mobile、Safari4.2+；
+.otf字体被认为是一种原始的字体格式，其内置在TrueType的基础上，支持这种字体的浏览器有Firefox3.5+、Chrome4.0+、Safari3.1+、Opera10.0+、iOS Mobile、Safari4.2+；
 
 3、Web Open Font Format(.woff)格式
 

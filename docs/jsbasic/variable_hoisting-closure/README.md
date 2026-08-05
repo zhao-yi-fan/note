@@ -277,7 +277,7 @@ console.log(window.a);//=> undefined
  */
 sum();//=> 2
 
-// fn();//=> Uncaught TypeError: fn is not a function 类型错误  fn现在是undefinded, undefinded不是函数, 不能执行, 会报错
+// fn();//=> Uncaught TypeError: fn is not a function 类型错误  fn现在是undefined, undefined不是函数, 不能执行, 会报错
 
 // 匿名函数之函数表达式
 var fn = function () {
@@ -302,19 +302,19 @@ function sum () {
 ### 在条件判断中的变量
 
 ```javascript
-console.log(a);//=> undefinded
+console.log(a);//=> undefined
 if (1 === 2) {
     var a = 12;
 }
-console.log(a);//=> undefinded
+console.log(a);//=> undefined
 ```
 ```javascript
 /**
  * 变量提升
- *      var a; 在全局作用域下声明的全局变量也相当于给win设置了一个属性window.a = undefinded
+ *      var a; 在全局作用域下声明的全局变量也相当于给win设置了一个属性window.a = undefined
  */
-console.log(a);//=> undefinded
-if ('a' in window) {// 在全局作用域下声明的全局变量也相当于给win设置了一个属性window.a = undefinded. 所以条件成立
+console.log(a);//=> undefined
+if ('a' in window) {// 在全局作用域下声明的全局变量也相当于给win设置了一个属性window.a = undefined. 所以条件成立
     var a = 100;
 }
 console.log(a);//=> 100
@@ -366,7 +366,7 @@ console.log(g());
 > ! 的优先级要大于==的，所以先运算右边
 >
 > 给数组取反 ![],  空数组转成boolean是true,
-> 只有 `NaN` `undefinded` `null` `0` `空字符串`  这五个为false
+> 只有 `NaN` `undefined` `null` `0` `空字符串`  这五个为false
 > 所以 [] 是true, ![] 是 false.
 >
 > [] == false, 对象和布尔比较, 需要都转换成数字
@@ -386,9 +386,9 @@ g = function () {return false;};// => window.g = function () {return false;} (FA
 ~function () {
     /**
      * 变量提升: 带var的和带function的都要进行变量提升,只不过,新版本的支持ES6,带function的只剩下声明了,没有定义了.
-     *      function g;    //=> g是私有变量,g 是 undefinded
+     *      function g;    //=> g是私有变量,g 是 undefined
      */
-    if (g() && [] == ![]) {// g 是 undefinded,不能执行  => TypeError: g is not a function
+    if (g() && [] == ![]) {// g 是 undefined,不能执行  => TypeError: g is not a function
         f = function () {return false;};
         function g() {return true;}
     }
@@ -432,7 +432,7 @@ console.log(g());// => false    全局的g, 没有被私有变量的g 修改
  * 变量提升:
  *      function fn;
  */
-console.log(fn); //=> undefinded
+console.log(fn); //=> undefined
 
 if (1 === 1) {
     console.log(fn);//=> 函数本身   当条件成立, 进入到判断体中(在ES6 中它是一个块级作用域.)第一件事并不是执行代码, 而是类似于变量提升一样(自我重复检测机制),先把fn声明和定义了, 也就是判断体中代码执行之前, fn就已经赋值了
@@ -451,7 +451,7 @@ console.log(fn);//=> 函数本身
  * 变量提升:
  *      function fn;
  */
-console.log(fn); //=> undefinded
+console.log(fn); //=> undefined
 
 if (1 === 2) {
     console.log(fn);    
@@ -459,7 +459,7 @@ if (1 === 2) {
         console.log('ok');
     }
 }
-console.log(fn);//=> undefinded   因为没进去判断, fn 仍然是只声明了的.
+console.log(fn);//=> undefined   因为没进去判断, fn 仍然是只声明了的.
 ```
 
 ## 变量提升机制下重名的处理
@@ -552,7 +552,7 @@ console.log(a);//=> Uncaught SyntaxError: Identifier 'a' has already been declar
 ```javascript
 // a = 12;//=> Uncaught ReferenceError: a is not defined (引用错误)
 let a = 12;
-console.log(window.a);//=> undefinded
+console.log(window.a);//=> undefined
 console.log(a); //=> 12
 ```
 ```javascript
