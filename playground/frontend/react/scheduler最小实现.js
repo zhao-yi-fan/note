@@ -2,7 +2,7 @@
  *  Mini Scheduler (面试用)
  *  实现：
  *   1. 任务优先级
- *   2. 小顶堆调度队列
+ *   2. 按过期时间排序的调度队列
  *   3. 时间切片 (time slicing)
  *   4. 可中断任务
  ******************************/
@@ -17,7 +17,7 @@ const Priority = {
 // 当前任务 id
 let taskId = 1;
 
-// 小顶堆（按 expirationTime 排序）
+// 按 expirationTime 排序的数组队列
 let taskQueue = [];
 
 /** push 入队 **/
@@ -80,7 +80,7 @@ function performWorkUntilDeadline() {
   if (task) requestHostCallback();
 }
 
-/** 小顶堆操作 **/
+/** 队列操作 **/
 function peek() {
   return taskQueue.length > 0 ? taskQueue[0] : null;
 }
