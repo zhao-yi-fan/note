@@ -1,8 +1,8 @@
 // 接口 描述对象的形状，根据接口提供一些新的类 为别人使用
 // 计算fullname = firstName + lastName
 
-// 接口可以被实现被继承type不能
-// type可以写联合类型
+// interface 可被类实现、可 extends，且支持声明合并；type 也可被类实现对象结构
+// type 更适合联合、交叉、条件类型等类型组合
 
 /* 
 // 1）描述对象
