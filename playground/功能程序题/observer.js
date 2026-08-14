@@ -6,7 +6,7 @@ class Subject {// 被观察者
     this.stack = [];
     this.state = '开心'
   }
-  attach () {
+  attach (observer) {
     this.stack.push(observer);
   }
   setState (newState) {
