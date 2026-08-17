@@ -21,9 +21,6 @@ console.log(temp1.fn(10));
  */
 //=====================
 let temp1 = require('./temp1');
-console.log(temp1.fn1(10));
-console.log(temp1.fn2(10))
-console.log(temp1.fn3);
-
+console.log(temp1); // {}：temp1 重定向了 exports，module.exports 仍为空对象
 
 
