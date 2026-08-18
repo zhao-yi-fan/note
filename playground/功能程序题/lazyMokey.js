@@ -63,7 +63,7 @@ class Monkey {
  * 2.使用promise的方式
  *
  *  */
-class Monkey {
+class MonkeyPromise {
   constructor(name) {
     this.stack = [];
 
@@ -99,7 +99,7 @@ class Monkey {
   }
 }
 
-new Monkey("Alan").sleep(4).eat("Banana1").sleep(5).eat("Banana2");
+new MonkeyPromise("Alan").sleep(4).eat("Banana1").sleep(5).eat("Banana2");
 // .eat("Banana3")
 // .eat("Banana4")
 // .eat("Pear")
