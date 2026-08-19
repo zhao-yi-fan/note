@@ -1,6 +1,6 @@
 interface User {
-  username: String;
-  password?: String
+  username: string;
+  password?: string
 }
 
 const user: User = {
@@ -57,4 +57,3 @@ class Person {
 }
 
 console.log(new Person('张三'));
-
