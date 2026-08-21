@@ -97,14 +97,14 @@ nrm ls 查看当前可用的源
 nrm use xxx 使用某个源
 这样处理完成后, 后期模块的管理依然基于npm即可
 ```
->   2. 基于yarn安装, 它也是模块管理器, 类似于npm. 但是安装管理的速度比npm快很多
+>   2. 基于yarn安装, 它也是模块管理器, 类似于npm.
 
 ```
 npm install yarn -g
 yarn add xxx
 yarn remove xxx
 
-使用yarn只能把模块安装到当前目录下, 不能安装到全局环境下
+项目依赖建议安装在当前目录；Yarn Classic 也支持 `yarn global add <package>` 全局安装命令行工具。
 ```
 >   3. bower也是类似于npm的包管理器, 只不过它是从github下载安装
 
@@ -146,7 +146,7 @@ bower install xxx
 
 
 > package.json
-> 版本号前面的^是以什么开头, 就是正则表达式
+> 版本号前面的 `^` 是 SemVer 的兼容版本范围，不是正则表达式。例如 `^1.2.3` 通常表示 `>=1.2.3 <2.0.0`。
 ```
 {
     "name": "10.nodePROMISE",   // 模块名称
