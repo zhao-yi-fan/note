@@ -14,8 +14,8 @@ class ChainedMap extends Chainable {
   getOrCompute (key, factory) {
     if (!this.has(key)) {
       this.set(key, factory());
-      return this.get(key);
     }
+    return this.get(key);
   }
   set (key, value) {
     this.store.set(key, value);

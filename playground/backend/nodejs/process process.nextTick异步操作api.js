@@ -1,6 +1,5 @@
-// NODE中独有的异步操作API
-// 它也是定时器，但是它不设置时间，但是它也是异步编程（宏任务），它会在所有其他定时器之前执行
-// 可以理解setImmediate相当于0毫秒
+// Node.js 中的异步调度 API
+// setImmediate 会在 I/O 回调后的 check 阶段执行，不等同于 0 毫秒定时器。
 /* setTimeout(() => {
   console.log(1)
 }, 0)
@@ -10,7 +9,8 @@ setImmediate(() => {
 }) */
 
 
-// process.nextTick：把当前任务放到主栈最后执行（当主栈执行完，先执行nextTick，再到等待队列中找）
+// process.nextTick：在当前调用栈清空后、事件循环进入下一阶段前执行。
+// 它不是宏任务；递归调用会持续占用 nextTick 队列，可能阻塞 I/O。
 /* process.nextTick(() => {
   console.log(2);
 });
