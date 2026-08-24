@@ -9,7 +9,7 @@ str = "abc";
 str.toLowerCase();
 
 // 类型断言
-let ele: HTMLElement | null = document.getElementById("#app");
+let ele: HTMLElement | null = document.getElementById("app");
 // ele!.style.color='red'；//非空断言表示一定有值ts语法
 ele?.style?.color; // ele && ele.style && ele.style.color
 
