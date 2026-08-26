@@ -10,7 +10,7 @@ Promise.myAny = function (promiseList) {
     }
 
     arr.forEach((promise, index) => {
-      promise.then(resolve).catch((err) => {
+      Promise.resolve(promise).then(resolve).catch((err) => {
         errors[index] = err;
         if (++rejectedCount === arr.length) {
           reject(new AggregateError(errors, "All promises were rejected"));
