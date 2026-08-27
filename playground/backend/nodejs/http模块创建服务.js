@@ -7,9 +7,10 @@ let http = require('http'),
 let port = 8686;
 /* let server = http.createServer();
 server.listen(); */
-http.createServer(() => {
+http.createServer((req, res) => {
     //=> 当服务创建成功, 并且客户端向当前服务器发送了请求, 才会执行回调函数, 并且发送一次请求, 回调函数就会被触发执行一次
     console.log(`hello world!`);
+    res.end('hello world!');
     
 }).listen(port, () => {
     //=> 当服务创建成功, 并且端口号已经监听成功后, 触发的回调函数
@@ -19,8 +20,8 @@ http.createServer(() => {
 
 /*
     错误分析
-        listen EACCES 0.0.0.0:80
-        这种错误都是因为端口号被占用了, 我们需要重新修改端口号
+        listen EADDRINUSE 0.0.0.0:80
+        这种错误表示端口号已被占用，需要更换端口或停止占用进程
 
         当服务创建成功, 命令行中会一直存在光标闪烁, 证明服务器正在运行(一定要保证服务是运行的), 按CTRL+C可以结束正在运行的服务
         
