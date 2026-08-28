@@ -14,7 +14,8 @@
 <body>
   <div id="app"></div>
   <script type="text/babel">
-    // 基本类型、组件状态(useState)可以放到依赖里，但是对象、数组、函数等引用类型不可以放到依赖里
+    // 对象、数组、函数可以作为依赖；但如果每次渲染都创建新引用，effect 会重复执行。
+    // 需要稳定引用时，可使用 useMemo 或 useCallback。
     const { useEffect, useMemo, useState } = React;
     function App () {
       const [num, setNum] = useState(0)

@@ -25,7 +25,7 @@ let handle = function handle(req, res) {
     /* res.write('hello world!'); */
     // res.end('hello world!');//=> 服务器端返回给客户端的内容一般都是 STRING 或者BUFFER格式的数据
     res.writeHead(200, {
-        'content-type': 'text/plain;charset=utf-8;'
+        'content-type': 'application/json; charset=utf-8'
     })
     res.end(JSON.stringify({ name: '哈哈' }));
 
@@ -35,5 +35,4 @@ let handle = function handle(req, res) {
 http.createServer(handle).listen(port, () => {
     console.log(`server is success, listen on ${port}!`)
 });
-
 
