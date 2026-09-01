@@ -2,11 +2,11 @@ const less = require('less')
 function loader (source) {
   console.log('less-loader normal');
   console.log(source, 'source=====');
-  let css = ''
+  const callback = this.async()
   less.render(source, (err, result) => {
-    css = result.css
+    if (err) return callback(err)
+    callback(null, result.css)
   })
-  return css
 }
 loader.pitch = function (remainingRequest){
   console.log('less-loader pitch');
