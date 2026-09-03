@@ -22,7 +22,7 @@
       {{obj1.name}}
     </div>
     <div>
-      4、测试对象 因为obj2是响应式的，obj2加属性是可以watch到的。如果监听的是obj2.name，则不是响应式数据，watch不到。
+      4、测试对象：Vue 2 中新增的 obj2 属性默认不是响应式的，需要通过 $set 添加后才能被 watch 到。
       {{obj2}}
     </div>
   </div>
@@ -68,7 +68,7 @@
       },
       watch: {
         // 4、
-        // 可以监听到
+        // 使用 $set 新增属性后可以监听到
         obj2:{
           handler(nv) {
             console.log(nv, 'obj2====');
@@ -76,7 +76,7 @@
           },
           immediate: true,
         },
-        // 不可以监听到
+        // 直接新增属性时不会触发监听
         /* 'obj2.name': {
           handler(nv) {
             console.log(nv, 'obj2.name====');
@@ -118,8 +118,7 @@
         // }, 2000);
 
         // 4、
-        this.obj2.name = '2222'
-        // this.$set(this.obj2, 'name', '2222')
+        this.$set(this.obj2, 'name', '2222')
       }
     })
   </script>
