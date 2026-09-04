@@ -41,7 +41,8 @@ class Compiler {
     }
   }
   getSource (modulePath) {
-    let parts = modulePath.replace(/^-?!+/g, '').split('!');
+    const request = modulePath;
+    let parts = request.replace(/^-?!+/g, '').split('!');
     modulePath = parts.pop();
     // loader转化为绝对路径
     let resolveLoader = loader => path.resolve(this.root, 'loaders', loader)
@@ -59,11 +60,11 @@ class Compiler {
         } else {
           normalLoaders.push(...use)
         }
-        if (modulePath.startsWith('!!')) {
+        if (request.startsWith('!!')) {
           loaders = [...inlineLoaders]
-        } else if (modulePath.startsWith('!')) {
+        } else if (request.startsWith('!')) {
           loaders = [...postLoaders, ...inlineLoaders, ...preLoaders]
-        } else if (modulePath.startsWith('-!')) {
+        } else if (request.startsWith('-!')) {
           loaders = [...postLoaders, ...inlineLoaders]
         } else {
           loaders = [...postLoaders, ...inlineLoaders, ...normalLoaders, ...preLoaders]
