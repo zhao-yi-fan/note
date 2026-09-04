@@ -4,6 +4,7 @@ const readline = async () => (await iter.next()).value;
 
 void (async function () {
   // Write your code here
+  let line;
   while ((line = await readline())) {
     console.log(validate(line));
   }
