@@ -5,9 +5,9 @@ export default {
   logo: '/logo.svg',
   author: 'zhaoyifan',
   authorAvatar: '/logo.svg',
-  docsRepo: 'https://github.com/vuepress-reco/vuepress-theme-reco-next',
-  docsBranch: 'main',
-  docsDir: 'example',
+  docsRepo: 'https://github.com/zhao-yi-fan/note',
+  docsBranch: 'master',
+  docsDir: 'docs',
   lastUpdatedText: '',
   // series 为原 sidebar
   series: sideBar,

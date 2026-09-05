@@ -22,15 +22,19 @@ export default defineClientConfig({
 
     onMounted(() => {
       if (typeof window !== "undefined") {
-        // 只添加最大高度和滚动功能
-        const style = document.createElement("style");
-        style.textContent = `
-          .dropdown-link__container {
-            max-height: 80vh !important;
-            overflow-y: auto !important;
-          }
-        `;
-        document.head.appendChild(style);
+        if (!document.getElementById("dropdown-link-scroll-style")) {
+          // 只添加最大高度和滚动功能
+          const style = document.createElement("style");
+          style.id = "dropdown-link-scroll-style";
+          style.textContent = `
+            .dropdown-link__container {
+              max-height: 80vh !important;
+              overflow-y: auto !important;
+            }
+          `;
+          document.head.appendChild(style);
+        }
+
         detachSiteBrandLogo();
       }
     });

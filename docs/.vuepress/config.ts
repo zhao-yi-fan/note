@@ -8,7 +8,7 @@ export default defineUserConfig({
   description: 'zhaoyifan Blog',
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
-    ['meta', { name: 'viewport', content: 'width=device-width,initial-scale=1,user-scalable=no' }],
+    ['meta', { name: 'viewport', content: 'width=device-width,initial-scale=1' }],
     ['meta', { name: 'baidu-site-verification', content: 'codeva-35wm7P5Tff' }],
   ],
   bundler: viteBundler(),
