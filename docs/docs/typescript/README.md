@@ -15,7 +15,7 @@ categories:
 interface ISchool {
   readonly name: string,
   age: number,
-  address?.string
+  address?: string
 }
 
 let school:ISchool = {
