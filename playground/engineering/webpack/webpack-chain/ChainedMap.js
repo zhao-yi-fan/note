@@ -2,7 +2,7 @@ const Chainable = require('./Chainable');
 class ChainedMap extends Chainable {
   constructor(parent) {
     super(parent);
-    //key是 字符串,value可能是任意的值Set字符串
+    // key 是字符串，value 可以是任意值
     this.store = new Map()
   }
   extend (methods) {
