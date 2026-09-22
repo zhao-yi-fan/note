@@ -49,7 +49,7 @@ window也可以理解为DOM，window.onload指页面元素加载结束执行的�
     - unload：页面关闭
     - beforeunload：页面关闭之前
     - scroll：滚动条滚动事件
-    - size：大小改变事件 `window.onsize=function(){}当浏览器窗口大小发生改变，会触发这个事件，执行对应的事情`
+    - resize：大小改变事件 `window.onresize=function(){}，当浏览器窗口大小发生改变，会触发这个事件，执行对应的事情`
     - ...
   - [移动端手指事件] touch单手指操作模型、gesture多手指操作模型
     - touchstart：手指按下
