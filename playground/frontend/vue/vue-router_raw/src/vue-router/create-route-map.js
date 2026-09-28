@@ -64,7 +64,9 @@ export default function createRouteMap (routes, oldPathMap) {
  */
 function addRouteRecord (route, pathMap, parent) { // pathMap = {路径,记录}
   // 要判断 儿子的路径不是以 / 开头的，否则不拼接 父路径
-  const path = parent ? parent.path + '/' + route.path : route.path;
+  const path = parent
+    ? (route.path.startsWith('/') ? route.path : `${parent.path.replace(/\/$/, '')}/${route.path}`)
+    : route.path;
   const record = {
     path,
     parent, // parent 指代的父记录
