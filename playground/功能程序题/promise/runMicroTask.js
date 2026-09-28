@@ -9,6 +9,6 @@ function runMicroTask(fn) {
     ob.observe(text);
     text.data = "2";
   } else {
-    setTimeout(fn); // 默认秒是4ms
+    setTimeout(fn); // 最小延迟通常约为 4ms
   }
 }
