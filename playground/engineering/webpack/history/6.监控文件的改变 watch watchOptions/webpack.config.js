@@ -20,7 +20,7 @@ module.exports = {
   },
   watch: true,
   watchOptions: {
-    poll: 1000, // 每秒问我1000次
+    poll: 1000, // 每 1000ms 轮询一次
     aggregateTimeout: 500, // 防抖 我一直输入代码
     ignored: /node_modules/, // 不需要进行监控
   },
