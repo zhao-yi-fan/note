@@ -74,6 +74,10 @@ class Promise {
   // 私有属性
   static all(promiseAry = []) {
     return new Promise((resolve, reject) => {
+      if (promiseAry.length === 0) {
+        resolve([]);
+        return;
+      }
       // index：记录成功的数量 result：记录成功的结果
       let index = 0,
         result = [];
