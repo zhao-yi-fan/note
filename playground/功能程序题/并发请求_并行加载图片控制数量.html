@@ -28,6 +28,10 @@
      * @param {(url: string) => Promise<any>} requestFn 请求函数
      */
     async function concurrentRequest (urls, maxNum, requestFn = fetch) {
+      if (!Number.isInteger(maxNum) || maxNum <= 0) {
+        throw new RangeError('maxNum 必须是正整数');
+      }
+
       const results = new Array(urls.length);
       let nextIndex = 0;
 
