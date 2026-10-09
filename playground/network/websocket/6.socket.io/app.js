@@ -78,6 +78,12 @@ io.on('connection', async function (socket) {
       }
     }
   })
+
+  socket.on('disconnect', function () {
+    if (!username) return;
+    delete sockets[username];
+    socket.broadcast.emit('message', getMsg(`${username}离开聊天室`));
+  })
 })
 
 server.listen(4000);
