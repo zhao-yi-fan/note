@@ -37,6 +37,8 @@ var levelOrder = function (root) {
 };
 
 function tree2array(root) {
+  if (!root) return [];
+
   const result = [];
   const queue = [root];
   let sizeLength = 0;
