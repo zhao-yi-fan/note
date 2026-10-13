@@ -115,8 +115,7 @@ void main() {
     print(b);
     // const
     const c = {"name": "zf"};
-    ;
-    c["name"] = "zhufeng";
+    // c["name"] = "zhufeng"; // 编译错误：const Map 不可修改
     print(c);
 
     // 对象/map/键值对 取值必须用中括号
