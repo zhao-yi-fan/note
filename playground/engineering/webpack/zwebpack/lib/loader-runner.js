@@ -80,16 +80,22 @@ function iteratePitchingLoaders (processOptions, loaderContext, finalCallback) {
 function runSyncOrAsync (fn, loaderContext, args, callback) {
   let isSync = true; // 默认是同步模式
   let isDone = false; // fn是否执行过了
-  const innerCallback = loaderContext.callback = function (...args) {
+  const innerCallback = loaderContext.callback = function (err, ...args) {
+    if (isDone) return;
     isSync = false;
     isDone = true;
-    callback(null, ...args)
+    callback(err, ...args)
   }
   loaderContext.async = function () {
     isSync = false; // 在pitch中执行async方法，就使方法变成异步
     return innerCallback
   }
-  let result = fn.apply(loaderContext, args) // pitch的返回值
+  let result;
+  try {
+    result = fn.apply(loaderContext, args) // pitch的返回值
+  } catch (err) {
+    return innerCallback(err);
+  }
   if (isSync) { // 如果是同步，在整个函数的执行期间都是同步模式
     isDone = true;
     callback(null, result)
