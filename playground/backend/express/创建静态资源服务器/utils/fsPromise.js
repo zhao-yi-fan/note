@@ -1,6 +1,6 @@
 let fs = require('fs'),
     path = require('path');
-//=> 存储的是当前模块执行所在的绝对路径(!==__dirname)
+//=> 存储当前进程工作目录的绝对路径（通常等于 process.cwd()，不是 __dirname）
 let dirname = path.resolve();
 
 //=> MKDIR && RMDIR && READ-DIR && READ-FILE && COPY-FILE
