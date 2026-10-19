@@ -16,7 +16,6 @@ void main() {
   print(b); */
   // const
   const c = {"name": "zf"};
-  ;
   // c["name"] = "zhufeng";
   print(c);
 
