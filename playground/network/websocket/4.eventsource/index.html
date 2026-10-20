@@ -13,11 +13,11 @@
       let clock = document.querySelector("#clock")
       // 监听服务器发过来的消息
       // 事件名是服务器自定义的
-      eventSource.onopen = function(event) {
+      eventSource.addEventListener("clock", function(event) {
         console.log(event)
         let message = event.data
         clock.innerHTML = message
-      }
+      })
       // 监听连接请求失败的错误事件
       eventSource.onerror = function() {}
     </script>
