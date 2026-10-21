@@ -32,9 +32,9 @@ let server = net.createServer(function (socket) {
         socket.write(response);
         // 后面所有的格式都是基于websocket协议的
         socket.on('data', function (buffers) { // data默认是一个Buffer
-          let fin = buffers[0] & 0b10000000 == 0b10000000; // 结束位是true还是false
+          let fin = (buffers[0] & 0b10000000) === 0b10000000; // 结束位是true还是false
           let opcode = buffers[0] & 0b00001111; // 操作码
-          let isMask = buffers[1] & 010000000 == 0b10000000; // 是否进行了掩码
+          let isMask = (buffers[1] & 0b10000000) === 0b10000000; // 是否进行了掩码
           let payloadLength = buffers[1] & 0b01111111; // 后七位全是1
           let mask = buffers.slice(2, 6); // 掩码键
           let payload = buffers.slice(6); // 携带的真实数据
