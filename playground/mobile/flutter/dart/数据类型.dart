@@ -7,9 +7,9 @@ void main() {
   print(a);
 
   // 定义常量：var const final
-  // 相同点：一旦定义，不能再赋值。声明和赋值必须同时进行
-  // 不同点：final声明之后可以修改，const声明之后不能修改。
-  // const要求更加严格，const定义的是编译器的常量，不能是运行结果，final就二者都行
+  // 相同点：变量只能赋值一次，之后不能重新赋值。
+  // 不同点：final 可以先声明、后完成一次赋值；const 必须在声明时赋值。
+  // const 要求编译期常量，final 的值可以在运行时确定。
   // final
   /* final b = {"name": "zf"};
   b["name"] = "zhufeng";
