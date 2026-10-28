@@ -26,7 +26,7 @@
         clearTimeout(timer)
         // 使用箭头函数可以直接获取 上下文中的this, arguments
         timer = setTimeout(() => {
-          fun.apply(this, arguments) // apply中需要传数组
+          fun.apply(this, arguments) // apply 接收数组或类数组对象
         }, delay)
       }
     }
@@ -35,21 +35,27 @@
     function throttle (fn, delay) {
       let last = 0;
       let timer = null;
+      let lastArgs;
+      let lastThis;
 
       return function (...args) {
         const now = Date.now();
         const remaining = delay - (now - last);
+        lastArgs = args;
+        lastThis = this;
 
         if (remaining <= 0) {
           clearTimeout(timer);
           timer = null;
           last = now;
-          fn.apply(this, args);
+          fn.apply(lastThis, lastArgs);
+          lastArgs = lastThis = null;
         } else if (!timer) {
           timer = setTimeout(() => {
             last = Date.now();
             timer = null;
-            fn.apply(this, args);
+            fn.apply(lastThis, lastArgs);
+            lastArgs = lastThis = null;
           }, remaining);
         }
       };
