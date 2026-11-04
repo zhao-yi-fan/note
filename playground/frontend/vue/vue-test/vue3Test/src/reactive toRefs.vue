@@ -23,7 +23,7 @@ const stateFn = () => {
   console.log(numRef,'numRef===');
 };
 const stateChange = () => {
-  numRef++;
+  numRef.value++;
 };
 </script>
 
