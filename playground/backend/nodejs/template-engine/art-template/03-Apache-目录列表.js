@@ -22,13 +22,13 @@ server.on('request', function (req, res) {
     //2.如何得到的文件名和目录名替换到template.html中
     //  2.1在 template.html中需要替换的位置预留一个特殊的标记(就像以前使用模板引擎的标记一样)
     //  2.2根据files生成需要的HTML内容
-    //只要你做了则两件事,这个问题就解决了
+    //只要你做了这两件事,这个问题就解决了
     fs.readdir(wwwDir, function (err, files) {
       if (err) {
         return res.end('Can not find www dir.')
       }
 
-      //2.1声称需要替换的内容
+      //2.1生成需要替换的内容
       var content = ''
       files.forEach(function (item) {
         // 在EcmaScript 6中的 ` 字符串中,可以使用${}来引用变量
