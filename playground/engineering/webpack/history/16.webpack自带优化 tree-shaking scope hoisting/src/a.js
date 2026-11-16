@@ -3,7 +3,7 @@ const sum = (a, b) => {
   return a + b;
 }
 const minus = (a, b) => {
-  console.log('sum-----');
+  console.log('minus-----');
   return a - b;
 }
 export default {
